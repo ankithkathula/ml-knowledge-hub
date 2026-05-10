@@ -1,0 +1,321 @@
+================================================================================
+MATERIAL LIBRARY KC — PROJECT CONTEXT
+Generated: 2026-04-03
+================================================================================
+
+PROJECT OVERVIEW
+================
+Material Library KC is a comprehensive construction materials platform for India,
+built as a React 18 + TypeScript + Vite + Tailwind CSS web application. It serves
+as a LinkedIn + UrbanCompany + Behance hybrid for the construction industry —
+connecting brands, studios/consultants, and individual professionals/students.
+
+TECH STACK
+==========
+- React 18.3.1 + TypeScript
+- React Router 7.13.0 (client-side routing via createBrowserRouter)
+- Vite 6.3.5 (build tool)
+- Tailwind CSS 4.1.12 (@tailwindcss/vite)
+- Radix UI (accessible component primitives — 25+ packages)
+- lucide-react 0.487.0 (icons)
+- MUI Material 7.3.5 (supplementary components)
+- Recharts 2.15.2 (charts)
+- motion 12.23.24 (animations)
+- react-hook-form 7.55.0 (forms)
+- embla-carousel-react (carousels)
+- CVA + clsx + tailwind-merge (styling utilities)
+- date-fns, sonner (utilities)
+- No backend — all mock data in TypeScript files
+
+DESIGN SYSTEM
+=============
+- Glassmorphism design with CSS custom properties
+- Orange accent: #ff6a3d (primary brand color)
+- Indigo accent: #6366f1 (user dashboard)
+- Dark accent: #1a1a1a (professionals page)
+- CSS vars: --accent, --text-primary, --text-secondary, --text-muted, --bg-base,
+  --accent-light, --glass, --glass-blur, --shadow-sm/md/lg, --r-sm/md/lg
+- Utility classes: glass-card, gl-card, gl-nav, gl-input, btn-primary,
+  btn-secondary, hover-lift, pill, stat-card
+- Fonts imported in fonts.css
+- Theme defined in theme.css + glass.css
+
+================================================================================
+ARCHITECTURE — 3 USER ROLES + PUBLIC PAGES
+================================================================================
+
+ROLE 1: ML ADMIN (/admin)
+==========================
+Master control over the entire platform.
+Layout: AdminLayout.tsx (collapsible sidebar + top bar + Outlet)
+Directory: src/app/components/admin/
+
+Routes:
+  /admin                    AdminDashboardPage        — KPIs, quick actions, pending reviews
+  /admin/taxonomy           TaxonomyManagementPage    — L1-L5 hierarchy CRUD
+  /admin/products           ProductManagementPage     — L6 product management
+  /admin/brands             BrandManagementPage       — Brand directory management
+  /admin/content            ContentManagementPage     — Blog/wiki content management
+  /admin/news               NewsManagementPage        — Industry news management
+  /admin/consultants        ConsultantManagementPage  — Studio management (label: "Studios")
+  /admin/users              AdminUsersManagementPage  — Individual user account management
+  /admin/jobs               AdminJobsManagementPage   — Moderate all posted jobs
+  /admin/courses            AdminCoursesManagementPage— Moderate all courses
+  /admin/kc-bookings        AdminKcBookingsPage       — KC visit booking management
+  /admin/samples            AdminSamplesPage          — Sample request tracking
+  /admin/market-data        MarketDataManagementPage  — Market analytics
+  /admin/bulk-import        BulkImportPage            — CSV/XLSX bulk import tool
+  /admin/contributors       ContributorConsolePage    — Community contributor management
+
+Sidebar nav: 15 items across Dashboard, Content, Users, Platform, Data sections.
+
+
+ROLE 2: STUDIO / CONSULTANT (/studio)
+======================================
+Business accounts — firms, studios, consultancies. Multi-user team login.
+They POST jobs, CREATE courses, manage projects + BOM, handle bookings.
+Layout: StudioDashboardLayout.tsx (collapsible sidebar, "Studio Hub" branding)
+Directory: src/app/components/studio/
+
+Routes:
+  /studio                   StudioDashboardHome       — KPIs, activity feed, bookings
+  /studio/jobs              StudioJobsPage            — Post jobs, manage applicants
+  /studio/projects          StudioProjectsManagePage  — Project portfolio management
+  /studio/projects/:id/bom  StudioProjectBomPage      — Bill of Materials per project
+  /studio/courses           StudioCoursesManagePage   — Create/manage courses (teacher mode)
+  /studio/blogs             StudioBlogsPage           — Blog/article management
+  /studio/profile           StudioStudioManagePage    — Studio profile editing
+  /studio/team              StudioTeamPage            — Multi-user team management
+  /studio/bookings          StudioBookingsPage        — Calendar + booking management
+  /studio/kc-visits         StudioKcVisitsPage        — Knowledge Center visit scheduling
+  /studio/samples           StudioSamplesPage         — Material sample request management
+  /studio/reviews           StudioReviewsPage         — Review/rating management
+  /studio/messages          StudioMessagesPage        — Messaging inbox
+  /studio/analytics         StudioAnalyticsPage       — Analytics dashboard
+  /studio/settings          StudioSettingsPage        — Account settings
+
+Sidebar nav: 14 items. Orange accent (#ff6a3d).
+
+
+ROLE 3: INDIVIDUAL / STUDENT (/u)
+==================================
+Personal accounts — architects, engineers, designers, students.
+They APPLY for jobs, ENROLL in courses, maintain portfolios.
+Layout: UserDashboardLayout.tsx (collapsible sidebar, "My Dashboard" branding)
+Directory: src/app/components/user/
+
+Routes:
+  /u                        UserDashboardHome         — Activity feed, recommendations
+  /u/portfolio              UserPortfolioPage         — Behance-style portfolio manager
+  /u/portfolio/:projectId   UserPortfolioProjectPage  — Single project view/edit
+  /u/jobs                   UserJobsPage              — Browse/apply for jobs
+  /u/courses                UserCoursesPage           — Browse/enroll in courses
+  /u/courses/:courseId      UserCourseDetailPage      — Course detail + enrollment
+  /u/bookmarks              UserBookmarksPage         — Saved materials/products
+  /u/samples                UserSamplesPage           — Sample request management
+  /u/kc-visits              UserKcVisitsPage          — KC visit scheduling
+  /u/activity               UserActivityPage          — Full activity log
+  /u/messages               UserMessagesPage          — Messaging inbox
+  /u/profile                UserProfileEditPage       — Profile editing
+  /u/settings               UserSettingsPage          — Account settings
+
+Sidebar nav: 11 items. Indigo accent (#6366f1).
+
+
+PUBLIC PAGES
+============
+Directory: src/app/components/pages/
+
+Core Pages:
+  /                         HomePage                  — Material Library landing, L1 category grid
+  /layer/:nodeId            HierarchyPage             — Unified L1-L5 hierarchy browser
+  /products/:l5Id           ProductListingPage        — L6 product listing
+  /brand/:brandId           BrandPage                 — Brand detail page
+  /blog                     BlogListingPage           — Blog articles
+  /blog/create              BlogEditorPage            — Blog editor
+  /blog/:blogId             BlogDetailPage            — Blog article detail
+
+Services Directory:
+  /services                 ServicesPage              — Discovery-first layout (split sidebar+feed)
+  /services/consultant/:slug ConsultantProfilePage    — Studio/consultant public profile
+  /services/project/:id     ConsultantProjectDetailPage — Project showcase
+  /services/professional/:slug UserPublicProfilePage  — Individual public portfolio
+  /services/:categorySlug   ServicesCategoryPage      — Category-filtered consultant listing
+
+Professionals Community:
+  /professionals            ProfessionalsPage         — Behance/Dribbble masonry gallery + sidebar
+  /professionals/b          ProfessionalsBPage        — Alt layout: Instagram/Twitter feed style
+  /professionals/:userSlug  ProfessionalProfilePage   — Individual profile (Work/About/Activity tabs)
+
+Platform Pages:
+  /jobs                     PublicJobBoardPage         — Public job board
+  /courses                  PublicCourseCatalogPage    — Public course catalog
+  /kc                       KcInfoPage                — Knowledge Center info + booking
+
+Legacy (still exists, unused in routes):
+  CategoryBrandsPage, CategoryWikiPage, L3SubcategoryPage, L4ProductTypePage
+
+
+NAVBAR
+======
+File: src/app/components/Navbar.tsx
+Top links: BRANDS (disabled), PRODUCTS (disabled), RESOURCES (/), SERVICES (/services), PROFESSIONALS (/professionals)
+Hidden but in code: JOBS, COURSES, KC
+Profile dropdown (K avatar): Professional Dashboard (/u), Studio Dashboard (/studio), Admin Console (/admin), Sign Out
+
+FOOTER
+======
+File: src/app/components/Footer.tsx
+Columns: Platform (Services, Jobs, Courses, KC, Professionals B, Blog), Company, Legal, For You
+Newsletter signup, social links, contact info.
+
+
+================================================================================
+BUSINESS FLOWS
+================================================================================
+
+JOBS:     Studio POSTS (/studio/jobs) → Individual APPLIES (/u/jobs) → Public browse (/jobs) → Admin moderates (/admin/jobs)
+COURSES:  Studio CREATES (/studio/courses) → Individual ENROLLS (/u/courses) → Public browse (/courses) → Admin moderates (/admin/courses)
+BOM:      Studio manages per project (/studio/projects/:id/bom) — links products from material library
+SAMPLES:  Studio requests (/studio/samples) | Individual requests (/u/samples) → Admin tracks (/admin/samples)
+KC VISITS: Studio schedules (/studio/kc-visits) | Individual schedules (/u/kc-visits) → Admin manages (/admin/kc-bookings)
+BOOKINGS: Studio manages calendar (/studio/bookings) → Clients book via public profile
+PORTFOLIO: Individual manages (/u/portfolio) → Public view (/services/professional/:slug)
+
+
+================================================================================
+DATA LAYER
+================================================================================
+All mock data, no backend. Data files in src/app/components/data/
+
+hierarchyData.ts
+  - HierarchyNode interface (id, name, description, image, icon, parentId, level 1-6, childCount, brandCount, color)
+  - BrandInfo interface (id, name, tagline, coverImage, rating, productCount, city, region, accentColor, tier, isFeatured, layerIds)
+  - ProductItem interface
+  - L1_DATA (11 root material categories)
+  - Functions: getNode, getChildren, getBreadcrumb, getBrandsForLayer, getSiblings
+
+mockData.ts
+  - BRANDS array with brand data
+
+consultantData.ts
+  - ServiceCategory (14 categories: Architects, Interior Designers, Structural Engineers, MEP, Landscape, PMC, QS, Vastu, Green Building, Lighting, Acoustics, Fire Safety, BIM, Waterproofing)
+  - Consultant (18 consultants with location, pricing, specializations, stats)
+  - Project (13 projects)
+  - TeamMember (16 team members)
+  - Job (11 job listings)
+  - Course (9 courses)
+  - Review (16 reviews)
+  - Uppercase aliases: SERVICE_CATEGORIES, CONSULTANTS, PROJECTS, TEAM_MEMBERS, JOBS, COURSES, REVIEWS
+  - Additional: CERTIFICATIONS, COURSE_CATEGORIES, MANAGED_PROJECTS
+  - Type aliases: JobListing, CourseListing, CertificationEntry, ManagedProject
+
+platformData.ts
+  - BomEntry, SampleRequest, KcVisit, PortfolioProject, UserProfile, TeamInvitation, TeamMemberStudio, PlatformCourse, PlatformJob
+  - Mock arrays: BOM_ENTRIES, SAMPLE_REQUESTS, KC_VISITS, PORTFOLIO_PROJECTS, USER_PROFILES, TEAM_MEMBERS_STUDIO, TEAM_INVITATIONS, PLATFORM_COURSES, PLATFORM_JOBS
+
+
+================================================================================
+6-LEVEL MATERIAL HIERARCHY
+================================================================================
+L1 (11): Root Material Categories (Structural, Flooring, Lighting, etc.)
+L2 (41): Subcategories
+L3 (195): Product Groups
+L4 (6,330): Product Types
+L5 (53,717): Specifications
+L6 (2M+): Individual Products
+
+
+================================================================================
+DIRECTORY STRUCTURE
+================================================================================
+src/
+├── app/
+│   ├── components/
+│   │   ├── admin/              (15 files — admin dashboard pages)
+│   │   ├── studio/             (17 files — studio dashboard pages)
+│   │   ├── consultant/         (12 files — legacy consultant pages, still routed but being replaced)
+│   │   ├── user/               (14 files — individual/student dashboard pages)
+│   │   ├── pages/              (18+ files — public-facing pages)
+│   │   ├── shared/             (8 files — reusable section components)
+│   │   ├── ui/                 (58+ files — Radix UI wrapped components)
+│   │   ├── data/               (4 files — mock data)
+│   │   ├── figma/              (ImageWithFallback component)
+│   │   ├── Navbar.tsx
+│   │   ├── Footer.tsx
+│   │   └── App.tsx
+│   ├── routes.ts               (Complete router configuration)
+│   └── main.tsx                (Entry point)
+├── styles/
+│   ├── index.css, theme.css, glass.css, tailwind.css, fonts.css
+├── imports/
+
+
+================================================================================
+UI COMPONENT LIBRARY (src/app/components/ui/)
+================================================================================
+58+ Radix UI wrapped components: accordion, alert, alert-dialog, avatar, badge,
+button, card, checkbox, dialog, dropdown-menu, form, input, label, menubar,
+pagination, popover, progress, radio-group, select, separator, sheet, slider,
+switch, tabs, textarea, toggle, toggle-group, chart, carousel, breadcrumb,
+calendar, command, context-menu, drawer, hover-card, input-otp, navigation-menu,
+resizable, scroll-area, skeleton, sonner, table, tooltip, plus utils.ts and
+use-mobile.ts hook.
+
+
+================================================================================
+KEY DESIGN DECISIONS & PATTERNS
+================================================================================
+
+1. Component Pattern: Functional components with hooks, no class components
+2. Styling: Inline styles with CSS vars + Tailwind utility classes + glass.css utilities
+3. Routing: React Router 7 with nested layouts using Outlet pattern
+4. Dashboard layouts: Collapsible sidebar (desktop) + mobile overlay drawer + top bar
+5. Data: All mock data in TypeScript files, no API calls
+6. Icons: lucide-react primary, @mui/icons-material secondary
+7. No authentication: All dashboards accessible, profile dropdown shows all 3 roles
+8. Export convention: Named exports preferred, some legacy default exports
+9. Pages wrap in min-h-screen div with Navbar + Footer (public) or Outlet (dashboard)
+10. Interactive state: useState for all form/toggle/modal state
+11. Glass UI: backdrop-filter blur + semi-transparent backgrounds + inner glow shadows
+12. Professionals page: Warm neutral bg (#f8f8f6), dark accents (#1a1a1a), Behance-style masonry
+13. Services page: Split layout (category sidebar + feed), discovery-first, glass cards
+14. Resources/Home: Category cards with glass frost effect on hover
+
+================================================================================
+RECENT CHANGES (This Session)
+================================================================================
+
+1. Created Services tab with public consultant directory (4 pages)
+2. Built Consultant dashboard with 12 pages (replaced by /studio)
+3. Reorganized into 3-role architecture: /admin, /studio, /u
+4. Created Studio dashboard (17 pages) with BOM, Team, KC Visits, Samples
+5. Created User/Student dashboard (14 pages) with Portfolio, Jobs, Courses
+6. Extended Admin with 5 new moderation pages
+7. Created Professionals community hub (Behance-style masonry + sidebar)
+8. Created Professionals B (Instagram/Twitter feed with carousels, PDFs)
+9. Added public Job Board, Course Catalog, KC Info pages
+10. Updated Navbar: BRANDS, PRODUCTS, RESOURCES, SERVICES, PROFESSIONALS
+11. Updated Footer with Platform links including Professionals B
+12. Services page: reimagined with split layout, glass UI top picks cards
+13. Professionals page: pastel vector backgrounds, 2-line descriptions, sponsored posts
+14. Resources/Home: glass frost effect on category card hover
+15. Consultant profile: removed banner image, clean back-nav bar
+16. Hierarchy page: consultant cards link to /services/consultant/:slug
+17. Fixed numerous data field mismatches (location.city, authorName, enrolledCount, etc.)
+
+================================================================================
+FILE COUNT SUMMARY
+================================================================================
+Admin pages:     15 files
+Studio pages:    17 files
+User pages:      14 files
+Consultant:      12 files (legacy, still functional)
+Public pages:    18+ files
+UI components:   58+ files
+Data files:      4 files
+Shared:          8 files
+Layout/Nav:      3 files (Navbar, Footer, App)
+Config:          routes.ts, main.tsx, vite.config.ts, package.json, postcss.config.mjs
+
+Total estimated: ~150+ component files
