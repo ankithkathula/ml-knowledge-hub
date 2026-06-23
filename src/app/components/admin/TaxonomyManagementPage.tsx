@@ -100,7 +100,21 @@ const LAYER_SECTIONS: Record<number, { name: string; icon: React.ElementType; de
   ],
 };
 
+const SERVICE_TAXONOMY = [
+  { id: "architecture-design", name: "Architecture & Design", icon: "🏛️", subCount: 6, providerCount: 820, color: "#3b82f6" },
+  { id: "structural-civil",    name: "Structural & Civil",   icon: "🏗️", subCount: 4, providerCount: 540, color: "#6c757d" },
+  { id: "interior-design",     name: "Interior Design",      icon: "🎨", subCount: 8, providerCount: 1240, color: "#ec4899" },
+  { id: "mep-services",        name: "MEP Engineering",      icon: "⚡", subCount: 5, providerCount: 460, color: "#ff6a3d" },
+  { id: "project-management",  name: "Project Management",   icon: "📋", subCount: 4, providerCount: 380, color: "#22c55e" },
+  { id: "sustainability",      name: "Sustainability & Green",icon: "🌿", subCount: 3, providerCount: 210, color: "#16a34a" },
+  { id: "facility-management", name: "Facility Management",  icon: "🔧", subCount: 5, providerCount: 320, color: "#8b5cf6" },
+  { id: "landscape",           name: "Landscape & Outdoor",  icon: "🌳", subCount: 4, providerCount: 180, color: "#2d6a4f" },
+  { id: "procurement",         name: "Procurement & Supply",  icon: "📦", subCount: 3, providerCount: 290, color: "#b45309" },
+  { id: "inspection",          name: "Inspection & Audit",   icon: "🔍", subCount: 4, providerCount: 150, color: "#dc2626" },
+];
+
 export function TaxonomyManagementPage() {
+  const [taxonomyTab, setTaxonomyTab] = useState<"product" | "service">("product");
   const [selectedLayer, setSelectedLayer] = useState<number>(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
@@ -124,11 +138,64 @@ export function TaxonomyManagementPage() {
 
   return (
     <div className="p-4 sm:p-6 max-w-[1400px] mx-auto space-y-6">
+      {/* Top-level taxonomy type tabs */}
+      <div className="flex gap-1 p-1 rounded-xl" style={{ background: "rgba(0,0,0,0.04)", width: "fit-content" }}>
+        {(["product", "service"] as const).map((t) => (
+          <button
+            key={t}
+            onClick={() => setTaxonomyTab(t)}
+            className="px-5 py-2 rounded-lg text-sm font-semibold capitalize transition-all"
+            style={{
+              background: taxonomyTab === t ? "white" : "transparent",
+              color: taxonomyTab === t ? "var(--text-primary)" : "var(--text-muted)",
+              boxShadow: taxonomyTab === t ? "0 1px 4px rgba(0,0,0,0.08)" : "none",
+            }}
+          >
+            {t === "product" ? "Product Taxonomy" : "Service Taxonomy"}
+          </button>
+        ))}
+      </div>
+
+      {taxonomyTab === "service" ? (
+        <div>
+          <div className="flex items-center justify-between mb-5">
+            <div>
+              <h2 style={{ fontSize: "1.15rem", fontWeight: 800, color: "var(--text-primary)" }}>Service Taxonomy</h2>
+              <p style={{ fontSize: "0.82rem", color: "var(--text-secondary)", marginTop: 2 }}>Manage service categories for studios, consultants, and professionals</p>
+            </div>
+            <button className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white" style={{ background: "#ff6a3d" }}>
+              <Plus className="w-4 h-4" /> Add Category
+            </button>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {SERVICE_TAXONOMY.map((cat) => (
+              <div key={cat.id} className="rounded-2xl p-5" style={{ background: "white", border: "1px solid rgba(0,0,0,0.06)" }}>
+                <div className="flex items-start justify-between mb-3">
+                  <span style={{ fontSize: "1.6rem" }}>{cat.icon}</span>
+                  <div className="flex gap-1">
+                    <button className="p-1.5 rounded-lg hover:bg-gray-50 transition-colors"><Edit3 className="w-3.5 h-3.5" style={{ color: "var(--text-muted)" }} /></button>
+                    <button className="p-1.5 rounded-lg hover:bg-red-50 transition-colors"><Trash2 className="w-3.5 h-3.5" style={{ color: "#ef4444" }} /></button>
+                  </div>
+                </div>
+                <p style={{ fontWeight: 700, fontSize: "0.9rem", color: "var(--text-primary)" }}>{cat.name}</p>
+                <div className="flex items-center gap-3 mt-2">
+                  <span style={{ fontSize: "0.72rem", color: "var(--text-muted)" }}>{cat.subCount} subcategories</span>
+                  <span style={{ fontSize: "0.72rem", color: "var(--text-muted)" }}>{cat.providerCount} providers</span>
+                </div>
+                <div className="mt-3 h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(0,0,0,0.06)" }}>
+                  <div className="h-full rounded-full" style={{ width: `${Math.min((cat.providerCount / 1240) * 100, 100)}%`, background: cat.color }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+      <>
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h2 style={{ fontSize: "1.35rem", fontWeight: 800, color: "var(--text-primary)" }}>
-            Taxonomy Management
+            Product Taxonomy
           </h2>
           <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginTop: 2 }}>
             Manage category hierarchy across all 5 layers with bulk import
@@ -542,6 +609,8 @@ export function TaxonomyManagementPage() {
             </div>
           </div>
         </div>
+      )}
+      </>
       )}
     </div>
   );

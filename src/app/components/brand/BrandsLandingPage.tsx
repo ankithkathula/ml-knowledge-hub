@@ -59,7 +59,7 @@ export function BrandsLandingPage({ onNavigate }: BrandsLandingPageProps) {
   return (
     <div className="min-h-screen bg-white font-['Satoshi',sans-serif]">
       {/* Breadcrumb */}
-      <div className="pt-24 pb-4 px-4 md:px-8 max-w-[1200px] mx-auto">
+      <div className="pt-6 pb-4 px-4 md:px-8 max-w-[1200px] mx-auto">
         <div className="flex items-center gap-2 text-[11px] text-gray-500 uppercase tracking-wider">
           <button onClick={() => onNavigate?.('home')} className="hover:text-[#FF6A3D] transition-colors">Home</button>
           <ChevronRight className="w-3 h-3" />

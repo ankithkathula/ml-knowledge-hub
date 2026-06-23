@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { useNavigate } from "react-router";
 import {
   Search,
   FolderKanban,
@@ -69,6 +70,7 @@ const EMPTY_FORM: ProjectFormData = {
 };
 
 export function StudioProjectsManagePage() {
+  const navigate = useNavigate();
   const [projects, setProjects] = useState<ManagedProject[]>(MANAGED_PROJECTS);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("All");
@@ -340,7 +342,8 @@ export function StudioProjectsManagePage() {
             {filtered.map((project) => (
               <div
                 key={project.id}
-                className="glass-card hover-lift !p-0 overflow-hidden group"
+                className="glass-card hover-lift !p-0 overflow-hidden group cursor-pointer"
+                onClick={() => navigate(`/studio/projects/${project.id}`)}
               >
                 <div className="relative">
                   <img
@@ -366,14 +369,14 @@ export function StudioProjectsManagePage() {
                     <button
                       className="w-7 h-7 rounded-lg flex items-center justify-center"
                       style={{ background: "rgba(255,255,255,0.9)" }}
-                      onClick={() => openEditModal(project)}
+                      onClick={(e) => { e.stopPropagation(); openEditModal(project); }}
                     >
                       <Pencil className="w-3.5 h-3.5" style={{ color: "var(--text-secondary)" }} />
                     </button>
                     <button
                       className="w-7 h-7 rounded-lg flex items-center justify-center"
                       style={{ background: "rgba(255,255,255,0.9)" }}
-                      onClick={() => setDeleteConfirmId(project.id)}
+                      onClick={(e) => { e.stopPropagation(); setDeleteConfirmId(project.id); }}
                     >
                       <Trash2 className="w-3.5 h-3.5" style={{ color: "#ef4444" }} />
                     </button>
@@ -441,7 +444,8 @@ export function StudioProjectsManagePage() {
             {filtered.map((project) => (
               <div
                 key={project.id}
-                className="glass-card hover-lift !p-0 overflow-hidden flex group"
+                className="glass-card hover-lift !p-0 overflow-hidden flex group cursor-pointer"
+                onClick={() => navigate(`/studio/projects/${project.id}`)}
               >
                 <img
                   src={project.thumbnail}
@@ -486,14 +490,14 @@ export function StudioProjectsManagePage() {
                       <button
                         className="w-7 h-7 rounded-lg flex items-center justify-center"
                         style={{ background: "var(--accent-light)" }}
-                        onClick={() => openEditModal(project)}
+                        onClick={(e) => { e.stopPropagation(); openEditModal(project); }}
                       >
                         <Pencil className="w-3.5 h-3.5" style={{ color: "var(--accent)" }} />
                       </button>
                       <button
                         className="w-7 h-7 rounded-lg flex items-center justify-center"
                         style={{ background: "rgba(239,68,68,0.10)" }}
-                        onClick={() => setDeleteConfirmId(project.id)}
+                        onClick={(e) => { e.stopPropagation(); setDeleteConfirmId(project.id); }}
                       >
                         <Trash2 className="w-3.5 h-3.5" style={{ color: "#ef4444" }} />
                       </button>

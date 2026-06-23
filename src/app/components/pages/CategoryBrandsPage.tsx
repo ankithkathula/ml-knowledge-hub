@@ -5,8 +5,6 @@ import {
   Grid, List, Building2, Package, Store, X, Clock,
   TrendingUp, Zap, Filter, SlidersHorizontal,
 } from "lucide-react";
-import { Navbar } from "../Navbar";
-import { Footer } from "../Footer";
 import { BRANDS, REGIONS } from "../data/mockData";
 
 const SUBCATEGORY_FILTERS = [
@@ -79,8 +77,6 @@ export function CategoryBrandsPage() {
 
   return (
     <div className="min-h-screen" style={{ background: "var(--bg-base)" }}>
-      <Navbar />
-
       {/* Breadcrumb */}
       <div style={{ background: "var(--glass-strong)", borderBottom: "var(--border)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex items-center gap-1.5">
@@ -333,7 +329,6 @@ export function CategoryBrandsPage() {
         )}
       </div>
 
-      <Footer />
     </div>
   );
 }

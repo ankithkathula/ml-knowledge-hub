@@ -1,26 +1,16 @@
-import {
-  Eye, Briefcase, GraduationCap, Bookmark, TrendingUp,
-  ArrowUpRight, Plus, Search, MapPin, Package, Clock,
-  ChevronRight, Star, Building2, IndianRupee
-} from "lucide-react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router";
+import {
+  Briefcase, GraduationCap, Bookmark, TrendingUp,
+  ArrowUpRight, MapPin, Package, Check, ChevronRight,
+  Building2, IndianRupee, Calendar, Eye, Award, Star,
+} from "lucide-react";
+import { getAuthUser, type AuthUser } from "../../utils/auth";
 
 const ACCENT = "#6366f1";
 const ACCENT_RGB = "99,102,241";
 
-/* ── Mock Data ──────────────────────────────────────────────────────── */
-
 const kpiCards = [
-  {
-    label: "Portfolio Views",
-    value: "890",
-    change: "+18%",
-    icon: Eye,
-    color: "#3b82f6",
-    bg: "rgba(59,130,246,0.1)",
-    border: "rgba(59,130,246,0.2)",
-    sparkline: [40, 55, 48, 62, 58, 70, 89],
-  },
   {
     label: "Jobs Applied",
     value: "12",
@@ -30,9 +20,21 @@ const kpiCards = [
     bg: `rgba(${ACCENT_RGB},0.1)`,
     border: `rgba(${ACCENT_RGB},0.2)`,
     sparkline: [5, 6, 7, 8, 9, 10, 12],
+    href: "/u/jobs",
   },
   {
-    label: "Courses In Progress",
+    label: "Profile Views",
+    value: "89",
+    change: "+18%",
+    icon: Eye,
+    color: "#3b82f6",
+    bg: "rgba(59,130,246,0.1)",
+    border: "rgba(59,130,246,0.2)",
+    sparkline: [40, 55, 48, 62, 58, 70, 89],
+    href: "/u/profile",
+  },
+  {
+    label: "Courses Enrolled",
     value: "3",
     change: "+1",
     icon: GraduationCap,
@@ -40,66 +42,85 @@ const kpiCards = [
     bg: "rgba(168,85,247,0.1)",
     border: "rgba(168,85,247,0.2)",
     sparkline: [1, 1, 2, 2, 2, 3, 3],
+    href: "/u/courses",
   },
   {
-    label: "Bookmarked Materials",
-    value: "45",
-    change: "+8",
+    label: "Saved Jobs",
+    value: "18",
+    change: "+5",
     icon: Bookmark,
     color: "#f59e0b",
     bg: "rgba(245,158,11,0.1)",
     border: "rgba(245,158,11,0.2)",
-    sparkline: [20, 25, 28, 32, 37, 40, 45],
+    sparkline: [8, 10, 12, 13, 15, 16, 18],
+    href: "/u/bookmarks",
   },
 ];
 
 const activityFeed = [
-  { icon: Briefcase, color: ACCENT, text: "Applied for Senior Architect at XYZ Studio", time: "2h ago" },
-  { icon: GraduationCap, color: "#a855f7", text: "Enrolled in Green Building Certification", time: "5h ago" },
-  { icon: Bookmark, color: "#f59e0b", text: "Bookmarked Italian Marble from BrandX", time: "1d ago" },
-  { icon: Package, color: "#10b981", text: "Sample request approved", time: "1d ago" },
-  { icon: MapPin, color: "#3b82f6", text: "KC Visit scheduled for Apr 15", time: "2d ago" },
-  { icon: Eye, color: "#ec4899", text: "Portfolio project got 50 views", time: "3d ago" },
+  { icon: Briefcase,     color: ACCENT,    text: "Applied for Junior Architect at DesignCraft Studio", time: "2h ago" },
+  { icon: GraduationCap, color: "#a855f7", text: "Completed Module 8: Green Walls in GBCI course",      time: "5h ago" },
+  { icon: Eye,           color: "#3b82f6", text: "Morphogenesis viewed your portfolio",                       time: "1d ago" },
+  { icon: Package,       color: "#10b981", text: "Sample request for Kajaria tiles approved",             time: "1d ago" },
+  { icon: MapPin,        color: "#f59e0b", text: "KC Visit scheduled — Asian Paints KC, Bengaluru",       time: "2d ago" },
+  { icon: Star,          color: "#ec4899", text: "Received a recommendation from Dr. Ravi Kumar",         time: "3d ago" },
 ];
 
 const recommendedJobs = [
-  { title: "Senior Architect", studio: "DesignCraft Studio", location: "Mumbai", salary: "12-18 LPA" },
-  { title: "Interior Designer", studio: "SpaceWorks India", location: "Bangalore", salary: "8-12 LPA" },
-  { title: "Sustainability Consultant", studio: "GreenBuild Associates", location: "Pune", salary: "10-15 LPA" },
+  { title: "Junior Architect",     studio: "DesignCraft Studio", location: "Mumbai",    salary: "4-6 LPA",  match: 92 },
+  { title: "Design Intern",        studio: "SpaceWorks India",   location: "Bangalore", salary: "15k/mo",   match: 85 },
+  { title: "Architecture Intern",  studio: "Morphogenesis",          location: "Gurgaon",   salary: "20k/mo",   match: 78 },
 ];
 
 const inProgressCourses = [
-  { title: "Green Building Certification", provider: "EcoDesign Academy", progress: 65, modules: "8/12 modules" },
-  { title: "Advanced Revit for Architecture", provider: "BuildSkill Pro", progress: 30, modules: "3/10 modules" },
+  { title: "Green Building Certification (GBCI)", provider: "EcoDesign Academy", progress: 65, modules: "8/12 modules" },
+  { title: "Advanced Revit for Architecture",     provider: "BuildSkill Pro",     progress: 30, modules: "3/10 modules" },
 ];
 
-const recentBookmarks = [
-  { name: "Italian Carrara Marble", brand: "BrandX", color: "#3b82f6" },
-  { name: "Vitrified Floor Tiles", brand: "Kajaria", color: "#10b981" },
-  { name: "Teak Wood Veneer", brand: "GreenPly", color: "#f59e0b" },
-  { name: "Aluminium Composite Panel", brand: "Aludecor", color: "#a855f7" },
+const upcomingEvents = [
+  { title: "Design Innovation Summit 2026",    date: "May 22", location: "Mumbai",      type: "Conference" },
+  { title: "Morphogenesis Campus Placement Drive", date: "May 25", location: "Online",      type: "Placement"  },
+  { title: "Material Clinic: Surfaces & Finishes", date: "Jun 3", location: "Bengaluru KC", type: "Workshop" },
 ];
 
-/* ── Tiny sparkline SVG ────────────────────────────────────────────── */
+const placementSteps = [
+  { label: "Basic Info", done: true  },
+  { label: "Education",  done: true  },
+  { label: "Portfolio",  done: false },
+  { label: "Skills",     done: false },
+];
 
 function MiniSparkline({ data, color }: { data: number[]; color: string }) {
   const max = Math.max(...data);
   const min = Math.min(...data);
   const range = max - min || 1;
-  const w = 64;
-  const h = 24;
-  const pts = data.map((v, i) => `${(i / (data.length - 1)) * w},${h - ((v - min) / range) * h}`).join(" ");
-
+  const w = 64, h = 24;
+  const pts = data
+    .map((v, i) => `${(i / (data.length - 1)) * w},${h - ((v - min) / range) * h}`)
+    .join(" ");
   return (
     <svg width={w} height={h} className="flex-shrink-0">
-      <polyline points={pts} fill="none" stroke={color} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+      <polyline
+        points={pts}
+        fill="none"
+        stroke={color}
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
 
-/* ── Main Component ────────────────────────────────────────────────── */
-
 export function UserDashboardHome() {
+  const [user, setUser] = useState<AuthUser | null>(() => getAuthUser());
+
+  useEffect(() => {
+    const sync = () => setUser(getAuthUser());
+    window.addEventListener("ml-auth-change", sync);
+    return () => window.removeEventListener("ml-auth-change", sync);
+  }, []);
+
   const greeting = (() => {
     const h = new Date().getHours();
     if (h < 12) return "Good morning";
@@ -107,81 +128,148 @@ export function UserDashboardHome() {
     return "Good evening";
   })();
 
-  const todayStr = new Date().toLocaleDateString("en-IN", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+  const firstName = user?.name.split(" ")[0] ?? "there";
+  const readiness = 45;
+  const circumference = 2 * Math.PI * 34;
 
   return (
     <div className="p-4 sm:p-6 max-w-[1400px] mx-auto space-y-6">
-      {/* ── Welcome Banner ────────────────────────────────────────── */}
+
+      {/* ── Placement Readiness Block ─────────────────────────────── */}
       <div
-        className="rounded-2xl p-5 sm:p-6"
-        style={{
-          background: `linear-gradient(135deg, rgba(${ACCENT_RGB},0.1) 0%, rgba(168,85,247,0.08) 100%)`,
-          border: `1px solid rgba(${ACCENT_RGB},0.15)`,
-        }}
+        className="rounded-2xl overflow-hidden"
+        style={{ background: "linear-gradient(135deg, #FF6A3D 0%, #f97316 100%)" }}
       >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <h2 style={{ fontSize: "1.35rem", fontWeight: 800, color: "var(--text-primary)" }}>
-              {greeting}, Ankit
+        <div className="p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+          <div className="text-white">
+            <div className="flex items-center gap-2 mb-1.5">
+              <Award style={{ width: 16, height: 16, opacity: 0.85 }} />
+              <span
+                style={{
+                  fontSize: "0.67rem",
+                  fontWeight: 700,
+                  opacity: 0.85,
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                }}
+              >
+                Placement Readiness
+              </span>
+            </div>
+            <h2 style={{ fontSize: "1.3rem", fontWeight: 800, lineHeight: 1.25 }}>
+              {greeting}, {firstName}! You're {readiness}% ready.
             </h2>
-            <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginTop: 4 }}>
-              {todayStr}
+            <p style={{ fontSize: "0.82rem", opacity: 0.85, marginTop: 6, lineHeight: 1.5 }}>
+              Complete your profile to get discovered by top studios &amp; brands.
             </p>
           </div>
-          <div className="flex items-center gap-2 flex-wrap">
-            <Link
-              to="/u/jobs"
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all"
-              style={{ background: `rgba(${ACCENT_RGB},0.12)`, color: ACCENT }}
-              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = `rgba(${ACCENT_RGB},0.2)`)}
-              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = `rgba(${ACCENT_RGB},0.12)`)}
-            >
-              <Search className="w-3.5 h-3.5" /> Browse Jobs
-            </Link>
-            <Link
-              to="/u/courses"
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all"
-              style={{ background: "rgba(168,85,247,0.12)", color: "#a855f7" }}
-              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "rgba(168,85,247,0.2)")}
-              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "rgba(168,85,247,0.12)")}
-            >
-              <GraduationCap className="w-3.5 h-3.5" /> Explore Courses
-            </Link>
-            <Link
-              to="/u/portfolio"
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all"
-              style={{ background: "rgba(16,185,129,0.12)", color: "#10b981" }}
-              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "rgba(16,185,129,0.2)")}
-              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "rgba(16,185,129,0.12)")}
-            >
-              <Plus className="w-3.5 h-3.5" /> Add Project
-            </Link>
+
+          <div className="flex items-center gap-4 flex-shrink-0">
+            {/* Circular progress */}
+            <div className="relative w-20 h-20 flex-shrink-0">
+              <svg
+                viewBox="0 0 80 80"
+                className="w-full h-full"
+                style={{ transform: "rotate(-90deg)" }}
+              >
+                <circle
+                  cx="40" cy="40" r="34"
+                  fill="none"
+                  stroke="rgba(255,255,255,0.25)"
+                  strokeWidth="8"
+                />
+                <circle
+                  cx="40" cy="40" r="34"
+                  fill="none"
+                  stroke="white"
+                  strokeWidth="8"
+                  strokeLinecap="round"
+                  strokeDasharray={`${(readiness / 100) * circumference} ${circumference}`}
+                />
+              </svg>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span style={{ fontSize: "1.1rem", fontWeight: 800, color: "white" }}>
+                  {readiness}%
+                </span>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <Link
+                to="/u/portfolio"
+                className="px-4 py-2 rounded-xl text-[12px] font-bold text-white text-center transition-all hover:opacity-90"
+                style={{ background: "rgba(255,255,255,0.25)" }}
+              >
+                Upload Portfolio
+              </Link>
+              <Link
+                to="/u/profile"
+                className="px-4 py-2 rounded-xl text-[12px] font-bold text-white text-center transition-all hover:opacity-90"
+                style={{ background: "rgba(255,255,255,0.15)" }}
+              >
+                Complete Profile
+              </Link>
+            </div>
           </div>
+        </div>
+
+        {/* Completion steps */}
+        <div className="px-5 sm:px-6 pb-4 grid grid-cols-2 sm:grid-cols-4 gap-2">
+          {placementSteps.map((step) => (
+            <div key={step.label} className="flex items-center gap-2">
+              <div
+                className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0"
+                style={{
+                  background: step.done ? "rgba(255,255,255,0.9)" : "rgba(255,255,255,0.25)",
+                }}
+              >
+                {step.done && (
+                  <Check style={{ width: 10, height: 10, color: "#FF6A3D" }} />
+                )}
+              </div>
+              <span
+                style={{
+                  fontSize: "0.7rem",
+                  color: step.done ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.55)",
+                  fontWeight: step.done ? 600 : 400,
+                }}
+              >
+                {step.label}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
 
       {/* ── KPI Cards ─────────────────────────────────────────────── */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <div id="tour-user-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {kpiCards.map((kpi) => {
           const Icon = kpi.icon;
           return (
-            <div
+            <Link
               key={kpi.label}
-              className="rounded-xl p-4 transition-all hover:scale-[1.02]"
+              to={kpi.href}
+              className="rounded-xl p-4 transition-all hover:scale-[1.02] hover:shadow-md"
               style={{ background: kpi.bg, border: `1px solid ${kpi.border}` }}
             >
               <div className="flex items-start justify-between mb-2">
-                <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: `${kpi.color}20` }}>
-                  <Icon className="w-4.5 h-4.5" style={{ color: kpi.color, width: 18, height: 18 }} />
+                <div
+                  className="w-9 h-9 rounded-lg flex items-center justify-center"
+                  style={{ background: `${kpi.color}20` }}
+                >
+                  <Icon style={{ color: kpi.color, width: 18, height: 18 }} />
                 </div>
                 <MiniSparkline data={kpi.sparkline} color={kpi.color} />
               </div>
-              <div style={{ fontSize: "1.5rem", fontWeight: 800, color: kpi.color, lineHeight: 1, marginBottom: 4 }}>
+              <div
+                style={{
+                  fontSize: "1.5rem",
+                  fontWeight: 800,
+                  color: kpi.color,
+                  lineHeight: 1,
+                  marginBottom: 4,
+                }}
+              >
                 {kpi.value}
               </div>
               <div className="flex items-center gap-1.5">
@@ -189,33 +277,40 @@ export function UserDashboardHome() {
                   {kpi.label}
                 </span>
                 <span
-                  className="flex items-center gap-0.5 text-xs font-semibold px-1.5 py-0.5 rounded-full"
-                  style={{ background: "rgba(34,197,94,0.15)", color: "#10b981", fontSize: "0.65rem" }}
+                  className="flex items-center gap-0.5 px-1.5 py-0.5 rounded-full"
+                  style={{
+                    background: "rgba(34,197,94,0.15)",
+                    color: "#10b981",
+                    fontSize: "0.65rem",
+                    fontWeight: 700,
+                  }}
                 >
-                  <TrendingUp className="w-3 h-3" />
+                  <TrendingUp style={{ width: 10, height: 10 }} />
                   {kpi.change}
                 </span>
               </div>
-            </div>
+            </Link>
           );
         })}
       </div>
 
-      {/* ── Activity Feed + Recommended Jobs ─────────────────────── */}
+      {/* ── Activity + Recommended Jobs ──────────────────────────── */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Activity Feed */}
         <div className="lg:col-span-1">
-          <div className="rounded-2xl p-5" style={{ background: "rgba(255,255,255,0.8)", border: "1px solid rgba(0,0,0,0.06)" }}>
+          <div
+            className="rounded-2xl p-5"
+            style={{ background: "rgba(255,255,255,0.8)", border: "1px solid rgba(0,0,0,0.06)" }}
+          >
             <div className="flex items-center justify-between mb-4">
               <h3 style={{ fontSize: "0.9rem", fontWeight: 700, color: "var(--text-primary)" }}>
                 Recent Activity
               </h3>
               <Link
                 to="/u/activity"
-                className="flex items-center gap-1 text-xs font-semibold transition-all"
+                className="flex items-center gap-1 text-xs font-semibold"
                 style={{ color: ACCENT }}
               >
-                View All <ArrowUpRight className="w-3 h-3" />
+                View All <ArrowUpRight style={{ width: 12, height: 12 }} />
               </Link>
             </div>
             <div className="space-y-3">
@@ -226,20 +321,33 @@ export function UserDashboardHome() {
                     key={idx}
                     className="flex items-start gap-3 p-2.5 rounded-xl transition-all"
                     style={{ background: "rgba(0,0,0,0.02)" }}
-                    onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "rgba(0,0,0,0.04)")}
-                    onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "rgba(0,0,0,0.02)")}
+                    onMouseEnter={(e) =>
+                      ((e.currentTarget as HTMLElement).style.background = "rgba(0,0,0,0.04)")
+                    }
+                    onMouseLeave={(e) =>
+                      ((e.currentTarget as HTMLElement).style.background = "rgba(0,0,0,0.02)")
+                    }
                   >
                     <div
-                      className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5"
+                      className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
                       style={{ background: `${item.color}15` }}
                     >
-                      <Icon className="w-4 h-4" style={{ color: item.color }} />
+                      <Icon style={{ color: item.color, width: 15, height: 15 }} />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p style={{ fontSize: "0.78rem", fontWeight: 500, color: "var(--text-primary)", lineHeight: 1.4 }}>
+                      <p
+                        style={{
+                          fontSize: "0.78rem",
+                          fontWeight: 500,
+                          color: "var(--text-primary)",
+                          lineHeight: 1.4,
+                        }}
+                      >
                         {item.text}
                       </p>
-                      <span style={{ fontSize: "0.68rem", color: "var(--text-muted)" }}>{item.time}</span>
+                      <span style={{ fontSize: "0.68rem", color: "var(--text-muted)" }}>
+                        {item.time}
+                      </span>
                     </div>
                   </div>
                 );
@@ -248,19 +356,22 @@ export function UserDashboardHome() {
           </div>
         </div>
 
-        {/* Recommended Jobs */}
         <div className="lg:col-span-2">
-          <div className="rounded-2xl p-5" style={{ background: "rgba(255,255,255,0.8)", border: "1px solid rgba(0,0,0,0.06)" }}>
+          <div
+            id="tour-user-jobs"
+            className="rounded-2xl p-5"
+            style={{ background: "rgba(255,255,255,0.8)", border: "1px solid rgba(0,0,0,0.06)" }}
+          >
             <div className="flex items-center justify-between mb-4">
               <h3 style={{ fontSize: "0.9rem", fontWeight: 700, color: "var(--text-primary)" }}>
-                Recommended Jobs
+                Recommended for You
               </h3>
               <Link
                 to="/u/jobs"
-                className="flex items-center gap-1 text-xs font-semibold transition-all"
+                className="flex items-center gap-1 text-xs font-semibold"
                 style={{ color: ACCENT }}
               >
-                Browse All <ArrowUpRight className="w-3 h-3" />
+                Browse All <ArrowUpRight style={{ width: 12, height: 12 }} />
               </Link>
             </div>
             <div className="space-y-3">
@@ -269,28 +380,58 @@ export function UserDashboardHome() {
                   key={idx}
                   className="flex items-center gap-4 p-4 rounded-xl transition-all"
                   style={{ background: "rgba(0,0,0,0.02)" }}
-                  onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "rgba(0,0,0,0.04)")}
-                  onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "rgba(0,0,0,0.02)")}
+                  onMouseEnter={(e) =>
+                    ((e.currentTarget as HTMLElement).style.background = "rgba(0,0,0,0.04)")
+                  }
+                  onMouseLeave={(e) =>
+                    ((e.currentTarget as HTMLElement).style.background = "rgba(0,0,0,0.02)")
+                  }
                 >
                   <div
                     className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
                     style={{ background: `rgba(${ACCENT_RGB},0.1)` }}
                   >
-                    <Building2 className="w-5 h-5" style={{ color: ACCENT }} />
+                    <Building2 style={{ color: ACCENT, width: 20, height: 20 }} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div style={{ fontSize: "0.88rem", fontWeight: 700, color: "var(--text-primary)" }}>
-                      {job.title}
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span
+                        style={{
+                          fontSize: "0.88rem",
+                          fontWeight: 700,
+                          color: "var(--text-primary)",
+                        }}
+                      >
+                        {job.title}
+                      </span>
+                      <span
+                        className="px-2 py-0.5 rounded-full text-[10px] font-bold"
+                        style={{ background: "rgba(16,185,129,0.1)", color: "#10b981" }}
+                      >
+                        {job.match}% match
+                      </span>
                     </div>
                     <div className="flex items-center gap-3 mt-1 flex-wrap">
-                      <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)", fontWeight: 500 }}>
+                      <span
+                        style={{
+                          fontSize: "0.75rem",
+                          color: "var(--text-secondary)",
+                          fontWeight: 500,
+                        }}
+                      >
                         {job.studio}
                       </span>
-                      <span className="flex items-center gap-0.5" style={{ fontSize: "0.72rem", color: "var(--text-muted)" }}>
-                        <MapPin className="w-3 h-3" /> {job.location}
+                      <span
+                        className="flex items-center gap-0.5"
+                        style={{ fontSize: "0.72rem", color: "var(--text-muted)" }}
+                      >
+                        <MapPin style={{ width: 11, height: 11 }} /> {job.location}
                       </span>
-                      <span className="flex items-center gap-0.5" style={{ fontSize: "0.72rem", color: "var(--text-muted)" }}>
-                        <IndianRupee className="w-3 h-3" /> {job.salary}
+                      <span
+                        className="flex items-center gap-0.5"
+                        style={{ fontSize: "0.72rem", color: "var(--text-muted)" }}
+                      >
+                        <IndianRupee style={{ width: 11, height: 11 }} /> {job.salary}
                       </span>
                     </div>
                   </div>
@@ -298,8 +439,14 @@ export function UserDashboardHome() {
                     to="/u/jobs"
                     className="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all flex-shrink-0"
                     style={{ background: `rgba(${ACCENT_RGB},0.1)`, color: ACCENT }}
-                    onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = `rgba(${ACCENT_RGB},0.2)`)}
-                    onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = `rgba(${ACCENT_RGB},0.1)`)}
+                    onMouseEnter={(e) =>
+                      ((e.currentTarget as HTMLElement).style.background =
+                        `rgba(${ACCENT_RGB},0.2)`)
+                    }
+                    onMouseLeave={(e) =>
+                      ((e.currentTarget as HTMLElement).style.background =
+                        `rgba(${ACCENT_RGB},0.1)`)
+                    }
                   >
                     Apply
                   </Link>
@@ -310,20 +457,24 @@ export function UserDashboardHome() {
         </div>
       </div>
 
-      {/* ── Continue Learning + Recent Bookmarks ─────────────────── */}
+      {/* ── Continue Learning + Upcoming Events ───────────────────── */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Continue Learning */}
-        <div className="rounded-2xl p-5" style={{ background: "rgba(255,255,255,0.8)", border: "1px solid rgba(0,0,0,0.06)" }}>
+        <div
+          id="tour-user-learning"
+          className="rounded-2xl p-5"
+          style={{ background: "rgba(255,255,255,0.8)", border: "1px solid rgba(0,0,0,0.06)" }}
+        >
           <div className="flex items-center justify-between mb-4">
             <h3 style={{ fontSize: "0.9rem", fontWeight: 700, color: "var(--text-primary)" }}>
               Continue Learning
             </h3>
             <Link
               to="/u/courses"
-              className="flex items-center gap-1 text-xs font-semibold transition-all"
+              className="flex items-center gap-1 text-xs font-semibold"
               style={{ color: ACCENT }}
             >
-              My Courses <ArrowUpRight className="w-3 h-3" />
+              My Courses <ArrowUpRight style={{ width: 12, height: 12 }} />
             </Link>
           </div>
           <div className="space-y-3">
@@ -332,36 +483,70 @@ export function UserDashboardHome() {
                 key={idx}
                 className="p-4 rounded-xl transition-all"
                 style={{ background: "rgba(0,0,0,0.02)" }}
-                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "rgba(0,0,0,0.04)")}
-                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "rgba(0,0,0,0.02)")}
+                onMouseEnter={(e) =>
+                  ((e.currentTarget as HTMLElement).style.background = "rgba(0,0,0,0.04)")
+                }
+                onMouseLeave={(e) =>
+                  ((e.currentTarget as HTMLElement).style.background = "rgba(0,0,0,0.02)")
+                }
               >
-                <div className="flex items-center justify-between mb-2">
+                <div className="flex items-start justify-between mb-2.5">
                   <div>
-                    <div style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--text-primary)" }}>
+                    <div
+                      style={{
+                        fontSize: "0.85rem",
+                        fontWeight: 700,
+                        color: "var(--text-primary)",
+                        lineHeight: 1.3,
+                      }}
+                    >
                       {course.title}
                     </div>
-                    <div style={{ fontSize: "0.72rem", color: "var(--text-muted)", marginTop: 2 }}>
-                      {course.provider} &middot; {course.modules}
+                    <div
+                      style={{
+                        fontSize: "0.72rem",
+                        color: "var(--text-muted)",
+                        marginTop: 3,
+                      }}
+                    >
+                      {course.provider} · {course.modules}
                     </div>
                   </div>
                   <Link
                     to="/u/courses"
-                    className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex-shrink-0"
+                    className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold flex-shrink-0 ml-2 transition-all"
                     style={{ background: `rgba(${ACCENT_RGB},0.1)`, color: ACCENT }}
-                    onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = `rgba(${ACCENT_RGB},0.2)`)}
-                    onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = `rgba(${ACCENT_RGB},0.1)`)}
+                    onMouseEnter={(e) =>
+                      ((e.currentTarget as HTMLElement).style.background =
+                        `rgba(${ACCENT_RGB},0.2)`)
+                    }
+                    onMouseLeave={(e) =>
+                      ((e.currentTarget as HTMLElement).style.background =
+                        `rgba(${ACCENT_RGB},0.1)`)
+                    }
                   >
-                    Continue <ChevronRight className="w-3 h-3" />
+                    Resume <ChevronRight style={{ width: 12, height: 12 }} />
                   </Link>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="flex-1 h-2 rounded-full" style={{ background: "rgba(0,0,0,0.06)" }}>
+                  <div
+                    className="flex-1 h-2 rounded-full"
+                    style={{ background: "rgba(0,0,0,0.06)" }}
+                  >
                     <div
                       className="h-full rounded-full transition-all"
                       style={{ width: `${course.progress}%`, background: ACCENT }}
                     />
                   </div>
-                  <span style={{ fontSize: "0.7rem", fontWeight: 700, color: ACCENT, minWidth: 32, textAlign: "right" }}>
+                  <span
+                    style={{
+                      fontSize: "0.7rem",
+                      fontWeight: 700,
+                      color: ACCENT,
+                      minWidth: 32,
+                      textAlign: "right",
+                    }}
+                  >
                     {course.progress}%
                   </span>
                 </div>
@@ -370,43 +555,98 @@ export function UserDashboardHome() {
           </div>
         </div>
 
-        {/* Recent Bookmarks */}
-        <div className="rounded-2xl p-5" style={{ background: "rgba(255,255,255,0.8)", border: "1px solid rgba(0,0,0,0.06)" }}>
+        {/* Upcoming Events */}
+        <div
+          className="rounded-2xl p-5"
+          style={{ background: "rgba(255,255,255,0.8)", border: "1px solid rgba(0,0,0,0.06)" }}
+        >
           <div className="flex items-center justify-between mb-4">
             <h3 style={{ fontSize: "0.9rem", fontWeight: 700, color: "var(--text-primary)" }}>
-              Recent Bookmarks
+              Upcoming Events
             </h3>
             <Link
-              to="/u/bookmarks"
-              className="flex items-center gap-1 text-xs font-semibold transition-all"
+              to="/events"
+              className="flex items-center gap-1 text-xs font-semibold"
               style={{ color: ACCENT }}
             >
-              View All <ArrowUpRight className="w-3 h-3" />
+              View All <ArrowUpRight style={{ width: 12, height: 12 }} />
             </Link>
           </div>
-          <div className="grid grid-cols-2 gap-3">
-            {recentBookmarks.map((item, idx) => (
-              <div
-                key={idx}
-                className="rounded-xl overflow-hidden transition-all hover:scale-[1.02]"
-                style={{ background: "rgba(0,0,0,0.02)", border: "1px solid rgba(0,0,0,0.06)" }}
-              >
+          <div className="space-y-3">
+            {upcomingEvents.map((event, idx) => {
+              const typeColor =
+                event.type === "Placement"
+                  ? { bg: `rgba(${ACCENT_RGB},0.1)`, text: ACCENT }
+                  : event.type === "Workshop"
+                  ? { bg: "rgba(168,85,247,0.1)", text: "#a855f7" }
+                  : { bg: "rgba(255,106,61,0.1)", text: "#FF6A3D" };
+              return (
                 <div
-                  className="h-24 flex items-center justify-center"
-                  style={{ background: `linear-gradient(135deg, ${item.color}20, ${item.color}10)` }}
+                  key={idx}
+                  className="flex items-center gap-4 p-4 rounded-xl transition-all"
+                  style={{ background: "rgba(0,0,0,0.02)" }}
+                  onMouseEnter={(e) =>
+                    ((e.currentTarget as HTMLElement).style.background = "rgba(0,0,0,0.04)")
+                  }
+                  onMouseLeave={(e) =>
+                    ((e.currentTarget as HTMLElement).style.background = "rgba(0,0,0,0.02)")
+                  }
                 >
-                  <Package className="w-8 h-8" style={{ color: `${item.color}60` }} />
-                </div>
-                <div className="p-3">
-                  <div style={{ fontSize: "0.78rem", fontWeight: 700, color: "var(--text-primary)", lineHeight: 1.3 }}>
-                    {item.name}
+                  <div
+                    className="w-12 h-12 rounded-xl flex flex-col items-center justify-center flex-shrink-0"
+                    style={{ background: "rgba(255,106,61,0.1)" }}
+                  >
+                    <Calendar style={{ color: "#FF6A3D", width: 16, height: 16 }} />
+                    <span
+                      style={{ fontSize: "0.63rem", fontWeight: 700, color: "#FF6A3D", marginTop: 2 }}
+                    >
+                      {event.date}
+                    </span>
                   </div>
-                  <div style={{ fontSize: "0.68rem", color: "var(--text-muted)", marginTop: 2 }}>
-                    {item.brand}
+                  <div className="flex-1 min-w-0">
+                    <div
+                      style={{
+                        fontSize: "0.85rem",
+                        fontWeight: 700,
+                        color: "var(--text-primary)",
+                        lineHeight: 1.3,
+                      }}
+                    >
+                      {event.title}
+                    </div>
+                    <div className="flex items-center gap-2 mt-1 flex-wrap">
+                      <span
+                        className="px-2 py-0.5 rounded-full text-[10px] font-bold"
+                        style={{ background: typeColor.bg, color: typeColor.text }}
+                      >
+                        {event.type}
+                      </span>
+                      <span
+                        className="flex items-center gap-0.5"
+                        style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}
+                      >
+                        <MapPin style={{ width: 10, height: 10 }} /> {event.location}
+                      </span>
+                    </div>
                   </div>
+                  <Link
+                    to="/events"
+                    className="px-3 py-1.5 rounded-lg text-[11px] font-semibold flex-shrink-0 transition-all"
+                    style={{ background: "rgba(255,106,61,0.08)", color: "#FF6A3D" }}
+                    onMouseEnter={(e) =>
+                      ((e.currentTarget as HTMLElement).style.background =
+                        "rgba(255,106,61,0.15)")
+                    }
+                    onMouseLeave={(e) =>
+                      ((e.currentTarget as HTMLElement).style.background =
+                        "rgba(255,106,61,0.08)")
+                    }
+                  >
+                    Register
+                  </Link>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>

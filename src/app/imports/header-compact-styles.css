@@ -1,0 +1,93 @@
+Update the Header height of the Material Library customer portal homepage to make it more compact while keeping the entire layout, content, navigation structure, and hero section exactly the same.
+
+Do not change the position, order, or content of any elements.
+Only reduce the vertical padding and header height to improve visual balance with the hero section.
+
+Header Height
+
+Reduce the header height from its current size to a more compact navigation bar.
+
+New header height:
+
+64px
+
+Ensure all elements inside the header remain vertically centered.
+
+Vertical Padding
+
+Reduce vertical padding for header elements.
+
+Navigation padding:
+
+padding-top: 12px
+padding-bottom: 12px
+
+Logo, navigation items, and right-side icons should align vertically in the center.
+
+Logo Size
+
+Keep the logo unchanged but slightly reduce its visual scale if necessary.
+
+Recommended max logo height:
+
+28px
+Navigation Items
+
+Keep the exact same navigation items:
+
+Brands
+Products
+Services
+
+Do not change their order or typography.
+
+Ensure the navigation text remains vertically aligned within the reduced header height.
+
+Right Side Controls
+
+Keep the same elements:
+
+Location selector
+Theme toggle
+Cart icon
+Sign In
+Sign Up
+
+Maintain their spacing but ensure they fit comfortably within the new header height.
+
+Spacing Between Elements
+
+Reduce spacing slightly so the header feels tighter but not crowded.
+
+Example spacing:
+
+navigation gap: 28px
+right controls gap: 20px
+Category Navigation Bar
+
+Do not modify the category navigation bar below the header.
+
+Its size and position should remain exactly the same.
+
+Hero Section
+
+Do not modify anything inside the hero section, including:
+
+Hero title
+Subheading
+Search bar
+Search tabs (Brands / Products / Services)
+Background video
+
+All spacing and layout should remain unchanged.
+
+Result
+
+The final design should look identical, except the header becomes:
+
+• more compact
+• visually balanced with the hero
+• less dominant vertically
+• cleaner and more modern
+
+No layout changes should occur beyond reducing the header height.

@@ -4,6 +4,7 @@
  */
 import { motion } from 'motion/react';
 import { useState, useRef } from 'react';
+import { StoreNavigator, type StoreLocation } from '../shared/StoreNavigator';
 import { 
   ArrowLeft, ArrowRight, MapPin, Globe, Star, Share2, Award, Building2, 
   Package, ChevronRight, CheckCircle,
@@ -18,6 +19,15 @@ interface BrandProfileProps {
   brandName: string;
   onBack: () => void;
 }
+
+const AB_STORES: StoreLocation[] = [
+  { id: "ab1", name: "Aditya Birla Experience Center", type: "flagship", address: "Plot 42, G Block", area: "BKC", city: "Mumbai", pincode: "400051", phone: "+91 22 6652 5000", hours: "Mon–Sat 10am–7pm", lat: 19.0659, lng: 72.8658 },
+  { id: "ab2", name: "UltraTech Cement Hub", type: "dealer", address: "Shop 12, Versova Road", area: "Andheri West", city: "Mumbai", pincode: "400058", phone: "+91 22 2632 8800", hours: "Mon–Sat 9am–6pm", lat: 19.1349, lng: 72.8253 },
+  { id: "ab3", name: "Birla White Showroom", type: "showroom", address: "7 Senapati Bapat Marg", area: "Dadar West", city: "Mumbai", pincode: "400028", phone: "+91 22 2436 7700", hours: "Mon–Sat 10am–6:30pm", lat: 19.0178, lng: 72.8478 },
+  { id: "ab4", name: "UltraTech Supply Depot", type: "depot", address: "MIDC Road, Wagle Estate", area: "Thane West", city: "Thane", pincode: "400604", phone: "+91 22 2580 3300", hours: "Mon–Fri 8am–5pm", lat: 19.2183, lng: 72.9781 },
+  { id: "ab5", name: "Aditya Birla Dealer", type: "dealer", address: "Plot 18, Sector 19", area: "Kharghar", city: "Navi Mumbai", pincode: "410210", phone: "+91 22 2774 6600", hours: "Mon–Sat 9am–6pm", lat: 19.0476, lng: 73.0688 },
+  { id: "ab6", name: "UltraTech Cement Outlet", type: "dealer", address: "Ghodbunder Road, Near Viviana Mall", area: "Manpada", city: "Thane", pincode: "400610", phone: "+91 22 2596 1100", hours: "Mon–Sat 9am–6pm", lat: 19.2468, lng: 72.9659 },
+];
 
 const BRAND_DATA = {
   name: 'ADITYA BIRLA GROUP',
@@ -89,9 +99,7 @@ const BRAND_DATA = {
     { name: 'Ready Mix Concrete', count: 15, image: 'https://images.unsplash.com/photo-1541008022357-e6195d1af8cc?auto=format&fit=crop&q=80&w=400' },
     { name: 'Industrial Paints', count: 55, image: 'https://images.unsplash.com/photo-1560185127-6ed189bf02f4?auto=format&fit=crop&q=80&w=400' },
   ],
-  stores: [
-    { name: 'Aditya Birla Experience Center', address: 'Plot 42, BKC Complex, G Block', city: 'Mumbai', country: 'India', image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=400' },
-  ],
+  stores: [] as StoreLocation[],
   portfolioCategories: [
     {
       name: 'Commercial',
@@ -317,7 +325,7 @@ export function BrandProfile({ brandName, onBack }: BrandProfileProps) {
 
   return (
     <div className="min-h-screen bg-[#FDFDFD] font-['Satoshi',sans-serif]">
-      <section className="relative pt-[64px] md:pt-[80px] min-h-[500px] md:min-h-[520px] flex items-end overflow-hidden">
+      <section className="relative min-h-[500px] md:min-h-[520px] flex items-end overflow-hidden">
         <div className="absolute inset-0 z-0 h-[240px] md:h-full">
           <ImageWithFallback 
             src={BRAND_DATA.bannerImage} 
@@ -896,46 +904,7 @@ export function BrandProfile({ brandName, onBack }: BrandProfileProps) {
 
         {/* SECTION 7: STORES & LOCATIONS */}
         <section>
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-[24px]">
-            <h2 className="text-[11px] font-medium uppercase tracking-[0.3em] text-gray-400">STORES & LOCATIONS</h2>
-            <div className="flex items-center gap-3 w-full sm:w-auto">
-              <div className="relative w-full sm:w-[240px]">
-                <MapPin size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                <input 
-                  type="text" 
-                  placeholder="Search by pincode..." 
-                  className="w-full h-[40px] pl-9 pr-4 bg-[#F8FAFC] border border-[#E6EAF0] rounded-lg text-[13px] outline-none focus:border-[#FF6A3D]/30 transition-all"
-                />
-              </div>
-              <button className="text-[11px] font-bold text-[#FF6A3D] uppercase tracking-widest whitespace-nowrap">
-                VIEW ALL →
-              </button>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {BRAND_DATA.stores.map((store, idx) => (
-              <motion.div 
-                key={idx}
-                whileHover={{ y: -5 }}
-                className="bg-white border border-[#E6EAF0] rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all cursor-pointer group"
-              >
-                <div className="h-[140px] overflow-hidden">
-                  <ImageWithFallback 
-                    src={store.image} 
-                    alt={store.name} 
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                </div>
-                <div className="p-5">
-                  <h3 className="text-[14px] font-medium text-[#111111] uppercase tracking-wider mb-2">{store.name}</h3>
-                  <div className="space-y-1">
-                    <p className="text-[13px] text-gray-500 line-clamp-1">{store.address}</p>
-                    <p className="text-[11px] font-medium text-gray-400 uppercase tracking-widest">PINCODE: 400051</p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          <StoreNavigator stores={AB_STORES} brandName="Aditya Birla" accentColor="#FF6A3D" />
         </section>
 
         {/* SECTION 8: CONTACT BRAND (UPGRADED) */}

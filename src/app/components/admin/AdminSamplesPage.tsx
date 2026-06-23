@@ -200,7 +200,7 @@ export function AdminSamplesPage() {
                   <td className="px-4 py-3" style={{ color: "var(--text-secondary)" }}>{s.brand}</td>
                   <td className="px-4 py-3"><span className="px-2 py-1 rounded-full text-xs font-semibold" style={{ background: statusColors[s.status].bg, color: statusColors[s.status].color }}>{s.status}</span></td>
                   <td className="px-4 py-3" style={{ color: "var(--text-secondary)" }}>{new Date(s.requestDate).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}</td>
-                  <td className="px-4 py-3" style={{ color: "var(--text-muted)", fontSize: "0.8rem", fontFamily: "monospace" }}>{s.tracking || "—"}</td>
+                  <td className="px-4 py-3" style={{ color: "var(--text-muted)", fontSize: "0.8rem", fontFamily: "Satoshi, monospace" }}>{s.tracking || "—"}</td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-1">
                       {s.status === "Pending" && <button className="p-1.5 rounded-lg transition-colors hover:bg-white/5 cursor-pointer" title="Approve"><CheckCircle size={15} style={{ color: "#10b981" }} /></button>}

@@ -4,6 +4,7 @@ import {
   Plus, X, User, Check, CheckCheck, Image, File,
   MessageSquare, ArrowRight, Circle,
 } from "lucide-react";
+import { AvatarImg } from "../ui/AvatarImg";
 
 // --- Types ---
 
@@ -19,6 +20,7 @@ interface Conversation {
   id: string;
   name: string;
   avatar: string;
+  avatarUrl: string;
   lastMessage: string;
   lastMessageTime: string;
   unreadCount: number;
@@ -34,6 +36,7 @@ const mockConversations: Conversation[] = [
     id: "C001",
     name: "Priya Desai",
     avatar: "PD",
+    avatarUrl: "https://i.pravatar.cc/80?img=49",
     lastMessage: "Hi Arjun, can you recommend eco-friendly tiles for a bathroom renovation?",
     lastMessageTime: "10:24 AM",
     unreadCount: 2,
@@ -54,6 +57,7 @@ const mockConversations: Conversation[] = [
     id: "C002",
     name: "Amit Verma",
     avatar: "AV",
+    avatarUrl: "https://i.pravatar.cc/80?img=32",
     lastMessage: "Thanks for the consultation yesterday! The cement brand comparison was really helpful.",
     lastMessageTime: "Yesterday",
     unreadCount: 0,
@@ -71,6 +75,7 @@ const mockConversations: Conversation[] = [
     id: "C003",
     name: "Neha Kulkarni",
     avatar: "NK",
+    avatarUrl: "https://i.pravatar.cc/80?img=39",
     lastMessage: "Would you be available for a site visit in Banjara Hills next week?",
     lastMessageTime: "2d ago",
     unreadCount: 1,
@@ -88,6 +93,7 @@ const mockConversations: Conversation[] = [
     id: "C004",
     name: "Rajesh Mehta",
     avatar: "RM",
+    avatarUrl: "https://i.pravatar.cc/80?img=25",
     lastMessage: "The Somany tiles samples look great! Let's finalize the living room design.",
     lastMessageTime: "3d ago",
     unreadCount: 0,
@@ -103,6 +109,7 @@ const mockConversations: Conversation[] = [
     id: "C005",
     name: "Sunita Sharma",
     avatar: "SS",
+    avatarUrl: "https://i.pravatar.cc/80?img=42",
     lastMessage: "Can we reschedule the interior material review to Thursday?",
     lastMessageTime: "4d ago",
     unreadCount: 0,
@@ -118,6 +125,7 @@ const mockConversations: Conversation[] = [
     id: "C006",
     name: "Karthik Nair",
     avatar: "KN",
+    avatarUrl: "https://i.pravatar.cc/80?img=29",
     lastMessage: "The waterproofing work is progressing well. Dr. Fixit was a great suggestion!",
     lastMessageTime: "5d ago",
     unreadCount: 0,
@@ -272,15 +280,7 @@ export default function StudioMessagesPage() {
               >
                 {/* Avatar with online dot */}
                 <div className="relative flex-shrink-0">
-                  <div
-                    className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold"
-                    style={{
-                      backgroundColor: convo.unreadCount > 0 ? "rgba(255,106,61,0.15)" : "var(--accent-light)",
-                      color: "var(--accent)",
-                    }}
-                  >
-                    {convo.avatar}
-                  </div>
+                  <AvatarImg src={convo.avatarUrl} fallback={convo.avatar} size={40} />
                   {convo.online && (
                     <div
                       className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2"
@@ -359,15 +359,7 @@ export default function StudioMessagesPage() {
               >
                 <div className="flex items-center gap-3">
                   <div className="relative">
-                    <div
-                      className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold"
-                      style={{
-                        backgroundColor: "var(--accent-light)",
-                        color: "var(--accent)",
-                      }}
-                    >
-                      {activeConvo.avatar}
-                    </div>
+                    <AvatarImg src={activeConvo.avatarUrl} fallback={activeConvo.avatar} size={36} />
                     {activeConvo.online && (
                       <div
                         className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2"

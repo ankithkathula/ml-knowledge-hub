@@ -1,7 +1,14 @@
 import { Link } from "react-router";
-import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin, Zap, ArrowRight, Star } from "lucide-react";
+import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin, ArrowRight } from "lucide-react";
+import logoImage from "figma:asset/84319742a432eabc75aa1b62e8b22d482a7499e6.png";
 
-const FOOTER_COLS: { title: string; links: { label: string; href: string }[] }[] = [
+type FooterCol = {
+  title: string;
+  links: { label: string; href: string }[];
+};
+
+// Existing ml_ui columns — kept intact.
+const FOOTER_COLS: FooterCol[] = [
   {
     title: "Platform",
     links: [
@@ -9,7 +16,7 @@ const FOOTER_COLS: { title: string; links: { label: string; href: string }[] }[]
       { label: "Jobs", href: "/jobs" },
       { label: "Courses", href: "/courses" },
       { label: "Knowledge Center", href: "/kc" },
-      { label: "Professionals B", href: "/professionals/b" },
+      { label: "Studios", href: "/professionals/b" },
       { label: "Blog", href: "/blog" },
     ],
   },
@@ -41,31 +48,50 @@ const FOOTER_COLS: { title: string; links: { label: string; href: string }[] }[]
   },
 ];
 
+
+const BG = "linear-gradient(180deg, rgb(4,7,15) 0%, rgb(2,4,10) 100%)";
+
 export function Footer() {
   return (
     <footer
       className="relative overflow-hidden mt-20"
-      style={{ background: "linear-gradient(160deg, #fff8f5 0%, #f5f7fb 50%, #fdf4ef 100%)", borderTop: "var(--border)" }}
+      style={{
+        background: BG,
+        borderTop: "1px solid rgba(255,255,255,0.05)",
+      }}
     >
-      {/* Decorative blob */}
+      {/* Decorative orange radials matching CP MainFooter */}
       <div
-        className="absolute top-0 right-0 pointer-events-none"
+        className="absolute pointer-events-none"
         style={{
-          width: "400px",
-          height: "400px",
+          width: "560px",
+          height: "560px",
           borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(255,106,61,0.07) 0%, transparent 70%)",
-          transform: "translate(30%, -30%)",
+          background: "radial-gradient(circle, rgba(255,106,61,0.4) 0%, rgba(128,53,31,0.2) 22%, transparent 45%)",
+          right: "-180px",
+          top: "60%",
         }}
       />
       <div
-        className="absolute bottom-0 left-0 pointer-events-none"
+        className="absolute pointer-events-none"
         style={{
-          width: "300px",
-          height: "300px",
+          width: "560px",
+          height: "560px",
           borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(255,106,61,0.05) 0%, transparent 70%)",
-          transform: "translate(-30%, 30%)",
+          background: "radial-gradient(circle, rgba(255,106,61,0.25) 0%, rgba(128,53,31,0.125) 25%, transparent 50%)",
+          left: "-220px",
+          top: "60%",
+        }}
+      />
+      {/* Top fade strip */}
+      <div
+        className="absolute pointer-events-none"
+        style={{
+          left: 0,
+          right: 0,
+          top: 0,
+          height: "200px",
+          background: "linear-gradient(to bottom, rgba(255,106,61,0.05) 0%, transparent 100%)",
         }}
       />
 
@@ -74,9 +100,8 @@ export function Footer() {
         <div
           className="rounded-2xl p-6 mb-12 flex flex-col sm:flex-row items-center justify-between gap-4"
           style={{
-            background: "var(--glass-strong)",
-            border: "var(--border)",
-            boxShadow: "var(--shadow-md)",
+            background: "rgba(255,255,255,0.04)",
+            border: "1px solid rgba(255,255,255,0.08)",
             backdropFilter: "blur(12px)",
           }}
         >
@@ -84,41 +109,48 @@ export function Footer() {
             <p className="text-xs mb-0.5" style={{ color: "var(--accent)", fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase" }}>
               Stay Informed
             </p>
-            <h4 style={{ color: "var(--text-primary)", fontWeight: 700, fontSize: "1.05rem" }}>
-              Get the latest lighting industry insights
+            <h4 style={{ color: "white", fontWeight: 700, fontSize: "1.05rem" }}>
+              Get the latest construction & material insights
             </h4>
-            <p style={{ color: "var(--text-secondary)", fontSize: "0.8rem" }}>
+            <p style={{ color: "rgba(255,255,255,0.6)", fontSize: "0.8rem" }}>
               Weekly updates on brands, regulations, and new products.
             </p>
           </div>
           <div className="flex gap-2 w-full sm:w-auto flex-shrink-0">
             <input
               placeholder="Your email address"
-              className="gl-input"
-              style={{ minWidth: "220px", fontSize: "0.82rem" }}
+              className="px-4 py-2.5 rounded-lg outline-none text-sm"
+              style={{
+                minWidth: "220px",
+                fontSize: "0.82rem",
+                background: "rgba(255,255,255,0.06)",
+                color: "white",
+                border: "1px solid rgba(255,255,255,0.1)",
+              }}
             />
-            <button className="btn-primary flex-shrink-0">
+            <button
+              className="flex-shrink-0 px-4 py-2.5 rounded-lg flex items-center justify-center transition-colors"
+              style={{ background: "var(--accent)", color: "white" }}
+              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "#ff5a2d")}
+              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "var(--accent)")}
+            >
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
         </div>
 
-        {/* Main grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-8 mb-12">
-          {/* Brand col */}
-          <div className="col-span-2">
-            <Link to="/" className="flex items-center gap-2 mb-4">
-              <div
-                className="w-7 h-7 rounded-lg flex items-center justify-center"
-                style={{ background: "var(--accent)", boxShadow: "0 3px 10px rgba(255,106,61,0.3)" }}
-              >
-                <Zap className="w-4 h-4 text-white" strokeWidth={2.5} />
-              </div>
-              <span style={{ fontWeight: 800, fontSize: "1rem", color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
-                material<span style={{ color: "var(--accent)" }}>library</span>
-              </span>
+        {/* Brand zone */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 mb-10">
+          <div className="lg:col-span-1">
+            <Link to="/v1" className="flex items-center gap-3 mb-4" aria-label="Material Library home">
+              <img
+                src={logoImage}
+                alt="Material Library"
+                className="h-5 w-auto"
+                style={{ maxHeight: "20px", filter: "brightness(0) invert(1)" }}
+              />
             </Link>
-            <p style={{ color: "var(--text-muted)", fontSize: "0.8rem", lineHeight: 1.7 }} className="mb-5 max-w-xs">
+            <p style={{ color: "rgba(255,255,255,0.55)", fontSize: "0.8rem", lineHeight: 1.7 }} className="mb-5 max-w-xs">
               India's first digital platform transforming the construction industry ecosystem — connecting brands, designers, and buyers.
             </p>
             <div className="flex items-center gap-3 mb-6">
@@ -126,33 +158,30 @@ export function Footer() {
                 <a
                   key={i}
                   href="#"
-                  className="w-8 h-8 rounded-lg flex items-center justify-center transition-all"
-                  style={{ background: "rgba(255,255,255,0.8)", border: "var(--border)", color: "var(--text-muted)" }}
+                  className="w-8 h-8 rounded-full flex items-center justify-center transition-all"
+                  style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.12)", color: "rgba(255,255,255,0.7)" }}
                   onMouseEnter={(e) => {
                     (e.currentTarget as HTMLElement).style.background = "var(--accent)";
                     (e.currentTarget as HTMLElement).style.color = "#fff";
                     (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
-                    (e.currentTarget as HTMLElement).style.boxShadow = "var(--shadow-orange)";
                   }}
                   onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.8)";
-                    (e.currentTarget as HTMLElement).style.color = "var(--text-muted)";
+                    (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.04)";
+                    (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.7)";
                     (e.currentTarget as HTMLElement).style.transform = "";
-                    (e.currentTarget as HTMLElement).style.boxShadow = "";
                   }}
                 >
                   <Icon className="w-3.5 h-3.5" />
                 </a>
               ))}
             </div>
-            {/* Contact mini */}
             <div className="space-y-2">
               {[
                 { Icon: Mail, text: "contact@materiallibrary.in" },
                 { Icon: Phone, text: "+91 123 456 7890" },
                 { Icon: MapPin, text: "Mumbai, Maharashtra" },
               ].map(({ Icon, text }, i) => (
-                <div key={i} className="flex items-center gap-2" style={{ color: "var(--text-muted)", fontSize: "0.75rem" }}>
+                <div key={i} className="flex items-center gap-2" style={{ color: "rgba(255,255,255,0.6)", fontSize: "0.75rem" }}>
                   <Icon className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "var(--accent)" }} />
                   {text}
                 </div>
@@ -160,77 +189,86 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Link columns */}
-          {FOOTER_COLS.map((col) => (
-            <div key={col.title}>
-              <h5
-                className="mb-3"
-                style={{ color: "var(--text-primary)", fontSize: "0.78rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em" }}
-              >
-                {col.title}
-              </h5>
-              <ul className="space-y-2">
-                {col.links.map((item) => (
-                  <li key={item.label}>
-                    {item.href === "#" ? (
-                      <a
-                        href="#"
-                        style={{ color: "var(--text-secondary)", fontSize: "0.8rem", transition: "var(--t-fast)" }}
-                        onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--accent)")}
-                        onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--text-secondary)")}
-                      >
-                        {item.label}
-                      </a>
-                    ) : (
-                      <Link
-                        to={item.href}
-                        style={{ color: "var(--text-secondary)", fontSize: "0.8rem", transition: "var(--t-fast)" }}
-                        onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--accent)")}
-                        onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--text-secondary)")}
-                      >
-                        {item.label}
-                      </Link>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          {/* Existing link columns */}
+          <div className="lg:col-span-2 grid grid-cols-2 sm:grid-cols-4 gap-8">
+            {FOOTER_COLS.map((col) => (
+              <FooterColumn key={col.title} col={col} />
+            ))}
+          </div>
         </div>
 
         {/* Bottom bar */}
         <div
           className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3"
-          style={{ borderTop: "var(--border)" }}
+          style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
         >
-          <p style={{ color: "var(--text-muted)", fontSize: "0.72rem" }}>
-            © 2025 MaterialLibrary Platform. All rights reserved.
+          <p style={{ color: "rgba(255,255,255,0.6)", fontSize: "0.78rem" }}>
+            © 2026 Material Library
           </p>
           <div className="flex items-center gap-4">
-            {["Privacy", "Terms", "Cookies", "Sitemap"].map((item) => (
+            {[
+              { label: "Sitemap", href: "#" },
+              { label: "Accessibility", href: "#" },
+              { label: "Status", href: "#" },
+            ].map((item) => (
               <a
-                key={item}
-                href="#"
-                style={{ color: "var(--text-muted)", fontSize: "0.72rem", transition: "var(--t-fast)" }}
+                key={item.label}
+                href={item.href}
+                style={{ color: "rgba(255,255,255,0.55)", fontSize: "0.72rem", transition: "var(--t-fast)" }}
                 onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--accent)")}
-                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--text-muted)")}
+                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.55)")}
               >
-                {item}
+                {item.label}
               </a>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Floating Rate Brand button */}
-      <div className="fixed bottom-6 right-6 z-50">
-        <button
-          className="btn-primary shadow-xl"
-          style={{ borderRadius: "var(--r-full)", padding: "10px 18px", fontSize: "0.78rem", boxShadow: "var(--shadow-orange)" }}
-        >
-          <Star className="w-4 h-4" /> Rate a Brand
-        </button>
-      </div>
     </footer>
+  );
+}
+
+function FooterColumn({ col }: { col: FooterCol }) {
+  return (
+    <div>
+      <h5
+        className="mb-3"
+        style={{
+          color: "rgba(255,255,255,0.85)",
+          fontSize: "0.72rem",
+          fontWeight: 700,
+          textTransform: "uppercase",
+          letterSpacing: "0.08em",
+        }}
+      >
+        {col.title}
+      </h5>
+      <ul className="space-y-2">
+        {col.links.map((item) => (
+          <li key={item.label}>
+            {item.href === "#" ? (
+              <a
+                href="#"
+                style={{ color: "rgba(255,255,255,0.6)", fontSize: "0.78rem", transition: "var(--t-fast)" }}
+                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--accent)")}
+                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.6)")}
+              >
+                {item.label}
+              </a>
+            ) : (
+              <Link
+                to={item.href}
+                style={{ color: "rgba(255,255,255,0.6)", fontSize: "0.78rem", transition: "var(--t-fast)" }}
+                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--accent)")}
+                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.6)")}
+              >
+                {item.label}
+              </Link>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }

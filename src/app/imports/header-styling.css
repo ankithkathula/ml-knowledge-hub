@@ -1,0 +1,109 @@
+Refine the Header styling of the Material Library customer portal homepage to improve contrast and visual quality while keeping the entire layout, structure, content, and hierarchy exactly the same.
+
+Do not change the position of any elements, navigation items, or hero content. Only improve the visual styling of the header and category navigation so they appear lighter, cleaner, and more premium.
+
+Header Styling
+
+Replace the current header background with a soft glass-style header.
+
+Header background:
+
+background: rgba(255,255,255,0.75)
+backdrop-filter: blur(12px)
+
+This creates a subtle translucent effect that works well with the hero background video while maintaining readability.
+
+Header Border
+
+Add a subtle bottom separator so the header feels structured and clean.
+
+border-bottom: 1px solid rgba(0,0,0,0.06)
+
+Optional subtle shadow:
+
+box-shadow: 0 4px 12px rgba(0,0,0,0.05)
+Navigation Text
+
+Keep the same navigation items:
+
+Brands
+Products
+Services
+Knowledge Center
+
+Update text color for better contrast:
+
+color: #1F1F1F
+
+Hover color:
+
+color: #FF6A3D
+
+Do not change typography or spacing.
+
+Right Side Icons
+
+Keep existing elements:
+
+Location selector
+Theme toggle
+Cart
+Sign In
+Sign Up
+
+Icon color:
+
+#444444
+
+Hover color:
+
+#FF6A3D
+Category Navigation Bar
+
+Do not change its position or structure.
+
+Keep the exact same category items and dropdown behavior.
+
+Refine the background so it remains readable above the hero video.
+
+Background:
+
+background: rgba(255,255,255,0.65)
+backdrop-filter: blur(10px)
+
+Border:
+
+1px solid rgba(255,255,255,0.35)
+Micro Interactions
+
+Add subtle hover transitions to navigation elements.
+
+transition: all 120ms ease
+
+This should apply to navigation text, icons, and category items.
+
+Hero Section
+
+Do not change anything inside the hero section.
+
+Keep:
+
+Hero headline
+Subheading
+Search bar
+Search tabs (Brands / Products / Services)
+Category navigation
+Hero video background
+
+All spacing and positioning should remain exactly the same.
+
+Result
+
+The homepage structure should remain identical, but the header will now:
+
+• feel lighter and more modern
+• integrate better with the hero video
+• improve navigation readability
+• look more premium and polished
+
+No layout or content changes should occur.

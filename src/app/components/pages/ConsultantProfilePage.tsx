@@ -7,8 +7,6 @@ import {
   Shield, Instagram, Linkedin, Facebook, Youtube, ExternalLink,
   Image as ImageIcon, ChevronDown, X,
 } from "lucide-react";
-import { Navbar } from "../Navbar";
-import { Footer } from "../Footer";
 import { CONSULTANTS, PROJECTS, TEAM_MEMBERS, REVIEWS } from "../data/consultantData";
 import { REGISTERED_PROFESSIONALS } from "../data/kcPortalData";
 import { ProfessionalMicrosite } from "./ProfessionalMicrosite";
@@ -109,12 +107,10 @@ export function ConsultantProfilePage() {
   if (!consultant) {
     return (
       <div className="min-h-screen" style={{ background: "var(--bg-base)" }}>
-        <Navbar />
         <div className="max-w-4xl mx-auto px-6 py-20 text-center">
           <h1 style={{ fontSize: "1.5rem", fontWeight: 700 }}>Consultant not found</h1>
           <Link to="/services" className="btn-primary mt-6 inline-flex">Browse Services</Link>
         </div>
-        <Footer />
       </div>
     );
   }
@@ -532,8 +528,6 @@ export function ConsultantProfilePage() {
 
   return (
     <div className="min-h-screen" style={{ background: "var(--bg-base)" }}>
-      <Navbar />
-
       {/* ── Back Navigation ── */}
       <div style={{ background: "var(--glass-strong)", borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2.5">
@@ -787,7 +781,6 @@ export function ConsultantProfilePage() {
         </div>
       </div>
 
-      <Footer />
     </div>
   );
 }

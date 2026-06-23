@@ -6,8 +6,6 @@ import {
   Ruler, Package, Truck, Briefcase, ArrowRight, ChevronRight, Flame,
   Sparkles, Award, Clock,
 } from "lucide-react";
-import { Navbar } from "../Navbar";
-import { Footer } from "../Footer";
 import {
   PROFESSIONAL_TYPES,
   REGISTERED_PROFESSIONALS,
@@ -64,13 +62,11 @@ export function ProfessionalsPage() {
 
   return (
     <div className="min-h-screen" style={{ background: "var(--bg-base)" }}>
-      <Navbar />
-
       {/* ── Compact Search Command Bar ── */}
       <div
         style={{
-          background: "linear-gradient(180deg, rgba(255,255,255,0.95) 0%, var(--bg-base) 100%)",
-          borderBottom: "1px solid rgba(0,0,0,0.04)",
+          background: "var(--glass-mid)",
+          borderBottom: "var(--border-subtle)",
         }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
@@ -85,13 +81,13 @@ export function ProfessionalsPage() {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-12 pr-4 py-3.5 rounded-xl text-base outline-none transition-all"
                 style={{
-                  background: "rgba(255,255,255,0.9)",
-                  border: "1.5px solid rgba(0,0,0,0.08)",
+                  background: "var(--glass-strong)",
+                  border: "var(--border)",
                   color: "var(--text-primary)",
                   fontWeight: 500,
                 }}
                 onFocus={(e) => (e.currentTarget.style.borderColor = "var(--accent)")}
-                onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(0,0,0,0.08)")}
+                onBlur={(e) => (e.currentTarget.style.border = "var(--border)" as string)}
               />
             </div>
             {/* City Selector */}
@@ -100,8 +96,8 @@ export function ProfessionalsPage() {
               onChange={(e) => setSelectedCity(e.target.value)}
               className="px-4 py-3.5 rounded-xl text-sm outline-none cursor-pointer"
               style={{
-                background: "rgba(255,255,255,0.9)",
-                border: "1.5px solid rgba(0,0,0,0.08)",
+                background: "var(--glass-strong)",
+                border: "var(--border)",
                 color: "var(--text-primary)",
                 fontWeight: 600,
                 minWidth: 160,
@@ -128,9 +124,9 @@ export function ProfessionalsPage() {
                   style={{
                     fontSize: "0.78rem",
                     fontWeight: 600,
-                    background: active ? `${f.color}15` : "rgba(255,255,255,0.8)",
+                    background: active ? `${f.color}25` : "var(--glass)",
                     color: active ? f.color : "var(--text-secondary)",
-                    border: active ? `1.5px solid ${f.color}40` : "1.5px solid rgba(0,0,0,0.06)",
+                    border: active ? `1.5px solid ${f.color}55` : "var(--border-subtle)",
                   }}
                 >
                   <f.icon className="w-3.5 h-3.5" style={{ color: f.color }} />
@@ -138,7 +134,7 @@ export function ProfessionalsPage() {
                 </button>
               );
             })}
-            <div className="h-5 w-px mx-1" style={{ background: "rgba(0,0,0,0.08)" }} />
+            <div className="h-5 w-px mx-1" style={{ background: "var(--border-subtle)" }} />
             <span style={{ fontSize: "0.75rem", color: "var(--text-muted)", fontWeight: 500, whiteSpace: "nowrap" }}>
               {REGISTERED_PROFESSIONALS.length} practices registered
             </span>
@@ -231,7 +227,7 @@ export function ProfessionalsPage() {
                   return (
                     <Link
                       key={p.id}
-                      to={`/services/consultant/${p.slug}`}
+                      to={p.profilePath ?? `/services/consultant/${p.slug}`}
                       className="flex-shrink-0 w-72 rounded-2xl overflow-hidden transition-all group"
                       style={{
                         background: "rgba(255,255,255,0.55)",
@@ -441,7 +437,7 @@ export function ProfessionalsPage() {
                   return (
                     <Link
                       key={p.id}
-                      to={`/services/consultant/${p.slug}`}
+                      to={p.profilePath ?? `/services/consultant/${p.slug}`}
                       className="flex gap-5 p-5 rounded-2xl transition-all group"
                       style={{
                         background: "rgba(255,255,255,0.7)",
@@ -578,7 +574,7 @@ export function ProfessionalsPage() {
                   return (
                     <Link
                       key={p.id}
-                      to={`/services/consultant/${p.slug}`}
+                      to={p.profilePath ?? `/services/consultant/${p.slug}`}
                       className="text-center p-5 rounded-2xl transition-all group"
                       style={{
                         background: "rgba(255,255,255,0.6)",
@@ -679,7 +675,6 @@ export function ProfessionalsPage() {
         </div>
       </div>
 
-      <Footer />
     </div>
   );
 }

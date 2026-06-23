@@ -19,8 +19,6 @@ import {
   X,
   ChevronLeft,
 } from "lucide-react";
-import { Navbar } from "../Navbar";
-import { Footer } from "../Footer";
 import {
   SERVICE_CATEGORIES,
   CONSULTANTS,
@@ -147,8 +145,6 @@ export function ServicesCategoryPage() {
 
   return (
     <div className="min-h-screen" style={{ background: "var(--bg-base)" }}>
-      <Navbar />
-
       {/* Category Header */}
       <div
         style={{
@@ -574,7 +570,6 @@ export function ServicesCategoryPage() {
         </div>
       </div>
 
-      <Footer />
     </div>
   );
 }

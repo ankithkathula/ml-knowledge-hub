@@ -552,7 +552,7 @@ export function ConsultantBookingsPage() {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 flex-wrap">
                             <h4 style={{ fontSize: "0.92rem", fontWeight: 700, color: "var(--text-primary)" }}>{booking.clientName}</h4>
-                            <span style={{ fontSize: "0.65rem", color: "var(--text-muted)", fontFamily: "monospace" }}>{booking.id}</span>
+                            <span style={{ fontSize: "0.65rem", color: "var(--text-muted)", fontFamily: "Satoshi, monospace" }}>{booking.id}</span>
                           </div>
                           <p style={{ fontSize: "0.8rem", color: "var(--accent)", fontWeight: 600 }}>{booking.serviceType}</p>
                         </div>

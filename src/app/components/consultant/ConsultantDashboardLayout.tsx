@@ -3,8 +3,9 @@ import { Link, useLocation, Outlet } from "react-router";
 import {
   LayoutDashboard, Briefcase, FolderKanban, GraduationCap, PenSquare,
   Building2, CalendarCheck, Star, MessageSquare, BarChart3, Settings,
-  ChevronLeft, ChevronRight, Zap, LogOut, Menu, X
+  ChevronLeft, ChevronRight, LogOut, Menu, X
 } from "lucide-react";
+import logoImage from "figma:asset/84319742a432eabc75aa1b62e8b22d482a7499e6.png";
 
 const CONSULTANT_NAV = [
   { label: "Dashboard", href: "/consultant", icon: LayoutDashboard },
@@ -34,15 +35,15 @@ export function ConsultantDashboardLayout() {
     <div className="flex flex-col h-full">
       {/* Logo */}
       <div className="flex items-center gap-2.5 px-4 h-[58px] flex-shrink-0" style={{ borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
-        <Link to="/" className="flex items-center gap-2.5 flex-shrink-0">
-          <div
-            className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
-            style={{ background: "#ff6a3d", boxShadow: "0 3px 10px rgba(255,106,61,0.35)" }}
-          >
-            <Zap className="w-4 h-4 text-white" strokeWidth={2.5} />
-          </div>
+        <Link to="/v1" className="flex items-center gap-2.5 flex-shrink-0" aria-label="Material Library home">
+          <img
+            src={logoImage}
+            alt="Material Library"
+            className="h-5 w-auto flex-shrink-0"
+            style={{ maxHeight: "20px" }}
+          />
           {!collapsed && (
-            <span style={{ fontWeight: 800, fontSize: "0.9rem", color: "var(--text-primary)", letterSpacing: "-0.02em", whiteSpace: "nowrap" }}>
+            <span style={{ fontWeight: 700, fontSize: "0.85rem", color: "var(--text-secondary)", letterSpacing: "-0.01em", whiteSpace: "nowrap" }}>
               Consultant Hub
             </span>
           )}

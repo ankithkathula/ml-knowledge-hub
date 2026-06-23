@@ -5,9 +5,6 @@ import {
   FolderOpen, Award, Briefcase, GraduationCap, Calendar,
   Linkedin, Globe, MessageCircle, Star
 } from "lucide-react";
-import { Navbar } from "../Navbar";
-import { Footer } from "../Footer";
-
 const mockProfile = {
   name: "Arjun Mehta",
   slug: "arjun-mehta",
@@ -53,8 +50,6 @@ export function UserPublicProfilePage() {
 
   return (
     <div className="min-h-screen" style={{ background: "var(--bg-base)" }}>
-      <Navbar />
-
       {/* Back Nav */}
       <div className="max-w-5xl mx-auto px-4 pt-6">
         <Link to="/directory" className="inline-flex items-center gap-2 text-sm font-semibold transition-colors hover:opacity-80" style={{ color: "var(--text-secondary)" }}>
@@ -217,7 +212,6 @@ export function UserPublicProfilePage() {
         </div>
       </div>
 
-      <Footer />
     </div>
   );
 }

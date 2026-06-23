@@ -1,14 +1,12 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useRef } from "react";
 import { Link } from "react-router";
 import {
   Search, Star, MapPin, CheckCircle, Building2, Palette, HardHat, Zap,
   ClipboardList, Compass, Trees, Wrench, Umbrella, Leaf, Shield, Monitor,
   Ruler, Package, Truck, Briefcase, ArrowRight, ChevronRight, Flame,
-  Sparkles, Phone, MessageCircle, Clock, Award, ShieldCheck, BadgeCheck,
-  IndianRupee, Users, FileText, Hammer, PaintBucket, Layers, Droplets,
+  Sparkles, Phone, Clock, Award, ShieldCheck, BadgeCheck,
+  IndianRupee, Hammer, PaintBucket, Layers, Droplets, X,
 } from "lucide-react";
-import { Navbar } from "../Navbar";
-import { Footer } from "../Footer";
 import {
   SERVICE_TYPES,
   REGISTERED_SERVICES,
@@ -52,10 +50,55 @@ const HOW_STEPS = [
   { n: 4, title: "Hire with confidence", desc: "Book through KC — backed by our quality guarantee." },
 ];
 
+const PINCODE_CITY: Record<string, string> = {
+  "400001": "Mumbai", "400069": "Mumbai", "400053": "Mumbai",
+  "110001": "New Delhi", "110020": "New Delhi", "110085": "New Delhi",
+  "560001": "Bangalore", "560034": "Bangalore",
+  "500001": "Hyderabad", "500018": "Hyderabad",
+  "600001": "Chennai", "600017": "Chennai",
+  "411001": "Pune", "411045": "Pune",
+  "700001": "Kolkata", "700064": "Kolkata",
+  "380001": "Ahmedabad", "380054": "Ahmedabad",
+  "302001": "Jaipur", "302017": "Jaipur",
+  "682001": "Kochi", "682011": "Kochi",
+};
+
 export function ServicesPage() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCity, setSelectedCity] = useState("Mumbai");
+  const [selectedCity, setSelectedCity] = useState("");
+  const [pincodeInput, setPincodeInput] = useState("");
+  const [pincodeCity, setPincodeCity] = useState("");
+  const [pincodeError, setPincodeError] = useState(false);
   const [activeSubCat, setActiveSubCat] = useState<string>("all");
+  const pincodeRef = useRef<HTMLInputElement>(null);
+
+  const allCities = useMemo(
+    () => [...new Set(REGISTERED_SERVICES.map((s) => s.city))].sort(),
+    []
+  );
+
+  const activeCity = pincodeCity || selectedCity;
+
+  const handlePincodeSearch = () => {
+    const pin = pincodeInput.trim();
+    if (!pin) return;
+    const city = PINCODE_CITY[pin];
+    if (city) {
+      setPincodeCity(city);
+      setSelectedCity("");
+      setPincodeError(false);
+    } else {
+      setPincodeError(true);
+      setPincodeCity("");
+    }
+  };
+
+  const clearLocation = () => {
+    setSelectedCity("");
+    setPincodeInput("");
+    setPincodeCity("");
+    setPincodeError(false);
+  };
 
   const mostBooked = useMemo(
     () => [...REGISTERED_SERVICES].sort((a, b) => b.projectCount - a.projectCount).slice(0, 8),
@@ -64,6 +107,7 @@ export function ServicesPage() {
 
   const nearYou = useMemo(() => {
     let list = REGISTERED_SERVICES.filter((s) => s.verified);
+    if (activeCity) list = list.filter((s) => s.city === activeCity);
     if (activeSubCat !== "all") {
       const typeIds = new Set(
         SERVICE_TYPES.filter((t) => t.subCategory === activeSubCat).map((t) => t.id)
@@ -71,7 +115,7 @@ export function ServicesPage() {
       list = list.filter((s) => typeIds.has(s.typeId));
     }
     return list.slice(0, 6);
-  }, [activeSubCat]);
+  }, [activeSubCat, activeCity]);
 
   const filteredCategories = UNIFIED_CATEGORIES.filter((c) => c.serviceCount > 0).filter(
     (cat) =>
@@ -80,13 +124,11 @@ export function ServicesPage() {
   );
 
   return (
-    <div className="min-h-screen" style={{ background: "#ffffff" }}>
-      <Navbar />
-
+    <div className="min-h-screen" style={{ background: "var(--bg-base)" }}>
       {/* ══ HERO — big question + search + city ══ */}
       <section
         style={{
-          background: "linear-gradient(180deg, #fff7f2 0%, #ffffff 100%)",
+          background: "var(--bg-hero)",
           paddingTop: 56,
           paddingBottom: 56,
           position: "relative",
@@ -150,7 +192,7 @@ export function ServicesPage() {
           {/* Search card */}
           <div
             style={{
-              background: "#ffffff",
+              background: "var(--glass-strong)",
               borderRadius: 20,
               padding: 10,
               boxShadow: "0 16px 48px -16px rgba(15,23,42,0.18), 0 0 0 1px rgba(15,23,42,0.04)",
@@ -220,7 +262,7 @@ export function ServicesPage() {
                   color: "#475569",
                   padding: "6px 14px",
                   borderRadius: 99,
-                  background: "#ffffff",
+                  background: "var(--glass-strong)",
                   border: "1px solid rgba(15,23,42,0.08)",
                   fontWeight: 500,
                 }}
@@ -235,7 +277,7 @@ export function ServicesPage() {
       {/* ══ TRUST ROW ══ */}
       <section
         style={{
-          background: "#ffffff",
+          background: "var(--glass-strong)",
           borderTop: "1px solid rgba(15,23,42,0.05)",
           borderBottom: "1px solid rgba(15,23,42,0.05)",
         }}
@@ -283,7 +325,7 @@ export function ServicesPage() {
               to={`/services/consultant/${s.slug}`}
               className="group"
               style={{
-                background: "#ffffff",
+                background: "var(--glass-strong)",
                 border: "1px solid rgba(15,23,42,0.08)",
                 borderRadius: 16,
                 padding: 18,
@@ -316,7 +358,7 @@ export function ServicesPage() {
       </section>
 
       {/* ══ MOST BOOKED ══ */}
-      <section style={{ background: "#fafafa", borderTop: "1px solid rgba(15,23,42,0.05)", borderBottom: "1px solid rgba(15,23,42,0.05)" }}>
+      <section style={{ background: "var(--bg-surface)", borderTop: "1px solid rgba(15,23,42,0.05)", borderBottom: "1px solid rgba(15,23,42,0.05)" }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
           <div className="flex items-end justify-between mb-6">
             <div>
@@ -340,7 +382,7 @@ export function ServicesPage() {
                   style={{
                     flexShrink: 0,
                     width: 280,
-                    background: "#ffffff",
+                    background: "var(--glass-strong)",
                     borderRadius: 16,
                     overflow: "hidden",
                     border: "1px solid rgba(15,23,42,0.06)",
@@ -361,7 +403,7 @@ export function ServicesPage() {
                     <img src={s.coverImage} alt="" className="w-full h-full object-cover" />
                     <div
                       className="absolute top-3 left-3 px-2.5 py-1 rounded-full"
-                      style={{ background: "rgba(255,255,255,0.95)", backdropFilter: "blur(8px)", fontSize: "0.68rem", fontWeight: 700, color: cat?.color || "#ff6a3d" }}
+                      style={{ background: "var(--glass-strong)", backdropFilter: "blur(8px)", fontSize: "0.68rem", fontWeight: 700, color: cat?.color || "#ff6a3d" }}
                     >
                       {cat?.name}
                     </div>
@@ -413,15 +455,116 @@ export function ServicesPage() {
 
       {/* ══ SUB-CATEGORY TABS + CONTRACTOR CARDS ══ */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
-        <div className="flex items-end justify-between mb-6">
+        <div className="flex items-end justify-between mb-5">
           <div>
             <h2 style={{ fontSize: "1.6rem", fontWeight: 800, color: "#0f172a", letterSpacing: "-0.015em" }}>
-              Verified contractors near you
+              Verified contractors{activeCity ? ` in ${activeCity}` : " near you"}
             </h2>
             <p style={{ fontSize: "0.88rem", color: "#64748b", marginTop: 4 }}>
               All contractors background-checked and work-sample verified.
             </p>
           </div>
+        </div>
+
+        {/* Location filter bar */}
+        <div
+          className="flex flex-wrap items-center gap-3 mb-5 p-3 rounded-2xl"
+          style={{ background: "var(--glass-strong)", border: "1px solid rgba(15,23,42,0.07)" }}
+        >
+          <MapPin className="w-4 h-4 flex-shrink-0" style={{ color: "#ff6a3d" }} />
+
+          {/* City dropdown */}
+          <div className="flex items-center gap-2">
+            <label style={{ fontSize: "0.74rem", fontWeight: 600, color: "#64748b", whiteSpace: "nowrap" }}>City</label>
+            <select
+              value={selectedCity}
+              onChange={(e) => {
+                setSelectedCity(e.target.value);
+                setPincodeInput("");
+                setPincodeCity("");
+                setPincodeError(false);
+              }}
+              style={{
+                fontSize: "0.84rem",
+                fontWeight: 600,
+                color: selectedCity ? "#0f172a" : "#94a3b8",
+                background: "white",
+                border: "1.5px solid rgba(15,23,42,0.1)",
+                borderRadius: 8,
+                padding: "6px 10px",
+                outline: "none",
+                cursor: "pointer",
+                minWidth: 140,
+              }}
+            >
+              <option value="">All cities</option>
+              {allCities.map((c) => <option key={c} value={c}>{c}</option>)}
+            </select>
+          </div>
+
+          <div style={{ width: 1, height: 20, background: "rgba(15,23,42,0.1)" }} />
+
+          {/* Pincode search */}
+          <div className="flex items-center gap-2">
+            <label style={{ fontSize: "0.74rem", fontWeight: 600, color: "#64748b", whiteSpace: "nowrap" }}>Pincode</label>
+            <div className="flex items-center gap-1">
+              <input
+                ref={pincodeRef}
+                type="text"
+                inputMode="numeric"
+                maxLength={6}
+                placeholder="e.g. 400001"
+                value={pincodeInput}
+                onChange={(e) => {
+                  setPincodeInput(e.target.value.replace(/\D/g, ""));
+                  setPincodeError(false);
+                  if (e.target.value.length === 0) setPincodeCity("");
+                }}
+                onKeyDown={(e) => e.key === "Enter" && handlePincodeSearch()}
+                style={{
+                  fontSize: "0.84rem",
+                  fontWeight: 500,
+                  color: "#0f172a",
+                  background: "white",
+                  border: `1.5px solid ${pincodeError ? "#ef4444" : "rgba(15,23,42,0.1)"}`,
+                  borderRadius: 8,
+                  padding: "6px 10px",
+                  outline: "none",
+                  width: 110,
+                }}
+              />
+              <button
+                onClick={handlePincodeSearch}
+                style={{
+                  background: "#ff6a3d",
+                  color: "white",
+                  padding: "6px 12px",
+                  borderRadius: 8,
+                  fontSize: "0.76rem",
+                  fontWeight: 700,
+                }}
+              >
+                Search
+              </button>
+            </div>
+            {pincodeError && (
+              <span style={{ fontSize: "0.72rem", color: "#ef4444" }}>Pincode not found</span>
+            )}
+          </div>
+
+          {/* Active filter pill + clear */}
+          {activeCity && (
+            <div
+              className="flex items-center gap-1.5 ml-auto px-3 py-1.5 rounded-full"
+              style={{ background: "rgba(255,106,61,0.1)", border: "1px solid rgba(255,106,61,0.2)" }}
+            >
+              <MapPin className="w-3 h-3" style={{ color: "#ff6a3d" }} />
+              <span style={{ fontSize: "0.78rem", fontWeight: 700, color: "#ff6a3d" }}>{activeCity}</span>
+              <button onClick={clearLocation} className="ml-1">
+                <X className="w-3 h-3" style={{ color: "#ff6a3d" }} />
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Tab row */}
@@ -462,7 +605,7 @@ export function ServicesPage() {
                 to={`/services/consultant/${s.slug}`}
                 className="group"
                 style={{
-                  background: "#ffffff",
+                  background: "var(--glass-strong)",
                   borderRadius: 16,
                   padding: 20,
                   border: "1px solid rgba(15,23,42,0.08)",
@@ -565,7 +708,7 @@ export function ServicesPage() {
                       <button
                         className="flex items-center gap-1.5"
                         style={{
-                          background: "#ffffff",
+                          background: "var(--glass-strong)",
                           border: "1.5px solid rgba(15,23,42,0.12)",
                           color: "#0f172a",
                           padding: "9px 16px",
@@ -596,25 +739,45 @@ export function ServicesPage() {
           })}
         </div>
 
-        <div className="flex justify-center mt-8">
-          <button
-            style={{
-              background: "#ffffff",
-              border: "1.5px solid #ff6a3d",
-              color: "#ff6a3d",
-              padding: "13px 32px",
-              borderRadius: 12,
-              fontSize: "0.88rem",
-              fontWeight: 700,
-            }}
-          >
-            Browse all {REGISTERED_SERVICES.length} contractors
-          </button>
-        </div>
+        {nearYou.length === 0 && (
+          <div className="text-center py-12">
+            <MapPin className="w-10 h-10 mx-auto mb-3" style={{ color: "#cbd5e1" }} />
+            <p style={{ fontSize: "1rem", fontWeight: 700, color: "#0f172a" }}>
+              No contractors found{activeCity ? ` in ${activeCity}` : ""}
+            </p>
+            <p style={{ fontSize: "0.84rem", color: "#64748b", marginTop: 6 }}>
+              Try a different city or clear the location filter.
+            </p>
+            <button
+              onClick={clearLocation}
+              style={{ marginTop: 16, color: "#ff6a3d", fontSize: "0.84rem", fontWeight: 700 }}
+            >
+              Clear filter →
+            </button>
+          </div>
+        )}
+
+        {nearYou.length > 0 && (
+          <div className="flex justify-center mt-8">
+            <button
+              style={{
+                background: "var(--glass-strong)",
+                border: "1.5px solid #ff6a3d",
+                color: "#ff6a3d",
+                padding: "13px 32px",
+                borderRadius: 12,
+                fontSize: "0.88rem",
+                fontWeight: 700,
+              }}
+            >
+              Browse all {REGISTERED_SERVICES.length} contractors
+            </button>
+          </div>
+        )}
       </section>
 
       {/* ══ BROWSE BY WORK TYPE — full category set ══ */}
-      <section style={{ background: "#fafafa", borderTop: "1px solid rgba(15,23,42,0.05)" }}>
+      <section style={{ background: "var(--bg-surface)", borderTop: "1px solid rgba(15,23,42,0.05)" }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
           <h2 style={{ fontSize: "1.5rem", fontWeight: 800, color: "#0f172a", letterSpacing: "-0.015em", marginBottom: 6 }}>
             Browse by work type
@@ -632,7 +795,7 @@ export function ServicesPage() {
                   to={`/services/${cat.slug}`}
                   className="group"
                   style={{
-                    background: "#ffffff",
+                    background: "var(--glass-strong)",
                     border: "1px solid rgba(15,23,42,0.08)",
                     borderRadius: 14,
                     padding: 18,
@@ -697,7 +860,7 @@ export function ServicesPage() {
             <div key={step.n} className="relative">
               <div
                 style={{
-                  background: "#ffffff",
+                  background: "var(--glass-strong)",
                   borderRadius: 16,
                   padding: 24,
                   border: "1px solid rgba(15,23,42,0.06)",
@@ -783,7 +946,7 @@ export function ServicesPage() {
               <Link
                 to="/studio"
                 style={{
-                  background: "#ffffff",
+                  background: "var(--glass-strong)",
                   color: "#ff6a3d",
                   padding: "14px 28px",
                   borderRadius: 12,
@@ -814,7 +977,6 @@ export function ServicesPage() {
         </div>
       </section>
 
-      <Footer />
     </div>
   );
 }

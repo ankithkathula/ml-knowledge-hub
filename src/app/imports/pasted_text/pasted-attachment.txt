@@ -1,0 +1,592 @@
+# 📄 FINAL MASTER FIGMA MAKE PROMPT
+
+## SERVICES ECOSYSTEM (DESKTOP) — CONTRACTOR DISCOVERY PLATFORM
+
+---
+
+## 🚨 GLOBAL RULES (STRICT)
+
+* Create **ALL pages from scratch (new frames)**
+* Do NOT modify:
+
+  * Homepage
+  * Product pages
+  * Brand pages
+* Reuse:
+
+  * Header
+  * Footer
+* Maintain system:
+
+  * Font: Satoshi
+  * Primary: #FF6A3D
+  * Clean, minimal, premium UI
+  * Strong hierarchy, spacing, readability
+
+---
+
+# 🧱 CORE UX STRUCTURE
+
+```plaintext
+Services Landing Page (Discovery)
+        ↓
+Service Detail Page (Context)
+        ↓
+Contractor Listing Page (Conversion)
+        ↓
+Contractor Profile Microsite (Deep Dive)
+```
+
+---
+
+# 🟧 1. SERVICES LANDING PAGE
+
+---
+
+## 🔝 HERO SECTION (CRITICAL)
+
+### Layout:
+
+* Full-width background (construction / industrial scene)
+* Dark gradient overlay
+* Center-aligned content
+* Balanced vertical spacing
+* Height calibrated so that:
+  ✅ **TRUST STRIP below is fully visible in first viewport**
+
+---
+
+### Content:
+
+**Heading:**
+FIND TRUSTED CONTRACTORS FOR EVERY SERVICE
+
+**Subtext:**
+Book verified contractor firms and professionals across construction, renovation, and building services — with free quotes and guaranteed quality.
+
+---
+
+### 🔍 Search Bar
+
+* Large, centered
+* Single input (NO location field)
+
+Placeholder:
+Search services, contractors, or tasks...
+
+CTA:
+[ FIND CONTRACTORS ]
+
+---
+
+### 📍 Location Context
+
+Showing results for Mumbai • Change
+
+---
+
+### 🏷️ Quick Search Tags
+
+[ Painting ] [ Plumbing ] [ Electrical ] [ Carpentry ] [ Waterproofing ] [ Tiling ]
+
+**Behavior:**
+
+* Multi-select (checkbox logic)
+* NOT navigation
+* Filters search results contextually
+* Subtle selected state
+
+---
+
+# ✅ 2. TRUST STRIP (VISIBLE IN FIRST VIEW)
+
+---
+
+## Layout:
+
+* Horizontal strip
+* Fully visible in first fold
+
+---
+
+## Items:
+
+* Verified contractors
+  (Background-checked)
+
+* Free quotes
+  (No commitment)
+
+* Quality guarantee
+  (Workmanship warranty)
+
+* Fast response
+  (Under 2 hours)
+
+---
+
+# 🔵 3. FEATURED SERVICES
+
+---
+
+## Layout:
+
+* **Single horizontal row**
+* Center aligned
+* Minimal spacing
+
+---
+
+## Card Design:
+
+* Circular
+* Minimal icon
+* Soft background
+* Label below
+
+---
+
+## Interaction:
+
+👉 Navigate to Service Detail Page
+
+---
+
+## Right:
+
+[ View All → ]
+
+---
+
+# 🔥 4. TRENDING NEAR YOU
+
+---
+
+## Header:
+
+LEFT:
+📍 Pincode / City input
+
+CENTER:
+Trending near you
+
+RIGHT:
+[ View All → ]
+
+---
+
+## Layout:
+
+* Horizontal scroll
+* 3–4 cards visible
+* Smaller, elegant cards
+
+---
+
+## Card Content:
+
+* Image
+* Contractor/Firm name
+* Service category
+* Rating
+* Verified icon
+
+---
+
+## REMOVE:
+
+❌ Pricing
+❌ Clutter
+
+---
+
+# 🧱 5. VERIFIED CONTRACTORS NEAR YOU (ENHANCED)
+
+---
+
+## Header:
+
+LEFT:
+📍 Location input
+
+CENTER:
+Section title
+
+RIGHT:
+[ View All → ]
+
+---
+
+## 🔁 CONTRACTOR TYPE FILTER (CRITICAL UPGRADE)
+
+Replace basic toggles with:
+
+### Contractor Type Pills:
+
+[ All ]
+[ General Contractors ]
+[ Specialty Contractors ]
+[ Trade Contractors ]
+[ Material Suppliers ]
+[ Testing Labs ]
+
+---
+
+## Behavior:
+
+* Single select OR multi-select (prefer multi-select)
+* Filters visible contractors
+* Smooth transitions
+
+---
+
+## Layout:
+
+* **Horizontal row**
+* Exactly **4 cards visible**
+* Scrollable
+
+---
+
+## Card Content:
+
+* Image
+* Name
+* Type (e.g. General Contractor)
+* Services (1–2 max)
+* Rating
+* CTA: View Profile
+
+---
+
+## REMOVE:
+
+❌ Pricing
+❌ Heavy metadata
+
+---
+
+# 🧭 6. BROWSE BY SERVICE TYPE
+
+---
+
+## Layout:
+
+* Grid (2–3 columns)
+
+---
+
+## Tile Design:
+
+* Icon-first
+* Service name
+* Subtext:
+  “1200+ contractors available”
+* Arrow →
+
+---
+
+## Style:
+
+* Soft color surfaces
+* Slight elevation
+* Clean modern UI
+
+---
+
+# ⚙️ 7. HOW IT WORKS
+
+---
+
+## 4-step horizontal flow:
+
+1. Tell us your need
+2. Get matched in minutes
+3. Compare quotes
+4. Hire confidently
+
+---
+
+# 📝 8. CONTACT / ENQUIRY SECTION
+
+---
+
+## Layout: Split
+
+---
+
+### LEFT:
+
+* Heading
+* Supporting text
+* Bullet points:
+
+  * Verified professionals
+  * Quick matching
+  * No hidden charges
+
+---
+
+### RIGHT:
+
+Form fields:
+
+* Name
+* Phone
+* Location
+* Service required
+* Description
+
+CTA:
+[ SUBMIT ENQUIRY ]
+
+---
+
+# 🟧 9. CONTRACTOR CTA
+
+---
+
+## Compact Banner
+
+Text:
+Are you a contractor?
+
+Subtext:
+Join 15,000+ verified contractors. Get leads and grow your business.
+
+---
+
+## CTA:
+
+[ List your business ]
+[ How it works ]
+
+---
+
+# 📄 2. SERVICE DETAIL PAGE
+
+---
+
+## Purpose:
+
+Contextual page after selecting a service
+
+---
+
+## Structure:
+
+---
+
+### 🔝 Hero (compact)
+
+* Service name
+* Description
+* Breadcrumb:
+  Home > Services > Painting
+
+---
+
+### 📍 Location context
+
+---
+
+### 🧱 SECTION 1:
+
+Top contractor firms
+
+* Horizontal scroll
+* Priority to firms
+
+---
+
+### 🧱 SECTION 2:
+
+All contractors
+
+* Grid layout
+
+---
+
+### 🔁 FILTER BAR (IMPORTANT)
+
+Include contractor types:
+
+[ All ]
+[ General Contractors ]
+[ Specialty Contractors ]
+[ Trade Contractors ]
+[ Material Suppliers ]
+[ Testing Labs ]
+
+---
+
+### 🧠 Optional:
+
+* FAQs
+* Scope of service
+
+---
+
+# 📄 3. CONTRACTOR LISTING PAGE (ADVANCED)
+
+---
+
+## 🔝 Header:
+
+Title:
+Verified contractors near you
+
+Subtext:
+Explore trusted professionals based on your location
+
+---
+
+## 🎛️ CONTROL BAR
+
+---
+
+### LEFT:
+
+📍 Location input
+
+---
+
+### CENTER:
+
+Contractor Type Toggle:
+
+[ All ]
+[ General Contractors ]
+[ Specialty Contractors ]
+[ Trade Contractors ]
+[ Material Suppliers ]
+[ Testing Labs ]
+
+---
+
+### RIGHT:
+
+Sort:
+[ Highest Rating ▼ ]
+
+Filter button
+
+---
+
+## 📦 GRID
+
+* 3–4 column layout
+* Clean spacing
+
+---
+
+## Card Content:
+
+* Image
+* Name
+* Contractor type
+* Services (max 2)
+* Rating
+* CTA: View Profile
+
+---
+
+## REMOVE:
+
+❌ Pricing
+❌ Clutter
+
+---
+
+## Pagination:
+
+[ Load More ] or infinite scroll
+
+---
+
+# 📄 4. CONTRACTOR PROFILE MICROSITE (NEW)
+
+---
+
+## Purpose:
+
+Deep dive into contractor
+
+---
+
+## Sections:
+
+---
+
+### 🔝 Hero
+
+* Banner image
+* Name
+* Type
+* Rating
+* Location
+
+CTA:
+[ Contact ] [ Get Quote ]
+
+---
+
+### 📌 About
+
+---
+
+### 🧱 Services Offered
+
+---
+
+### 🖼️ Portfolio
+
+---
+
+### ⭐ Reviews
+
+---
+
+### 📞 Contact Info
+
+---
+
+# 🎨 DESIGN PRINCIPLES
+
+* Clean layouts
+* 8pt grid system
+* Minimal shadows
+* Rounded corners (12–16px)
+* Strong hierarchy
+* No visual clutter
+
+---
+
+# 🚫 AVOID
+
+* Pricing overload
+* Deep nested confusion
+* Large bulky cards
+* Excess tags
+
+---
+
+# 🚀 FINAL EXPERIENCE
+
+User should:
+
+* Discover services instantly
+* Filter contractors intelligently
+* Understand contractor types clearly
+* Prioritize firms naturally
+* Navigate without confusion
+* Convert quickly
+
+---
+
+# 🔥 OUTPUT
+
+* Scalable contractor ecosystem
+* Clear industry taxonomy
+* Premium UX
+* High conversion design

@@ -7,8 +7,6 @@ import {
   Send, Plus, CheckCircle, ChevronDown, Download, Eye,
   TrendingUp, Users, Zap, Building2,
 } from "lucide-react";
-import { Navbar } from "../Navbar";
-import { Footer } from "../Footer";
 import { BRANDS } from "../data/mockData";
 
 function EmptyState({ icon: Icon, label }: { icon: React.ElementType; label: string }) {
@@ -63,8 +61,6 @@ export function BrandPage() {
 
   return (
     <div className="min-h-screen" style={{ background: "var(--bg-base)" }}>
-      <Navbar />
-
       {/* Back bar */}
       <div style={{ background: "var(--glass-strong)", borderBottom: "var(--border)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2.5">
@@ -717,7 +713,6 @@ export function BrandPage() {
         </div>
       </div>
 
-      <Footer />
     </div>
   );
 }

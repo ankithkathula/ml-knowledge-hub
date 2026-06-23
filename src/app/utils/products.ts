@@ -49,7 +49,7 @@ export const PRODUCTS: Product[] = [
     features: ['High Strength', 'Fast Setting', 'Weather Resistant'],
     application: ['Structural Concrete', 'High-Rise Buildings', 'Industrial Projects'],
     stock: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&q=80&w=600',
+    image: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&q=80&w=600',
     price: '₹400/bag',
     badge: 'Top Seller',
     durability: '30+ years',
@@ -97,7 +97,7 @@ export const PRODUCTS: Product[] = [
     features: ['High Compressive Strength', 'Durability', 'Consistency'],
     application: ['Structural Concrete', 'Bridges', 'Dams'],
     stock: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1518005020251-582c788447dd?auto=format&fit=crop&q=80&w=600',
+    image: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&q=80&w=600',
     price: '₹395/bag',
     badge: 'Best Value',
     durability: '25+ years',
@@ -121,7 +121,7 @@ export const PRODUCTS: Product[] = [
     features: ['Extra High Strength', 'Low Heat Generation', 'Crack Resistant'],
     application: ['High-Rise Construction', 'Infrastructure', 'Commercial Buildings'],
     stock: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1518005020251-582c788447dd?auto=format&fit=crop&q=80&w=600',
+    image: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&q=80&w=600',
     priceType: 'quote',
     availableCities: ['Delhi NCR', 'Kolkata']
   },
@@ -142,7 +142,7 @@ export const PRODUCTS: Product[] = [
     features: ['Superior Strength', 'Excellent Workability', 'Low Carbon Footprint'],
     application: ['RCC Structures', 'Pre-stressed Concrete', 'Mass Concreting'],
     stock: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1544377193-33dcf4d68fb5?auto=format&fit=crop&q=80&w=600',
+    image: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&q=80&w=600',
     price: '₹410/bag',
     badge: 'Eco-Friendly',
     durability: '30+ years',
@@ -166,7 +166,7 @@ export const PRODUCTS: Product[] = [
     features: ['High Early Strength', 'Superior Finish', 'Eco-Friendly'],
     application: ['Structural Concrete', 'Industrial Construction', 'Flyovers'],
     stock: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1544377193-33dcf4d68fb5?auto=format&fit=crop&q=80&w=600',
+    image: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&q=80&w=600',
     price: '₹430/bag',
     badge: 'New Launch',
     durability: '30+ years',
@@ -189,7 +189,7 @@ export const PRODUCTS: Product[] = [
     features: ['High Strength', 'Quick Hardening', 'Sulphate Resistant'],
     application: ['Structural Work', 'RCC Construction', 'Marine Structures'],
     stock: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&q=80&w=600',
+    image: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&q=80&w=600',
     price: '₹405/bag',
     durability: '25+ years',
     availableCities: ['North India'],
@@ -234,7 +234,7 @@ export const PRODUCTS: Product[] = [
     features: ['Excellent Workability', 'Smooth Finish', 'Uniform Strength'],
     application: ['General Construction', 'Residential Buildings', 'Brick Masonry'],
     stock: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1518005020251-582c788447dd?auto=format&fit=crop&q=80&w=600',
+    image: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&q=80&w=600',
     price: '₹340/bag'
   },
 
@@ -276,7 +276,7 @@ export const PRODUCTS: Product[] = [
     features: ['Corrosion Resistant', 'Workable Mix', 'Sustainable'],
     application: ['Residential', 'Plastering', 'Underground Structures'],
     stock: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1544377193-33dcf4d68fb5?auto=format&fit=crop&q=80&w=600',
+    image: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&q=80&w=600',
     price: '₹355/bag'
   },
 
@@ -296,7 +296,7 @@ export const PRODUCTS: Product[] = [
     features: ['High Whiteness', 'Smooth Finish', 'Superior Adhesion'],
     application: ['Wall Putty', 'Decorative Work', 'Flooring'],
     stock: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1560185127-6ed189bf02f4?auto=format&fit=crop&q=80&w=600',
+    image: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&q=80&w=600',
     price: '₹650/bag'
   },
   {
@@ -314,7 +314,7 @@ export const PRODUCTS: Product[] = [
     features: ['Ultra White', 'Non-Yellowing', 'Crack Resistance'],
     application: ['Interior Walls', 'Art Work', 'Tile Grouting'],
     stock: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1560185127-6ed189bf02f4?auto=format&fit=crop&q=80&w=600',
+    image: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&q=80&w=600',
     price: '₹630/bag'
   },
 
@@ -335,7 +335,7 @@ export const PRODUCTS: Product[] = [
     features: ['Consistent Quality', 'Time-Saving', 'Reduced Wastage'],
     application: ['Slabs', 'Beams', 'Columns'],
     stock: 'Made to Order',
-    image: 'https://images.unsplash.com/photo-1541008022357-e6195d1af8cc?auto=format&fit=crop&q=80&w=600',
+    image: 'https://images.unsplash.com/photo-1517089152318-42ec560349c0?auto=format&fit=crop&q=80&w=600',
     price: '₹4,500/m³'
   },
   {
@@ -354,7 +354,7 @@ export const PRODUCTS: Product[] = [
     features: ['High Strength', 'Superior Finish', 'Quality Assured'],
     application: ['Structural Elements', 'High-Rise Buildings', 'Industrial Floors'],
     stock: 'Made to Order',
-    image: 'https://images.unsplash.com/photo-1541008022357-e6195d1af8cc?auto=format&fit=crop&q=80&w=600',
+    image: 'https://images.unsplash.com/photo-1517089152318-42ec560349c0?auto=format&fit=crop&q=80&w=600',
     price: '₹5,000/m³'
   },
 
@@ -375,7 +375,7 @@ export const PRODUCTS: Product[] = [
     features: ['High Tensile Strength', 'Earthquake Resistant', 'Corrosion Resistant'],
     application: ['RCC Structures', 'Beams', 'Columns'],
     stock: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1587293852726-70cdb56c2866?auto=format&fit=crop&q=80&w=600',
+    image: 'https://images.unsplash.com/photo-1590496793929-36417d3117de?auto=format&fit=crop&q=80&w=600',
     price: '₹62,000/tonne'
   },
   {
@@ -394,7 +394,7 @@ export const PRODUCTS: Product[] = [
     features: ['Superior Strength', 'Better Elongation', 'Fire Resistant'],
     application: ['Residential Buildings', 'Bridges', 'Industrial Structures'],
     stock: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1587293852726-70cdb56c2866?auto=format&fit=crop&q=80&w=600',
+    image: 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&q=80&w=600',
     price: '₹61,500/tonne'
   },
 
@@ -415,7 +415,7 @@ export const PRODUCTS: Product[] = [
     features: ['Extra High Strength', 'Bendability', 'Weldability'],
     application: ['High-Rise Buildings', 'Flyovers', 'Dams'],
     stock: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1587293852726-70cdb56c2866?auto=format&fit=crop&q=80&w=600',
+    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=600',
     price: '₹65,000/tonne'
   },
   {
@@ -434,7 +434,7 @@ export const PRODUCTS: Product[] = [
     features: ['Maximum Strength', 'Ductility', 'Thermal Resistance'],
     application: ['Infrastructure', 'Metro Projects', 'Commercial Buildings'],
     stock: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1587293852726-70cdb56c2866?auto=format&fit=crop&q=80&w=600',
+    image: 'https://images.unsplash.com/photo-1590496793929-36417d3117de?auto=format&fit=crop&q=80&w=600',
     price: '₹64,500/tonne'
   },
 
@@ -455,7 +455,7 @@ export const PRODUCTS: Product[] = [
     features: ['High Load Capacity', 'Uniform Strength', 'Precision Rolled'],
     application: ['Building Frames', 'Industrial Sheds', 'Bridge Construction'],
     stock: 'Made to Order',
-    image: 'https://images.unsplash.com/photo-1565610222535-2d66b2eaa9a6?auto=format&fit=crop&q=80&w=600',
+    image: 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&q=80&w=600',
     price: '₹58,000/tonne'
   },
 
@@ -476,7 +476,7 @@ export const PRODUCTS: Product[] = [
     features: ['Superior Strength', 'Versatile Application', 'Dimensional Accuracy'],
     application: ['Roof Structures', 'Platform Construction', 'Support Beams'],
     stock: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1565610222535-2d66b2eaa9a6?auto=format&fit=crop&q=80&w=600',
+    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=600',
     price: '₹57,000/tonne'
   },
 
@@ -497,7 +497,7 @@ export const PRODUCTS: Product[] = [
     features: ['High Strength', 'Good Formability', 'Rust Resistant'],
     application: ['Framing', 'Support Structures', 'Trusses'],
     stock: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1565610222535-2d66b2eaa9a6?auto=format&fit=crop&q=80&w=600',
+    image: 'https://images.unsplash.com/photo-1590496793929-36417d3117de?auto=format&fit=crop&q=80&w=600',
     price: '₹56,000/tonne'
   },
 
@@ -518,7 +518,7 @@ export const PRODUCTS: Product[] = [
     features: ['Corner Reinforcement', 'Lightweight', 'Easy Installation'],
     application: ['Edge Protection', 'Frame Corners', 'Support Brackets'],
     stock: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1565610222535-2d66b2eaa9a6?auto=format&fit=crop&q=80&w=600',
+    image: 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&q=80&w=600',
     price: '₹55,000/tonne'
   },
 
@@ -540,7 +540,7 @@ export const PRODUCTS: Product[] = [
     features: ['Good Weldability', 'Machinability', 'Formability'],
     application: ['Industrial Fabrication', 'General Engineering', 'Shipbuilding'],
     stock: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1565610222535-2d66b2eaa9a6?auto=format&fit=crop&q=80&w=600',
+    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80&w=600',
     price: '₹60,000/tonne'
   },
 
@@ -562,7 +562,7 @@ export const PRODUCTS: Product[] = [
     features: ['Corrosion Resistant', 'Hygienic', 'High Polish Finish'],
     application: ['Food Processing', 'Chemical Plants', 'Decorative Cladding'],
     stock: 'Made to Order',
-    image: 'https://images.unsplash.com/photo-1565610222535-2d66b2eaa9a6?auto=format&fit=crop&q=80&w=600',
+    image: 'https://images.unsplash.com/photo-1590496793929-36417d3117de?auto=format&fit=crop&q=80&w=600',
     price: '₹1,80,000/tonne'
   },
 
@@ -581,7 +581,7 @@ export const PRODUCTS: Product[] = [
     features: ['Thermal Insulation', 'Sound Absorption', 'Fire Resistant'],
     application: ['Wall Construction', 'Facades', 'Partition Walls'],
     stock: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1585128903994-c52a803b1ecb?auto=format&fit=crop&q=80&w=600',
+    image: 'https://images.unsplash.com/photo-1590247813693-5541d1c609fd?auto=format&fit=crop&q=80&w=600',
     price: '₹8,500/1000 bricks'
   },
 
@@ -600,7 +600,7 @@ export const PRODUCTS: Product[] = [
     features: ['Eco-Friendly', 'High Strength', 'Lightweight'],
     application: ['Load Bearing Walls', 'Partition Walls', 'Compound Walls'],
     stock: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1585128903994-c52a803b1ecb?auto=format&fit=crop&q=80&w=600',
+    image: 'https://images.unsplash.com/photo-1590247813693-5541d1c609fd?auto=format&fit=crop&q=80&w=600',
     price: '₹6,000/1000 bricks'
   },
 
@@ -619,7 +619,7 @@ export const PRODUCTS: Product[] = [
     features: ['High Compressive Strength', 'Dimensional Accuracy', 'Cost Effective'],
     application: ['Load Bearing Walls', 'Retaining Walls', 'Boundary Walls'],
     stock: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1585128903994-c52a803b1ecb?auto=format&fit=crop&q=80&w=600',
+    image: 'https://images.unsplash.com/photo-1607400201515-c2c41c07d307?auto=format&fit=crop&q=80&w=600',
     price: '₹45/block'
   },
 
@@ -639,7 +639,7 @@ export const PRODUCTS: Product[] = [
     features: ['Lightweight', 'Thermal Insulation', 'Fire Resistant'],
     application: ['Interior Walls', 'Exterior Walls', 'Infill Panels'],
     stock: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1585128903994-c52a803b1ecb?auto=format&fit=crop&q=80&w=600',
+    image: 'https://images.unsplash.com/photo-1607400201515-c2c41c07d307?auto=format&fit=crop&q=80&w=600',
     price: '₹55/block'
   },
 
@@ -659,7 +659,7 @@ export const PRODUCTS: Product[] = [
     features: ['Flexible', 'UV Resistant', 'Seamless Application'],
     application: ['Roofs', 'Terraces', 'Balconies'],
     stock: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1560185127-6ed189bf02f4?auto=format&fit=crop&q=80&w=600',
+    image: 'https://images.unsplash.com/photo-1581094288338-2314dddb7ece?auto=format&fit=crop&q=80&w=600',
     price: '₹4,200/drum'
   },
 
@@ -679,7 +679,7 @@ export const PRODUCTS: Product[] = [
     features: ['Water Resistant', 'Easy Application', 'Long Lasting'],
     application: ['Basements', 'Foundations', 'Water Tanks'],
     stock: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1560185127-6ed189bf02f4?auto=format&fit=crop&q=80&w=600',
+    image: 'https://images.unsplash.com/photo-1581094288338-2314dddb7ece?auto=format&fit=crop&q=80&w=600',
     price: '₹2,800/drum'
   },
 
@@ -699,7 +699,7 @@ export const PRODUCTS: Product[] = [
     features: ['Breathable', 'Crack Bridging', 'Polymer Modified'],
     application: ['Wet Areas', 'Swimming Pools', 'Water Retaining Structures'],
     stock: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1560185127-6ed189bf02f4?auto=format&fit=crop&q=80&w=600',
+    image: 'https://images.unsplash.com/photo-1581094288338-2314dddb7ece?auto=format&fit=crop&q=80&w=600',
     price: '₹1,500/bag'
   },
 
@@ -719,7 +719,7 @@ export const PRODUCTS: Product[] = [
     features: ['Good Bonding', 'Easy Application', 'Water Resistant'],
     application: ['Wall Tiles', 'Floor Tiles', 'Ceramic Tiles'],
     stock: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1560185127-6ed189bf02f4?auto=format&fit=crop&q=80&w=600',
+    image: 'https://images.unsplash.com/photo-1581094288338-2314dddb7ece?auto=format&fit=crop&q=80&w=600',
     price: '₹350/bag'
   },
 
@@ -739,7 +739,7 @@ export const PRODUCTS: Product[] = [
     features: ['Superior Bond Strength', 'Extended Open Time', 'Vertical Hold'],
     application: ['Large Format Tiles', 'Porcelain Tiles', 'Heavy Tiles'],
     stock: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1560185127-6ed189bf02f4?auto=format&fit=crop&q=80&w=600',
+    image: 'https://images.unsplash.com/photo-1581094288338-2314dddb7ece?auto=format&fit=crop&q=80&w=600',
     price: '₹550/bag'
   },
 
@@ -759,7 +759,7 @@ export const PRODUCTS: Product[] = [
     features: ['Crack Bridging', 'Movement Tolerance', 'Weather Resistant'],
     application: ['Expansion Joints', 'Facades', 'Swimming Pools'],
     stock: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1560185127-6ed189bf02f4?auto=format&fit=crop&q=80&w=600',
+    image: 'https://images.unsplash.com/photo-1581094288338-2314dddb7ece?auto=format&fit=crop&q=80&w=600',
     price: '₹650/bag'
   },
 
@@ -779,8 +779,140 @@ export const PRODUCTS: Product[] = [
     features: ['Stain Resistant', 'Chemical Resistant', 'Non-Porous'],
     application: ['Kitchen Counters', 'Bathrooms', 'Commercial Kitchens'],
     stock: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1560185127-6ed189bf02f4?auto=format&fit=crop&q=80&w=600',
+    image: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&q=80&w=600',
     price: '₹2,500/kit'
+  },
+
+  // ========== LIGHTING > LED BULBS ==========
+  {
+    id: 'lb-001',
+    name: 'Havells Adore 9W LED Bulb',
+    brand: 'Havells',
+    productFamily: 'Adore Series',
+    category: 'lighting',
+    subcategory: 'led-bulbs',
+    materialType: 'LED Bulb',
+    grade: 'E27 Base',
+    packaging: 'Single unit',
+    certifications: ['BEE 5-Star', 'IS 16102', 'RoHS'],
+    features: ['High Luminous Efficacy', 'Cool White 6500K', 'Instant On', 'Long Life'],
+    application: ['Living Rooms', 'Offices', 'Study Rooms', 'Kitchen'],
+    stock: 'In Stock',
+    image: 'https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?auto=format&fit=crop&q=80&w=600',
+    price: '₹149/unit',
+    badge: 'Top Seller',
+    durability: '25,000 hours',
+    availableCities: ['Pan India'],
+    priceType: 'fixed'
+  },
+  {
+    id: 'lb-002',
+    name: 'Philips Stellar Bright 12W LED',
+    brand: 'Philips Lighting',
+    productFamily: 'Stellar Bright Series',
+    category: 'lighting',
+    subcategory: 'led-bulbs',
+    materialType: 'LED Bulb',
+    grade: 'E27 Base',
+    packaging: 'Single unit',
+    certifications: ['BEE 5-Star', 'IS 16102', 'CE'],
+    features: ['Super Bright 1200lm', 'Warm White 3000K', 'Energy Star Rated', 'Dimmable'],
+    application: ['Bedrooms', 'Living Rooms', 'Hospitality Spaces', 'Retail'],
+    stock: 'In Stock',
+    image: 'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?auto=format&fit=crop&q=80&w=600',
+    price: '₹179/unit',
+    badge: 'Premium',
+    durability: '25,000 hours',
+    availableCities: ['Pan India'],
+    priceType: 'fixed'
+  },
+
+  // ========== LIGHTING > COMMERCIAL LIGHTING ==========
+  {
+    id: 'cl-001',
+    name: 'Havells Endura Star LED Panel 18W',
+    brand: 'Havells',
+    productFamily: 'Endura Star Series',
+    category: 'lighting',
+    subcategory: 'commercial-lighting',
+    materialType: 'LED Panel Light',
+    grade: 'Recessed Mount',
+    packaging: 'Single unit',
+    certifications: ['BIS', 'IS 10322', 'IP44'],
+    features: ['Uniform Light Distribution', 'Cool White 6500K', 'Low Glare Design', 'Flicker Free'],
+    application: ['Offices', 'Conference Rooms', 'Retail Showrooms', 'Hospitals'],
+    stock: 'In Stock',
+    image: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&q=80&w=600',
+    price: '₹1,250/unit',
+    badge: 'Top Seller',
+    durability: '30,000 hours',
+    availableCities: ['Delhi NCR', 'Mumbai', 'Bangalore', 'Pune'],
+    priceType: 'fixed'
+  },
+  {
+    id: 'cl-002',
+    name: 'Wipro Garnet LED Downlight 12W',
+    brand: 'Wipro Lighting',
+    productFamily: 'Garnet Series',
+    category: 'lighting',
+    subcategory: 'commercial-lighting',
+    materialType: 'LED Downlight',
+    grade: 'Recessed Mount',
+    packaging: 'Single unit',
+    certifications: ['BIS', 'IS 10322', 'IP20'],
+    features: ['Adjustable Beam Angle', 'Warm White 3000K', 'CRI > 80', 'Dimmable'],
+    application: ['Hotels', 'Restaurants', 'Boutique Retail', 'Residential Ceilings'],
+    stock: 'In Stock',
+    image: 'https://images.unsplash.com/photo-1550985616-10810253b84d?auto=format&fit=crop&q=80&w=600',
+    price: '₹980/unit',
+    badge: 'New Launch',
+    durability: '25,000 hours',
+    availableCities: ['Mumbai', 'Bangalore', 'Chennai', 'Hyderabad'],
+    priceType: 'fixed'
+  },
+
+  // ========== LIGHTING > DECORATIVE LIGHTING ==========
+  {
+    id: 'dl-001',
+    name: 'Havells Filamento LED Filament Bulb',
+    brand: 'Havells',
+    productFamily: 'Filamento Series',
+    category: 'lighting',
+    subcategory: 'decorative-lighting',
+    materialType: 'LED Filament Bulb',
+    grade: 'E27 Base',
+    packaging: 'Single unit',
+    certifications: ['BEE 5-Star', 'IS 16102', 'RoHS'],
+    features: ['360° Omni-directional Light', 'Vintage Edison Style', 'Dimmable', 'Instant On'],
+    application: ['Pendant Lights', 'Chandeliers', 'Cafe & Restaurant Decor', 'Residential Accent Lighting'],
+    stock: 'In Stock',
+    image: 'https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?auto=format&fit=crop&q=80&w=600',
+    price: '₹249/unit',
+    badge: 'Top Seller',
+    durability: '15,000 hours',
+    availableCities: ['Mumbai', 'Delhi NCR', 'Bangalore', 'Pune', 'Hyderabad'],
+    priceType: 'fixed'
+  },
+  {
+    id: 'dl-002',
+    name: 'Syska Heritage ST64 Edison Bulb',
+    brand: 'Syska',
+    productFamily: 'Heritage Series',
+    category: 'lighting',
+    subcategory: 'decorative-lighting',
+    materialType: 'LED Filament Bulb',
+    grade: 'E27 Base',
+    packaging: 'Single unit',
+    certifications: ['BEE 4-Star', 'IS 16102'],
+    features: ['ST64 Globe Shape', 'Amber Warm Glow', 'Low Flicker', 'Energy Efficient'],
+    application: ['Table Lamps', 'Wall Sconces', 'Industrial Loft Decor', 'Hotel Lobby Lighting'],
+    stock: 'In Stock',
+    image: 'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?auto=format&fit=crop&q=80&w=600',
+    price: '₹199/unit',
+    badge: 'New Launch',
+    durability: '12,000 hours',
+    availableCities: ['Mumbai', 'Delhi NCR', 'Chennai', 'Kolkata'],
+    priceType: 'fixed'
   },
 
   // ========== CONSTRUCTION CHEMICALS > GROUTS > CEMENT GROUT ==========
@@ -799,7 +931,7 @@ export const PRODUCTS: Product[] = [
     features: ['Smooth Finish', 'Colour Fast', 'Crack Free'],
     application: ['Tile Joints', 'Wall Tiles', 'Floor Tiles'],
     stock: 'In Stock',
-    image: 'https://images.unsplash.com/photo-1560185127-6ed189bf02f4?auto=format&fit=crop&q=80&w=600',
+    image: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&q=80&w=600',
     price: '₹350/bag'
   }
 ];

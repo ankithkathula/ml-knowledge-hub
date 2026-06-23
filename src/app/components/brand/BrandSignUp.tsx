@@ -112,7 +112,7 @@ export default function BrandSignUp({ onSubmitSuccess }: BrandSignUpProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 pt-16 md:pt-20 lg:pt-24">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <div className="relative bg-white shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.15)] overflow-hidden w-full max-w-[1152px] lg:h-[774px] flex flex-col lg:flex-row">
         
         {/* Right Panel - Image & Testimonial */}

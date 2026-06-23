@@ -65,12 +65,157 @@
   --t-slow: all 0.38s ease;
 }
 
-/* ---- Base reset ---- */
-body {
+/* ---- Dark theme overrides for the glass tokens ---- */
+.dark {
+  --bg-base:    #161922;       /* softer than near-black — easier on the eyes */
+  --bg-surface: #1e2230;
+  --bg-hero:    linear-gradient(140deg, #1f1814 0%, #161922 55%, #20171f 100%);
+
+  --glass:         rgba(255, 255, 255, 0.05);
+  --glass-mid:     rgba(255, 255, 255, 0.07);
+  --glass-strong:  rgba(30, 34, 48, 0.92);
+
+  --border:        1px solid rgba(255, 255, 255, 0.10);
+  --border-hover:  1px solid rgba(255, 106, 61, 0.45);
+  --border-focus:  1px solid rgba(255, 106, 61, 0.70);
+  --border-subtle: 1px solid rgba(255, 255, 255, 0.06);
+
+  --shadow-xs:    0 1px 4px rgba(0, 0, 0, 0.35);
+  --shadow-sm:    0 2px 8px rgba(0, 0, 0, 0.40);
+  --shadow-md:    0 4px 20px rgba(0, 0, 0, 0.45);
+  --shadow-lg:    0 8px 40px rgba(0, 0, 0, 0.50);
+  --shadow-hover: 0 14px 48px rgba(0, 0, 0, 0.55);
+
+  --text-primary:   #f1f3f7;
+  --text-secondary: #c8ccd6;
+  --text-muted:     #8d94a3;
+  --text-accent:    #ff8d68;
+
+  --accent-light:  rgba(255, 106, 61, 0.18);
+  --accent-border: rgba(255, 106, 61, 0.35);
+}
+
+/* ---- Dark mode overrides for hardcoded Tailwind classes ----
+   Many figma-export components use bg-white/bg-gray-* and text-gray-*. The :where()
+   wrapper keeps specificity at 0 so explicit component classes always win when needed. */
+:where(.dark) :where(.bg-white)             { background-color: var(--bg-surface); }
+:where(.dark) :where(.bg-gray-50)           { background-color: #1a1d27; }
+:where(.dark) :where(.bg-gray-100)          { background-color: #1f2330; }
+:where(.dark) :where(.bg-gray-200)          { background-color: #262a38; }
+:where(.dark) :where(.bg-gray-900)          { background-color: #0f1218; }
+:where(.dark) :where(.bg-gray-950)          { background-color: #0b0d13; }
+:where(.dark) :where(.bg-slate-50)          { background-color: #1a1d27; }
+:where(.dark) :where(.bg-slate-100)         { background-color: #1f2330; }
+:where(.dark) :where(.bg-neutral-50)        { background-color: #1a1d27; }
+
+:where(.dark) :where(.text-black)           { color: #f1f3f7; }
+:where(.dark) :where(.text-gray-900)        { color: #f1f3f7; }
+:where(.dark) :where(.text-gray-800)        { color: #e3e6ed; }
+:where(.dark) :where(.text-gray-700)        { color: #c8ccd6; }
+:where(.dark) :where(.text-gray-600)        { color: #b5bac6; }
+:where(.dark) :where(.text-gray-500)        { color: #9ca2af; }
+:where(.dark) :where(.text-gray-400)        { color: #8d94a3; }
+:where(.dark) :where(.text-slate-900)       { color: #f1f3f7; }
+:where(.dark) :where(.text-slate-700)       { color: #c8ccd6; }
+
+:where(.dark) :where(.border-gray-100)      { border-color: rgba(255,255,255,0.06); }
+:where(.dark) :where(.border-gray-200)      { border-color: rgba(255,255,255,0.10); }
+:where(.dark) :where(.border-gray-300)      { border-color: rgba(255,255,255,0.14); }
+:where(.dark) :where(.border-slate-200)     { border-color: rgba(255,255,255,0.10); }
+
+:where(.dark) :where(.divide-gray-100 > *)  { border-color: rgba(255,255,255,0.06); }
+:where(.dark) :where(.divide-gray-200 > *)  { border-color: rgba(255,255,255,0.10); }
+
+/* Hardcoded inline-style page wrappers — use :is(.dark) ... [style*=] heavy hammer with !important. */
+.dark [style*="linear-gradient(135deg, #f8f9fa"],
+.dark [style*="linear-gradient(135deg,#f8f9fa"] {
   background: var(--bg-base) !important;
+}
+.dark [style*="#FDFDFD"] {
+  background-color: var(--bg-base) !important;
+}
+
+/* Inline rgba(255,255,255, .x) backgrounds (common in figma exports) → dark glass overlay */
+.dark [style*="rgba(255,255,255,0.9)"],
+.dark [style*="rgba(255, 255, 255, 0.9)"],
+.dark [style*="rgba(255,255,255,0.95)"],
+.dark [style*="rgba(255, 255, 255, 0.95)"],
+.dark [style*="rgba(255,255,255,0.8)"],
+.dark [style*="rgba(255, 255, 255, 0.8)"] {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(255, 255, 255, 0.10) !important;
+}
+
+/* Hairline dividers using rgba(0,0,0,0.0X) become invisible in dark — flip to rgba(255,...) */
+.dark [style*="rgba(0,0,0,0.04)"],
+.dark [style*="rgba(0, 0, 0, 0.04)"],
+.dark [style*="rgba(0,0,0,0.05)"],
+.dark [style*="rgba(0, 0, 0, 0.05)"],
+.dark [style*="rgba(0,0,0,0.06)"],
+.dark [style*="rgba(0, 0, 0, 0.06)"],
+.dark [style*="rgba(0,0,0,0.08)"],
+.dark [style*="rgba(0, 0, 0, 0.08)"] {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* ─── Arbitrary-value hex Tailwind utility classes ───
+   Many figma-export components use bg-[#FDFDFD], text-[#101828], etc.
+   These don't get auto-dark; override here. */
+
+/* Light backgrounds → dark surfaces */
+.dark .bg-\[\#FDFDFD\],
+.dark .bg-\[\#FFFFFF\],
+.dark .bg-\[\#FAFAFA\] { background-color: var(--bg-surface); }
+.dark .bg-\[\#F9FAFB\],
+.dark .bg-\[\#F3F4F6\],
+.dark .bg-\[\#F5F5F5\] { background-color: #1f2330; }
+.dark .bg-\[\#EAEAEA\],
+.dark .bg-\[\#E5E7EB\] { background-color: rgba(255,255,255,0.08); }
+
+/* Peach/orange tints → translucent orange overlay */
+.dark .bg-\[\#FFF8F6\],
+.dark .bg-\[\#FFF5F0\],
+.dark .bg-\[\#FFF3EF\],
+.dark .bg-\[\#FFEDE5\] { background-color: rgba(255, 106, 61, 0.12); }
+
+/* Dark text on light bg → light text on dark bg */
+.dark .text-\[\#0F172A\],
+.dark .text-\[\#101828\],
+.dark .text-\[\#111827\],
+.dark .text-\[\#1F1F1F\] { color: var(--text-primary); }
+.dark .text-\[\#364153\],
+.dark .text-\[\#4A5565\],
+.dark .text-\[\#4B5563\] { color: var(--text-secondary); }
+.dark .text-\[\#6B7280\],
+.dark .text-\[\#667085\],
+.dark .text-\[\#98A2B3\],
+.dark .text-\[\#9CA3AF\],
+.dark .text-\[\#717182\] { color: var(--text-muted); }
+
+/* Light borders → dark borders */
+.dark .border-\[\#E5E7EB\],
+.dark .border-\[\#EAEAEA\],
+.dark .border-\[\#F3F4F6\] { border-color: rgba(255,255,255,0.10); }
+.dark .border-\[\#D1D5DB\] { border-color: rgba(255,255,255,0.14); }
+
+/* ---- Base reset ---- */
+html, body {
+  background: var(--bg-base);
   color: var(--text-primary);
-  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+  font-family: 'Satoshi', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.26s ease, color 0.26s ease;
+}
+
+/* Force Satoshi everywhere — inline figma exports often hardcode 'Satoshi' or no font;
+   this catches everything else (buttons, inputs, MUI, etc.) without overriding inline styles. */
+*, *::before, *::after {
+  font-family: inherit;
+}
+
+button, input, select, textarea, optgroup {
+  font-family: 'Satoshi', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 /* ---- Global transition on interactive elements ---- */
@@ -124,6 +269,9 @@ a, button, input, select, textarea,
   padding: 20px;
   transition: var(--t-base);
 }
+.dark .glass-card-subtle {
+  background: rgba(255, 255, 255, 0.04);
+}
 
 .glass-card-strong {
   background: var(--glass-strong);
@@ -152,6 +300,12 @@ a, button, input, select, textarea,
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   box-shadow: 0 2px 16px rgba(0, 0, 0, 0.05);
+  transition: background-color 0.26s ease, border-color 0.26s ease;
+}
+.dark .gl-nav {
+  background: rgba(11, 13, 18, 0.85);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.5);
 }
 
 /* ---- Buttons ---- */
@@ -225,6 +379,13 @@ a, button, input, select, textarea,
 }
 .gl-input::placeholder {
   color: var(--text-muted);
+}
+.dark .gl-input {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+}
+.dark .gl-input:focus {
+  background: rgba(255, 255, 255, 0.08);
 }
 
 /* ---- Pills / Tags ---- */

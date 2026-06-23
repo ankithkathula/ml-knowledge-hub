@@ -5,8 +5,6 @@ import {
   Package, ShoppingBag, Heart, ChevronDown, Building2, Search,
   SlidersHorizontal, X, Share2, Plus, ArrowRight,
 } from "lucide-react";
-import { Navbar } from "../Navbar";
-import { Footer } from "../Footer";
 import {
   getNode, getBreadcrumb, getProductsForL5, getBrandsForLayer,
   type ProductItem,
@@ -249,12 +247,10 @@ export function ProductListingPage() {
   if (!node) {
     return (
       <div className="min-h-screen" style={{ background: "var(--bg-base)" }}>
-        <Navbar />
         <div className="max-w-7xl mx-auto px-6 py-20 text-center">
           <h1 style={{ fontSize: "1.5rem", fontWeight: 700 }}>Products not found</h1>
           <Link to="/" className="btn-primary mt-6 inline-flex">Back to Home</Link>
         </div>
-        <Footer />
       </div>
     );
   }
@@ -285,8 +281,6 @@ export function ProductListingPage() {
 
   return (
     <div className="min-h-screen" style={{ background: "var(--bg-base)" }}>
-      <Navbar />
-
       {/* ===== BANNER — light style matching hierarchy pages ===== */}
       <div className="relative overflow-hidden" style={{ background: "linear-gradient(135deg, #fff8f5 0%, #f5f7fb 50%, #fdf4ef 100%)" }}>
         <div className="absolute top-0 right-0 w-[500px] h-[400px] opacity-20" style={{ background: "radial-gradient(ellipse, rgba(255,106,61,0.25) 0%, transparent 70%)" }} />
@@ -448,7 +442,6 @@ export function ProductListingPage() {
         </div>
       </div>
 
-      <Footer />
     </div>
   );
 }

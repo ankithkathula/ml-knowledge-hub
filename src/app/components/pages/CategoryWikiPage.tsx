@@ -5,8 +5,6 @@ import {
   Play, ArrowRight, Eye, TrendingUp, Users, Package,
   Award, Newspaper, Lightbulb, Check,
 } from "lucide-react";
-import { Navbar } from "../Navbar";
-import { Footer } from "../Footer";
 import { CATEGORY, BRANDS } from "../data/mockData";
 import { TechnologiesSection } from "../shared/TechnologiesSection";
 import { IndustryNewsSection } from "../shared/IndustryNewsSection";
@@ -55,8 +53,6 @@ export function CategoryWikiPage() {
 
   return (
     <div className="min-h-screen" style={{ background: "var(--bg-base)" }}>
-      <Navbar />
-
       {/* Breadcrumb */}
       <div style={{ background: "var(--glass-strong)", borderBottom: "var(--border)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex items-center gap-1.5">
@@ -398,7 +394,6 @@ export function CategoryWikiPage() {
         </div>
       </div>
 
-      <Footer />
     </div>
   );
 }

@@ -1,424 +1,499 @@
 import { useState } from "react";
 import { Link } from "react-router";
-import {
-  Search, Calendar, User, Tag, Clock, TrendingUp,
-  Filter, ChevronDown, Grid, List as ListIcon, Eye,
-  BookOpen, Sparkles, ArrowRight,
-} from "lucide-react";
-import { Navbar } from "../Navbar";
-import { Footer } from "../Footer";
+import { Search, Eye, ArrowRight, Sparkles, Clock, ExternalLink } from "lucide-react";
+import { AvatarImg } from "../ui/AvatarImg";
 
-interface BlogPost {
+interface Post {
   id: string;
   title: string;
-  subtitle: string;
-  bannerImage: string;
+  category: string;
   author: string;
-  authorAvatar?: string;
+  authorImg: string;
   date: string;
   readTime: string;
-  tags: string[];
-  category: string;
-  excerpt: string;
   views: number;
-  featured: boolean;
+  imgUrl: string;
+  excerpt: string;
 }
 
-const SAMPLE_BLOGS: BlogPost[] = [
+const POSTS: Post[] = [
+  { id: "sustainable-concrete", title: "Sustainable Concrete Innovations Transforming Modern Construction", category: "Structural", author: "Ar. Priya Sharma",     authorImg: "https://i.pravatar.cc/80?img=55", date: "28 Mar", readTime: "8 min", views: 12450, imgUrl: "https://picsum.photos/seed/concrete-build/600/400",    excerpt: "Breakthroughs in carbon-negative mixes, recycled aggregate innovations, and real-world implementations in mega projects across India." },
+  { id: "smart-glass",          title: "Smart Glass Technology: The Future of Building Envelopes",          category: "Facade",     author: "Eng. Rajesh Kumar",    authorImg: "https://i.pravatar.cc/80?img=66", date: "25 Mar", readTime: "6 min", views: 8920,  imgUrl: "https://picsum.photos/seed/glass-facade/600/400",     excerpt: "Electrochromic glass can reduce HVAC costs by up to 40% while dramatically improving occupant comfort and visual transparency control." },
+  { id: "hvac-vrf",             title: "VRF vs Traditional Ducted HVAC: A 15-Project Analysis",            category: "MEP",        author: "Ar. Sneha Patel",      authorImg: "https://i.pravatar.cc/80?img=13", date: "22 Mar", readTime: "10 min",views: 15670, imgUrl: "https://picsum.photos/seed/hvac-system/600/400",      excerpt: "Cost analysis, installation considerations, and performance metrics from 15 completed projects across residential and commercial sectors." },
+  { id: "luxury-flooring",      title: "Luxury Flooring Trends: Italian Marble to Engineered Wood",        category: "Interiors",  author: "Des. Aisha Khan",      authorImg: "https://i.pravatar.cc/80?img=67", date: "20 Mar", readTime: "7 min", views: 6540,  imgUrl: "https://picsum.photos/seed/flooring-marble/600/400",  excerpt: "Material selection guide for high-end residential and hospitality projects with full cost breakdowns and installation notes." },
+  { id: "led-lighting",         title: "LED Lighting Design Strategies for Commercial Spaces",             category: "MEP",        author: "Eng. Michael D'Souza", authorImg: "https://i.pravatar.cc/80?img=18", date: "18 Mar", readTime: "9 min", views: 4230,  imgUrl: "https://picsum.photos/seed/office-lighting/600/400",  excerpt: "Circadian rhythm lighting, color temperature selection, and smart control system integration for modern workplace environments." },
+  { id: "waterproofing-guide",  title: "Complete Guide to Basement Waterproofing Solutions",               category: "Structural", author: "Ar. Vikram Mehta",     authorImg: "https://i.pravatar.cc/80?img=69", date: "15 Mar", readTime: "11 min",views: 9870,  imgUrl: "https://picsum.photos/seed/basement-build/600/400",   excerpt: "Membrane selection, drainage systems, crystalline waterproofing, and a deep-dive into common failure modes with case studies." },
+  { id: "bim-contractors",      title: "BIM for Contractors: Streamlining On-Site Documentation",         category: "BIM & Tech", author: "Ar. Kavya Reddy",      authorImg: "https://i.pravatar.cc/80?img=61", date: "12 Mar", readTime: "8 min", views: 7200,  imgUrl: "https://picsum.photos/seed/bim-construction/600/400", excerpt: "From clash detection to digital twins — a practical BIM implementation guide for construction teams working on site." },
+  { id: "biophilic-offices",    title: "Biophilic Design in Corporate Offices: The ROI on Wellbeing",     category: "Interiors",  author: "Dr. Sameer Joshi",     authorImg: "https://i.pravatar.cc/80?img=54", date: "10 Mar", readTime: "6 min", views: 5800,  imgUrl: "https://picsum.photos/seed/biophilic-plant/600/400",  excerpt: "Green walls, natural light strategies, and material palettes proven to boost employee productivity by up to 12% in measured studies." },
+];
+
+const TAGS = ["All", "Structural", "MEP", "Facade", "Interiors", "BIM & Tech"];
+const ACCENT = "#ff6a3d";
+const LINE = "1px solid rgba(0,0,0,0.1)";
+
+interface StudioAd {
+  id: string;
+  name: string;
+  tagline: string;
+  desc: string;
+  tags: string[];
+  imgUrl: string;
+  profilePath: string;
+  cta: string;
+  stat: string;
+  statLabel: string;
+}
+
+const STUDIO_ADS: StudioAd[] = [
   {
-    id: "sustainable-concrete-innovations-2026",
-    title: "Sustainable Concrete Innovations Transforming Modern Construction",
-    subtitle: "How eco-friendly concrete solutions are reducing carbon footprint in mega projects",
-    bannerImage: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1200",
-    author: "Ar. Priya Sharma",
-    date: "2026-03-28",
-    readTime: "8 min read",
-    tags: ["Sustainability", "Concrete", "Green Building"],
-    category: "Structural Systems",
-    excerpt: "Discover the latest breakthroughs in sustainable concrete technology, including carbon-negative mixes, recycled aggregate innovations, and how leading construction firms are implementing these solutions in real-world projects.",
-    views: 12450,
-    featured: true,
+    id: "morphogenesis",
+    name: "Morphogenesis",
+    tagline: "Sustainable architecture at civic scale",
+    desc: "From TERI's net-zero retreat to Fortis hospitals and the USAID New Delhi campus — Morphogenesis designs buildings that perform as well as they look.",
+    tags: ["Architecture", "Sustainability", "Urban"],
+    imgUrl: "https://picsum.photos/seed/morphogenesis-civic/800/420",
+    profilePath: "/studio/morphogenesis",
+    cta: "View Portfolio",
+    stat: "200+",
+    statLabel: "completed projects",
   },
   {
-    id: "smart-glass-technology-building-envelope",
-    title: "Smart Glass Technology: The Future of Building Envelopes",
-    subtitle: "Electrochromic windows and their impact on energy efficiency",
-    bannerImage: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1200",
-    author: "Eng. Rajesh Kumar",
-    date: "2026-03-25",
-    readTime: "6 min read",
-    tags: ["Smart Buildings", "Glass", "Energy Efficiency"],
-    category: "Building Envelope",
-    excerpt: "An in-depth analysis of electrochromic glass technology and its applications in modern architecture. Learn how smart windows can reduce HVAC costs by up to 40% while improving occupant comfort.",
-    views: 8920,
-    featured: true,
-  },
-  {
-    id: "hvac-systems-comparison-2026",
-    title: "HVAC Systems Comparison: VRF vs Traditional Ducted Systems",
-    subtitle: "Choosing the right mechanical system for your project",
-    bannerImage: "https://images.unsplash.com/photo-1621905251918-48416bd8575a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1200",
-    author: "Ar. Sneha Patel",
-    date: "2026-03-22",
-    readTime: "10 min read",
-    tags: ["HVAC", "MEP", "Building Systems"],
-    category: "MEP Systems",
-    excerpt: "A comprehensive comparison of Variable Refrigerant Flow systems versus traditional ducted HVAC. Includes cost analysis, installation considerations, and performance metrics from 15 completed projects.",
-    views: 15670,
-    featured: false,
-  },
-  {
-    id: "luxury-flooring-trends-2026",
-    title: "Luxury Flooring Trends: From Italian Marble to Engineered Wood",
-    subtitle: "Material selection guide for high-end residential projects",
-    bannerImage: "https://images.unsplash.com/photo-1615873968403-89e068629265?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1200",
-    author: "Des. Aisha Khan",
-    date: "2026-03-20",
-    readTime: "7 min read",
-    tags: ["Flooring", "Interior Design", "Luxury"],
-    category: "Interior Finishes",
-    excerpt: "Explore the most sought-after flooring materials for 2026, including natural stone, engineered hardwood, and luxury vinyl planks. Complete with installation tips, maintenance requirements, and cost breakdowns.",
-    views: 6540,
-    featured: false,
-  },
-  {
-    id: "led-lighting-design-commercial-spaces",
-    title: "LED Lighting Design Strategies for Commercial Spaces",
-    subtitle: "Creating ambiance while maximizing energy savings",
-    bannerImage: "https://images.unsplash.com/photo-1621905251918-48416bd8575a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1200",
-    author: "Eng. Michael D'Souza",
-    date: "2026-03-18",
-    readTime: "9 min read",
-    tags: ["Lighting", "Energy Efficiency", "Design"],
-    category: "MEP Systems",
-    excerpt: "Master the art of LED lighting design with practical examples from retail, office, and hospitality projects. Includes circadian rhythm lighting, color temperature selection, and control system integration.",
-    views: 4230,
-    featured: false,
-  },
-  {
-    id: "waterproofing-solutions-basements",
-    title: "Complete Guide to Basement Waterproofing Solutions",
-    subtitle: "Preventing moisture ingress in below-grade construction",
-    bannerImage: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1200",
-    author: "Ar. Vikram Mehta",
-    date: "2026-03-15",
-    readTime: "11 min read",
-    tags: ["Waterproofing", "Construction", "Technical"],
-    category: "Structural Systems",
-    excerpt: "Everything you need to know about basement waterproofing: from membrane selection and drainage systems to crystalline waterproofing and common failure modes. Case studies included.",
-    views: 9870,
-    featured: false,
+    id: "studio-lotus",
+    name: "Studio Lotus",
+    tagline: "Crafting soulful spaces with local materials",
+    desc: "Raas Hotels, Amara, and a growing portfolio of private residences — Studio Lotus brings craft and narrative to every interior.",
+    tags: ["Interior Design", "Hospitality", "Residential"],
+    imgUrl: "https://picsum.photos/seed/studio-lotus-interior/800/420",
+    profilePath: "/studio/studio-lotus",
+    cta: "Explore Work",
+    stat: "15+",
+    statLabel: "award-winning hospitality projects",
   },
 ];
 
-const CATEGORIES = [
-  "All Categories",
-  "Building Envelope",
-  "Structural Systems",
-  "MEP Systems",
-  "Interior Finishes",
-  "Fixtures & Equipment",
-];
+function CategoryLabel({ cat }: { cat: string }) {
+  return (
+    <span style={{ fontSize: "0.62rem", fontWeight: 700, color: ACCENT, textTransform: "uppercase", letterSpacing: "0.12em" }}>
+      {cat}
+    </span>
+  );
+}
+
+function PostMeta({ post }: { post: Post }) {
+  return (
+    <div className="flex items-center gap-2 mt-3">
+      <AvatarImg src={post.authorImg} fallback={post.author.split(" ").map(n => n[0]).join("").slice(0, 2)} size={24} borderStyle="none" />
+      <span style={{ fontSize: "0.72rem", fontWeight: 600, color: "#1a1a1a" }}>{post.author}</span>
+      <span style={{ fontSize: "0.68rem", color: "var(--text-muted)" }}>· {post.date} · {post.readTime}</span>
+    </div>
+  );
+}
 
 export function BlogListingPage() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All Categories");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [sortBy, setSortBy] = useState("newest");
+  const [activeTag, setActiveTag] = useState("All");
+  const [search, setSearch] = useState("");
+  const [email, setEmail] = useState("");
 
-  let filteredBlogs = SAMPLE_BLOGS.filter(
-    (blog) =>
-      (selectedCategory === "All Categories" || blog.category === selectedCategory) &&
-      (blog.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        blog.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        blog.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase())))
+  const filtered = POSTS.filter(p =>
+    (activeTag === "All" || p.category === activeTag) &&
+    (!search || p.title.toLowerCase().includes(search.toLowerCase()) || p.category.toLowerCase().includes(search.toLowerCase()))
   );
 
-  if (sortBy === "popular") {
-    filteredBlogs = [...filteredBlogs].sort((a, b) => b.views - a.views);
-  } else if (sortBy === "oldest") {
-    filteredBlogs = [...filteredBlogs].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-  } else {
-    filteredBlogs = [...filteredBlogs].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-  }
-
-  const featuredBlogs = SAMPLE_BLOGS.filter((b) => b.featured);
+  const showMagazine = activeTag === "All" && !search && filtered.length >= 8;
 
   return (
-    <div className="min-h-screen" style={{ background: "var(--bg-base)" }}>
-      <Navbar />
+    <div className="min-h-screen" style={{ background: "#fafaf9" }}>
 
-      {/* Hero Section */}
-      <div className="relative overflow-hidden" style={{ background: "linear-gradient(135deg, #fff8f5 0%, #f5f7fb 50%, #fdf4ef 100%)", borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
-        <div className="absolute top-0 right-0 w-[600px] h-[400px] opacity-20" style={{ background: "radial-gradient(ellipse, rgba(255,106,61,0.3) 0%, transparent 70%)" }} />
-        
-        <div className="relative max-w-7xl mx-auto px-6 py-12">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <div className="flex items-center gap-3 mb-3">
-                <BookOpen className="w-8 h-8" style={{ color: "#ff6a3d" }} />
-                <h1 style={{ fontSize: "2rem", fontWeight: 800, color: "var(--text-primary)" }}>
-                  Blog & Insights
-                </h1>
-              </div>
-              <p style={{ fontSize: "0.95rem", color: "var(--text-secondary)", maxWidth: 600 }}>
-                Expert articles, industry trends, and technical guides from construction materials professionals
-              </p>
-            </div>
-            <Link
-              to="/blog/create"
-              className="flex items-center gap-2 px-5 py-3 rounded-xl"
-              style={{ background: "#ff6a3d", color: "#fff", fontSize: "0.85rem", fontWeight: 600 }}
-            >
-              <Sparkles className="w-4 h-4" /> Write Article
-            </Link>
+      {/* ── Masthead ── */}
+      <div className="max-w-6xl mx-auto px-6 pt-10">
+        <div className="flex items-start justify-between gap-8 pb-8" style={{ borderBottom: LINE }}>
+          {/* Left: Big title */}
+          <div>
+            <p style={{ fontSize: "0.68rem", fontWeight: 700, color: ACCENT, textTransform: "uppercase", letterSpacing: "0.15em", marginBottom: 6 }}>
+              Material Library · Knowledge Center
+            </p>
+            <h1 style={{ fontSize: "clamp(3.8rem, 9vw, 7.5rem)", fontWeight: 900, letterSpacing: "-0.035em", lineHeight: 0.88, color: "#1a1a1a" }}>
+              Insights.
+            </h1>
           </div>
 
-          {/* Search & Filters */}
-          <div className="flex gap-3 flex-wrap">
-            <div className="flex-1 min-w-[300px]">
-              <div className="flex items-center gap-3 px-4 py-3 rounded-xl" style={{ background: "rgba(255,255,255,0.9)", border: "1px solid rgba(0,0,0,0.08)" }}>
-                <Search className="w-5 h-5" style={{ color: "var(--text-muted)" }} />
-                <input
-                  type="text"
-                  placeholder="Search articles by title, tags, or keywords..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="flex-1 bg-transparent outline-none"
-                  style={{ fontSize: "0.88rem", color: "var(--text-primary)" }}
-                />
-              </div>
+          {/* Right: Filters + Search */}
+          <div className="flex flex-col gap-4 pt-1 min-w-0 max-w-xs">
+            <div className="flex flex-wrap gap-2">
+              {TAGS.map(tag => (
+                <button
+                  key={tag}
+                  onClick={() => setActiveTag(tag)}
+                  className="px-3 py-1.5 rounded-full transition-all"
+                  style={{
+                    fontSize: "0.72rem",
+                    fontWeight: 600,
+                    background: activeTag === tag ? "#1a1a1a" : "transparent",
+                    color: activeTag === tag ? "#fff" : "#1a1a1a",
+                    border: "1px solid rgba(0,0,0,0.22)",
+                  }}
+                >
+                  {tag}
+                </button>
+              ))}
             </div>
             <div className="relative">
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="pl-4 pr-10 py-3 rounded-xl appearance-none"
-                style={{ background: "rgba(255,255,255,0.9)", border: "1px solid rgba(0,0,0,0.08)", fontSize: "0.85rem", fontWeight: 500, color: "var(--text-primary)" }}
-              >
-                {CATEGORIES.map((cat) => (
-                  <option key={cat} value={cat}>{cat}</option>
-                ))}
-              </select>
-              <ChevronDown className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: "var(--text-muted)" }} />
-            </div>
-            <div className="flex rounded-xl overflow-hidden" style={{ border: "1px solid rgba(0,0,0,0.08)" }}>
-              <button
-                onClick={() => setViewMode("grid")}
-                className="p-3"
-                style={{ background: viewMode === "grid" ? "#ff6a3d" : "rgba(255,255,255,0.9)" }}
-              >
-                <Grid className="w-4 h-4" style={{ color: viewMode === "grid" ? "#fff" : "var(--text-muted)" }} />
-              </button>
-              <button
-                onClick={() => setViewMode("list")}
-                className="p-3"
-                style={{ background: viewMode === "list" ? "#ff6a3d" : "rgba(255,255,255,0.9)" }}
-              >
-                <ListIcon className="w-4 h-4" style={{ color: viewMode === "list" ? "#fff" : "var(--text-muted)" }} />
-              </button>
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5" style={{ color: "var(--text-muted)" }} />
+              <input
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                placeholder="Search articles…"
+                className="w-full pl-9 pr-4 py-2 rounded-xl text-sm outline-none"
+                style={{ background: "white", border: LINE, color: "#1a1a1a" }}
+              />
             </div>
           </div>
         </div>
       </div>
 
-      {/* Featured Articles */}
-      {searchQuery === "" && selectedCategory === "All Categories" && featuredBlogs.length > 0 && (
-        <div className="max-w-7xl mx-auto px-6 py-8">
-          <div className="flex items-center gap-2 mb-6">
-            <TrendingUp className="w-5 h-5" style={{ color: "#ff6a3d" }} />
-            <h2 style={{ fontSize: "1.2rem", fontWeight: 700, color: "var(--text-primary)" }}>Featured Articles</h2>
+      {showMagazine ? (
+        <div className="max-w-6xl mx-auto px-6">
+
+          {/* ── ROW 1: 4-column editorial strip ── */}
+          <div className="grid grid-cols-4" style={{ borderBottom: LINE }}>
+
+            {/* Col 1: Article with photo */}
+            <Link to={`/blog/${filtered[0].id}`} className="block group" style={{ borderRight: LINE, paddingRight: 24, paddingTop: 22, paddingBottom: 24 }}>
+              <div className="rounded-xl overflow-hidden mb-3" style={{ aspectRatio: "4/3" }}>
+                <img src={filtered[0].imgUrl} alt={filtered[0].title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+              </div>
+              <CategoryLabel cat={filtered[0].category} />
+              <h3 className="mt-1 group-hover:underline" style={{ fontSize: "0.95rem", fontWeight: 800, color: "#1a1a1a", lineHeight: 1.35 }}>
+                {filtered[0].title}
+              </h3>
+              <p className="line-clamp-2 mt-1.5" style={{ fontSize: "0.72rem", color: "var(--text-muted)", lineHeight: 1.55 }}>
+                {filtered[0].excerpt}
+              </p>
+              <PostMeta post={filtered[0]} />
+            </Link>
+
+            {/* Col 2: Stat / highlight visual */}
+            <div style={{ borderRight: LINE, padding: "22px 24px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+              <div>
+                <CategoryLabel cat="This Week" />
+                <div style={{ fontSize: "3.8rem", fontWeight: 900, color: "#1a1a1a", lineHeight: 1, marginTop: 10, letterSpacing: "-0.04em" }}>
+                  42.3k
+                </div>
+                <p style={{ fontSize: "0.75rem", color: "var(--text-muted)", marginTop: 6, lineHeight: 1.5 }}>
+                  spec sheets downloaded across 6 material categories
+                </p>
+              </div>
+              <div className="flex items-end justify-between">
+                <div style={{ width: 52, height: 52, borderRadius: "50%", background: ACCENT, opacity: 0.12 }} />
+                <div style={{ width: 32, height: 32, borderRadius: "50%", border: `2px solid ${ACCENT}`, opacity: 0.4 }} />
+              </div>
+            </div>
+
+            {/* Col 3: Text-only article */}
+            <Link to={`/blog/${filtered[2].id}`} className="block group" style={{ borderRight: LINE, padding: "22px 24px 24px" }}>
+              <CategoryLabel cat={filtered[2].category} />
+              <h3 className="mt-1 group-hover:underline" style={{ fontSize: "1rem", fontWeight: 800, color: "#1a1a1a", lineHeight: 1.35 }}>
+                {filtered[2].title}
+              </h3>
+              <p className="line-clamp-3 mt-2" style={{ fontSize: "0.72rem", color: "var(--text-muted)", lineHeight: 1.6 }}>
+                {filtered[2].excerpt}
+              </p>
+              <PostMeta post={filtered[2]} />
+            </Link>
+
+            {/* Col 4: Article with photo */}
+            <Link to={`/blog/${filtered[3].id}`} className="block group" style={{ paddingLeft: 24, paddingTop: 22, paddingBottom: 24 }}>
+              <div className="rounded-xl overflow-hidden mb-3" style={{ aspectRatio: "4/3" }}>
+                <img src={filtered[3].imgUrl} alt={filtered[3].title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+              </div>
+              <CategoryLabel cat={filtered[3].category} />
+              <h3 className="mt-1 group-hover:underline" style={{ fontSize: "0.95rem", fontWeight: 800, color: "#1a1a1a", lineHeight: 1.35 }}>
+                {filtered[3].title}
+              </h3>
+              <PostMeta post={filtered[3]} />
+            </Link>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {featuredBlogs.map((blog) => (
-              <Link
-                key={blog.id}
-                to={`/blog/${blog.id}`}
-                className="gl-card overflow-hidden group"
-                style={{ padding: 0 }}
-              >
-                <div className="relative h-64 overflow-hidden">
-                  <img src={blog.bannerImage} alt={blog.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                  <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.8) 100%)" }} />
-                  <span className="absolute top-4 left-4 px-3 py-1.5 rounded-full" style={{ fontSize: "0.7rem", fontWeight: 600, background: "#ff6a3d", color: "#fff" }}>
-                    Featured
+
+          {/* ── ROW 2: Big photo + 2 stacked + dark stat ── */}
+          <div className="grid grid-cols-4" style={{ borderBottom: LINE }}>
+
+            {/* Big photo: col-span-2 */}
+            <Link to={`/blog/${filtered[1].id}`} className="col-span-2 block group" style={{ borderRight: LINE, paddingRight: 28, paddingTop: 28, paddingBottom: 28 }}>
+              <div className="relative rounded-2xl overflow-hidden" style={{ height: 300 }}>
+                <img src={filtered[1].imgUrl} alt={filtered[1].title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-600 group-hover:scale-105" loading="lazy" />
+                <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, transparent 25%, rgba(0,0,0,0.75))" }} />
+                <div style={{ position: "absolute", bottom: 20, left: 20, right: 20 }}>
+                  <span style={{ fontSize: "0.62rem", fontWeight: 700, color: "rgba(255,255,255,0.7)", textTransform: "uppercase", letterSpacing: "0.12em" }}>
+                    {filtered[1].category}
                   </span>
-                  <div className="absolute bottom-0 left-0 right-0 p-6">
-                    <span className="inline-block px-3 py-1 rounded-full mb-3" style={{ fontSize: "0.7rem", fontWeight: 600, background: "rgba(255,255,255,0.2)", color: "#fff", backdropFilter: "blur(8px)" }}>
-                      {blog.category}
-                    </span>
-                    <h3 className="line-clamp-2 mb-2" style={{ fontSize: "1.3rem", fontWeight: 800, color: "#fff", lineHeight: 1.3, textShadow: "0 2px 8px rgba(0,0,0,0.4)" }}>
-                      {blog.title}
-                    </h3>
-                    <p className="line-clamp-1" style={{ fontSize: "0.85rem", color: "rgba(255,255,255,0.9)", textShadow: "0 1px 4px rgba(0,0,0,0.4)" }}>
-                      {blog.subtitle}
-                    </p>
-                  </div>
+                  <h3 className="mt-1" style={{ fontSize: "1.45rem", fontWeight: 900, color: "#fff", lineHeight: 1.2, letterSpacing: "-0.02em" }}>
+                    {filtered[1].title}
+                  </h3>
                 </div>
-                <div className="p-5" style={{ background: "rgba(255,255,255,0.5)" }}>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-full flex items-center justify-center" style={{ background: "linear-gradient(135deg, #ff6a3d 0%, #ff8f6d 100%)", color: "#fff", fontSize: "0.75rem", fontWeight: 700 }}>
-                        {blog.author.split(" ").map(n => n[0]).join("").slice(0, 2)}
-                      </div>
-                      <div>
-                        <p style={{ fontSize: "0.78rem", fontWeight: 600, color: "var(--text-primary)" }}>{blog.author}</p>
-                        <div className="flex items-center gap-2" style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>
-                          <span>{new Date(blog.date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>
-                          <span>•</span>
-                          <span>{blog.readTime}</span>
-                        </div>
-                      </div>
-                    </div>
-                    <span className="flex items-center gap-1" style={{ fontSize: "0.72rem", color: "var(--text-muted)" }}>
-                      <Eye className="w-3.5 h-3.5" /> {(blog.views / 1000).toFixed(1)}k
-                    </span>
-                  </div>
+              </div>
+              <div className="flex items-center gap-3 mt-3">
+                <AvatarImg src={filtered[1].authorImg} fallback={filtered[1].author.split(" ").map(n => n[0]).join("").slice(0, 2)} size={28} borderStyle="none" />
+                <span style={{ fontSize: "0.75rem", fontWeight: 600, color: "#1a1a1a" }}>{filtered[1].author}</span>
+                <span style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>· {filtered[1].date} · {filtered[1].readTime}</span>
+                <span className="ml-auto flex items-center gap-1" style={{ fontSize: "0.68rem", color: "var(--text-muted)" }}>
+                  <Eye className="w-3 h-3" /> {(filtered[1].views / 1000).toFixed(1)}k
+                </span>
+              </div>
+            </Link>
+
+            {/* 2 stacked text articles */}
+            <div style={{ borderRight: LINE }}>
+              {[4, 5].map((idx, i) => (
+                <Link key={idx} to={`/blog/${filtered[idx].id}`} className="block group"
+                  style={{ padding: "24px 22px", borderBottom: i === 0 ? LINE : "none", height: "50%" }}
+                >
+                  <CategoryLabel cat={filtered[idx].category} />
+                  <h4 className="mt-1 group-hover:underline" style={{ fontSize: "0.88rem", fontWeight: 800, color: "#1a1a1a", lineHeight: 1.4 }}>
+                    {filtered[idx].title}
+                  </h4>
+                  <p className="line-clamp-2 mt-1.5" style={{ fontSize: "0.7rem", color: "var(--text-muted)", lineHeight: 1.55 }}>
+                    {filtered[idx].excerpt}
+                  </p>
+                </Link>
+              ))}
+            </div>
+
+            {/* Dark stat card */}
+            <div style={{ background: "#1a1a1a", padding: "28px 22px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+              <div>
+                <span style={{ fontSize: "0.62rem", fontWeight: 700, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", letterSpacing: "0.12em" }}>
+                  Most Read
+                </span>
+                <div style={{ fontSize: "3.5rem", fontWeight: 900, color: ACCENT, lineHeight: 1, marginTop: 14, letterSpacing: "-0.04em" }}>
+                  24.1k
                 </div>
+                <p style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.75)", marginTop: 10, lineHeight: 1.55 }}>
+                  readers — Polished vs Matte: Choosing the Right Tile Finish for Indian Homes
+                </p>
+              </div>
+              <Link to="/blog/hvac-vrf" className="flex items-center gap-1.5 mt-4" style={{ fontSize: "0.75rem", fontWeight: 700, color: ACCENT }}>
+                Read it <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          </div>
+
+          {/* ── STUDIO AD (between row 2 and row 3) ── */}
+          <StudioSpotlightAd ad={STUDIO_ADS[0]} reverse={false} />
+
+          {/* ── ROW 3: Large text headline + article + stat ── */}
+          <div className="grid grid-cols-3" style={{ borderBottom: LINE }}>
+
+            {/* Big text-only headline */}
+            <Link to={`/blog/${filtered[6].id}`} className="block group col-span-1" style={{ borderRight: LINE, paddingRight: 28, paddingTop: 28, paddingBottom: 28 }}>
+              <div className="flex flex-wrap gap-1.5 mb-4">
+                {[filtered[6].category, "Construction", "Digital"].map(t => (
+                  <span key={t} className="px-2.5 py-1 rounded-full" style={{ fontSize: "0.62rem", fontWeight: 600, border: "1px solid rgba(0,0,0,0.18)", color: "#1a1a1a" }}>
+                    {t}
+                  </span>
+                ))}
+              </div>
+              <h2 className="group-hover:underline" style={{ fontSize: "clamp(1.4rem, 3vw, 2.1rem)", fontWeight: 900, color: "#1a1a1a", lineHeight: 1.15, letterSpacing: "-0.025em" }}>
+                {filtered[6].title}
+              </h2>
+              <p className="mt-3" style={{ fontSize: "0.8rem", color: "var(--text-muted)", lineHeight: 1.65 }}>
+                {filtered[6].excerpt}
+              </p>
+              <PostMeta post={filtered[6]} />
+            </Link>
+
+            {/* Article with small photo */}
+            <Link to={`/blog/${filtered[7].id}`} className="block group" style={{ borderRight: LINE, padding: "28px 26px" }}>
+              <div className="rounded-xl overflow-hidden mb-4" style={{ height: 150 }}>
+                <img src={filtered[7].imgUrl} alt={filtered[7].title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+              </div>
+              <CategoryLabel cat={filtered[7].category} />
+              <h3 className="mt-1 group-hover:underline" style={{ fontSize: "0.95rem", fontWeight: 800, color: "#1a1a1a", lineHeight: 1.35 }}>
+                {filtered[7].title}
+              </h3>
+              <p className="line-clamp-2 mt-2" style={{ fontSize: "0.72rem", color: "var(--text-muted)", lineHeight: 1.55 }}>
+                {filtered[7].excerpt}
+              </p>
+              <PostMeta post={filtered[7]} />
+            </Link>
+
+            {/* Community stat card */}
+            <div style={{ padding: "28px 26px" }}>
+              <span style={{ fontSize: "0.62rem", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.12em" }}>
+                Community
+              </span>
+              <div style={{ fontSize: "3rem", fontWeight: 900, color: "#1a1a1a", lineHeight: 1, marginTop: 14, letterSpacing: "-0.04em" }}>
+                12k+
+              </div>
+              <p style={{ fontSize: "0.9rem", fontWeight: 700, color: "#1a1a1a", marginTop: 8 }}>
+                Spec downloads
+              </p>
+              <p style={{ fontSize: "0.75rem", color: "var(--text-muted)", marginTop: 6, lineHeight: 1.6 }}>
+                Products from ML Knowledge Hub specified in projects this month
+              </p>
+              <Link to="/products" className="flex items-center gap-1.5 mt-5" style={{ fontSize: "0.75rem", fontWeight: 700, color: ACCENT }}>
+                Browse products <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      ) : (
+        /* ── Filtered / Search grid ── */
+        <div className="max-w-6xl mx-auto px-6 py-8">
+          <p style={{ fontSize: "0.78rem", color: "var(--text-muted)", marginBottom: 20 }}>
+            {filtered.length} article{filtered.length !== 1 ? "s" : ""} {activeTag !== "All" ? `in ${activeTag}` : "matching your search"}
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0">
+            {filtered.map((post, i) => (
+              <Link
+                key={post.id}
+                to={`/blog/${post.id}`}
+                className="block group"
+                style={{
+                  borderRight: (i % 3 < 2) ? LINE : "none",
+                  borderBottom: LINE,
+                  padding: "24px 24px",
+                }}
+              >
+                <div className="rounded-xl overflow-hidden mb-3" style={{ aspectRatio: "16/9" }}>
+                  <img src={post.imgUrl} alt={post.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+                </div>
+                <CategoryLabel cat={post.category} />
+                <h3 className="mt-1 group-hover:underline" style={{ fontSize: "0.95rem", fontWeight: 800, color: "#1a1a1a", lineHeight: 1.35 }}>
+                  {post.title}
+                </h3>
+                <p className="line-clamp-2 mt-1.5" style={{ fontSize: "0.72rem", color: "var(--text-muted)", lineHeight: 1.55 }}>
+                  {post.excerpt}
+                </p>
+                <PostMeta post={post} />
               </Link>
             ))}
+            {filtered.length === 0 && (
+              <div className="col-span-3 py-20 text-center" style={{ color: "var(--text-muted)", fontSize: "0.9rem" }}>
+                No articles match your search.
+              </div>
+            )}
           </div>
         </div>
       )}
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        <div className="flex items-center justify-between mb-6">
-          <h2 style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--text-primary)" }}>
-            {selectedCategory === "All Categories" ? "All Articles" : selectedCategory} ({filteredBlogs.length})
-          </h2>
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-            className="px-4 py-2 rounded-lg"
-            style={{ background: "rgba(255,255,255,0.9)", border: "1px solid rgba(0,0,0,0.08)", fontSize: "0.8rem", color: "var(--text-secondary)" }}
-          >
-            <option value="newest">Newest First</option>
-            <option value="oldest">Oldest First</option>
-            <option value="popular">Most Popular</option>
-          </select>
-        </div>
-
-        {viewMode === "grid" ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredBlogs.map((blog) => (
-              <Link
-                key={blog.id}
-                to={`/blog/${blog.id}`}
-                className="gl-card overflow-hidden group"
-                style={{ padding: 0 }}
-              >
-                <div className="relative h-48 overflow-hidden">
-                  <img src={blog.bannerImage} alt={blog.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                  <div className="absolute top-3 left-3">
-                    <span className="inline-block px-2.5 py-1 rounded-full" style={{ fontSize: "0.68rem", fontWeight: 600, background: "rgba(255,106,61,0.95)", color: "#fff" }}>
-                      {blog.category}
-                    </span>
-                  </div>
-                </div>
-                <div className="p-5">
-                  <h3 className="line-clamp-2 mb-2" style={{ fontSize: "0.95rem", fontWeight: 700, color: "var(--text-primary)", lineHeight: 1.4 }}>
-                    {blog.title}
-                  </h3>
-                  <p className="line-clamp-2 mb-4" style={{ fontSize: "0.8rem", color: "var(--text-secondary)", lineHeight: 1.6 }}>
-                    {blog.excerpt}
-                  </p>
-                  <div className="flex flex-wrap gap-1.5 mb-4">
-                    {blog.tags.slice(0, 3).map((tag) => (
-                      <span key={tag} className="px-2 py-0.5 rounded-full" style={{ fontSize: "0.65rem", fontWeight: 500, background: "rgba(255,106,61,0.08)", color: "#ff6a3d" }}>
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="flex items-center justify-between pt-3" style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }}>
-                    <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ background: "linear-gradient(135deg, #ff6a3d 0%, #ff8f6d 100%)", color: "#fff", fontSize: "0.65rem", fontWeight: 700 }}>
-                        {blog.author.split(" ").map(n => n[0]).join("").slice(0, 2)}
-                      </div>
-                      <div>
-                        <p style={{ fontSize: "0.72rem", fontWeight: 600, color: "var(--text-primary)" }}>{blog.author.split(" ")[1]}</p>
-                        <p style={{ fontSize: "0.65rem", color: "var(--text-muted)" }}>{blog.readTime}</p>
-                      </div>
-                    </div>
-                    <span className="flex items-center gap-1" style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>
-                      <Eye className="w-3 h-3" /> {(blog.views / 1000).toFixed(1)}k
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {filteredBlogs.map((blog) => (
-              <Link
-                key={blog.id}
-                to={`/blog/${blog.id}`}
-                className="gl-card flex gap-6 group"
-                style={{ padding: "20px" }}
-              >
-                <div className="w-64 h-40 rounded-xl overflow-hidden flex-shrink-0">
-                  <img src={blog.bannerImage} alt={blog.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="px-2.5 py-1 rounded-full" style={{ fontSize: "0.68rem", fontWeight: 600, background: "rgba(255,106,61,0.1)", color: "#ff6a3d" }}>
-                      {blog.category}
-                    </span>
-                    <span className="flex items-center gap-1" style={{ fontSize: "0.72rem", color: "var(--text-muted)" }}>
-                      <Calendar className="w-3 h-3" /> {new Date(blog.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
-                    </span>
-                  </div>
-                  <h3 className="mb-2" style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--text-primary)", lineHeight: 1.3 }}>
-                    {blog.title}
-                  </h3>
-                  <p className="mb-1" style={{ fontSize: "0.85rem", color: "var(--text-secondary)", fontWeight: 500 }}>
-                    {blog.subtitle}
-                  </p>
-                  <p className="line-clamp-2 mb-3" style={{ fontSize: "0.8rem", color: "var(--text-secondary)", lineHeight: 1.6 }}>
-                    {blog.excerpt}
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "linear-gradient(135deg, #ff6a3d 0%, #ff8f6d 100%)", color: "#fff", fontSize: "0.7rem", fontWeight: 700 }}>
-                          {blog.author.split(" ").map(n => n[0]).join("").slice(0, 2)}
-                        </div>
-                        <span style={{ fontSize: "0.78rem", fontWeight: 600, color: "var(--text-primary)" }}>{blog.author}</span>
-                      </div>
-                      <span style={{ fontSize: "0.72rem", color: "var(--text-muted)" }}>•</span>
-                      <span style={{ fontSize: "0.72rem", color: "var(--text-muted)" }}>{blog.readTime}</span>
-                      <span style={{ fontSize: "0.72rem", color: "var(--text-muted)" }}>•</span>
-                      <span className="flex items-center gap-1" style={{ fontSize: "0.72rem", color: "var(--text-muted)" }}>
-                        <Eye className="w-3 h-3" /> {(blog.views / 1000).toFixed(1)}k views
-                      </span>
-                    </div>
-                    <div className="flex gap-1.5">
-                      {blog.tags.slice(0, 3).map((tag) => (
-                        <span key={tag} className="px-2.5 py-1 rounded-full" style={{ fontSize: "0.65rem", fontWeight: 500, background: "rgba(255,106,61,0.08)", color: "#ff6a3d" }}>
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        )}
-
-        {filteredBlogs.length === 0 && (
-          <div className="text-center py-16">
-            <BookOpen className="w-16 h-16 mx-auto mb-4" style={{ color: "var(--text-muted)", opacity: 0.5 }} />
-            <h3 style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--text-primary)", marginBottom: 8 }}>No articles found</h3>
-            <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)" }}>
-              Try adjusting your search or filters
-            </p>
-          </div>
-        )}
+      {/* ── Studio ad before newsletter ── */}
+      <div className="max-w-6xl mx-auto px-6">
+        <StudioSpotlightAd ad={STUDIO_ADS[1]} reverse={true} />
       </div>
 
-      <Footer />
+      {/* ── Write CTA strip ── */}
+      <div className="max-w-6xl mx-auto px-6 py-6" style={{ borderTop: LINE, borderBottom: LINE }}>
+        <div className="flex items-center justify-between flex-wrap gap-4">
+          <div>
+            <p style={{ fontSize: "0.7rem", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.1em" }}>Share your expertise</p>
+            <p style={{ fontSize: "0.95rem", fontWeight: 700, color: "#1a1a1a", marginTop: 2 }}>Write a technical article for the ML community</p>
+          </div>
+          <Link
+            to="/blog/create"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl"
+            style={{ background: "#1a1a1a", color: "#fff", fontSize: "0.8rem", fontWeight: 700 }}
+          >
+            <Sparkles className="w-3.5 h-3.5" /> Write Article
+          </Link>
+        </div>
+      </div>
+
+      {/* ── Newsletter ── */}
+      <div style={{ background: "#1a1a1a" }}>
+        <div className="max-w-6xl mx-auto px-6 py-14">
+          <div className="flex items-center justify-between flex-wrap gap-8">
+            <div>
+              <p style={{ fontSize: "0.68rem", fontWeight: 700, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", letterSpacing: "0.14em", marginBottom: 12 }}>
+                Newsletter · Sent every Saturday morning
+              </p>
+              <h2 style={{ fontSize: "clamp(1.6rem, 4vw, 2.8rem)", fontWeight: 900, color: "#fff", lineHeight: 1.15, letterSpacing: "-0.025em" }}>
+                Stay ahead of the curve.<br />
+                <span style={{ color: ACCENT }}>New insights every week.</span>
+              </h2>
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="email@company.com"
+                className="px-4 py-3 rounded-xl text-sm outline-none"
+                style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)", color: "#fff", width: 260 }}
+              />
+              <button
+                className="px-5 py-3 rounded-xl font-bold transition-opacity"
+                style={{ background: ACCENT, color: "#fff", fontSize: "0.85rem" }}
+                onMouseEnter={e => (e.currentTarget.style.opacity = "0.85")}
+                onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
+              >
+                Subscribe →
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  );
+}
+
+function StudioSpotlightAd({ ad, reverse }: { ad: StudioAd; reverse: boolean }) {
+  return (
+    <div
+      className={`grid md:grid-cols-2`}
+      style={{ borderTop: LINE, borderBottom: LINE }}
+    >
+      {/* Photo side */}
+      {!reverse && (
+        <div className="relative overflow-hidden hidden md:block" style={{ minHeight: 240 }}>
+          <img src={ad.imgUrl} alt={ad.name} className="absolute inset-0 w-full h-full object-cover" />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(to right, transparent 60%, #fafaf9 100%)" }} />
+        </div>
+      )}
+
+      {/* Text side */}
+      <div className="flex flex-col justify-center py-8 px-8 gap-3">
+        <p style={{ fontSize: "0.6rem", fontWeight: 700, color: ACCENT, textTransform: "uppercase", letterSpacing: "0.14em" }}>
+          Sponsored · Studio Spotlight
+        </p>
+        <h3 style={{ fontSize: "clamp(1.2rem, 2.5vw, 1.8rem)", fontWeight: 900, color: "#1a1a1a", letterSpacing: "-0.025em", lineHeight: 1.15 }}>
+          {ad.name}
+        </h3>
+        <p style={{ fontSize: "0.9rem", fontWeight: 700, color: "var(--text-secondary)", lineHeight: 1.4 }}>
+          {ad.tagline}
+        </p>
+        <p style={{ fontSize: "0.78rem", color: "var(--text-muted)", lineHeight: 1.65, maxWidth: 400 }}>
+          {ad.desc}
+        </p>
+        <div className="flex flex-wrap gap-1.5 my-1">
+          {ad.tags.map(t => (
+            <span key={t} className="px-2.5 py-1 rounded-full" style={{ fontSize: "0.62rem", fontWeight: 600, border: LINE, color: "#1a1a1a" }}>
+              {t}
+            </span>
+          ))}
+        </div>
+        <div className="flex items-center gap-6">
+          <div>
+            <p style={{ fontSize: "1.6rem", fontWeight: 900, color: "#1a1a1a", letterSpacing: "-0.03em", lineHeight: 1 }}>{ad.stat}</p>
+            <p style={{ fontSize: "0.68rem", color: "var(--text-muted)", marginTop: 2 }}>{ad.statLabel}</p>
+          </div>
+          <Link
+            to={ad.profilePath}
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl"
+            style={{ background: "#1a1a1a", color: "#fff", fontSize: "0.78rem", fontWeight: 700, textDecoration: "none" }}
+          >
+            {ad.cta} <ExternalLink className="w-3 h-3" />
+          </Link>
+        </div>
+      </div>
+
+      {/* Photo side (reversed) */}
+      {reverse && (
+        <div className="relative overflow-hidden hidden md:block" style={{ minHeight: 240 }}>
+          <img src={ad.imgUrl} alt={ad.name} className="absolute inset-0 w-full h-full object-cover" />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(to left, transparent 60%, #fafaf9 100%)" }} />
+        </div>
+      )}
     </div>
   );
 }

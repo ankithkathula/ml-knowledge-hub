@@ -4,6 +4,7 @@ import {
   TrendingUp, Clock, CheckCircle, Send, X, Mail, Phone,
   ChevronDown, AlertCircle, Smile, User,
 } from "lucide-react";
+import { AvatarImg } from "../ui/AvatarImg";
 
 // --- Types ---
 
@@ -11,6 +12,7 @@ interface Review {
   id: string;
   authorName: string;
   authorAvatar: string;
+  authorAvatarUrl?: string;
   rating: number;
   date: string;
   projectTitle: string;
@@ -30,6 +32,7 @@ const mockReviews: Review[] = [
     id: "R001",
     authorName: "Meera Reddy",
     authorAvatar: "MR",
+    authorAvatarUrl: "https://i.pravatar.cc/80?img=53",
     rating: 5,
     date: "2026-03-28",
     projectTitle: "3BHK Villa Interior Design",
@@ -45,6 +48,7 @@ const mockReviews: Review[] = [
     id: "R002",
     authorName: "Vikram Patel",
     authorAvatar: "VP",
+    authorAvatarUrl: "https://i.pravatar.cc/80?img=59",
     rating: 5,
     date: "2026-03-22",
     projectTitle: "Office Space Material Consultation",
@@ -60,6 +64,7 @@ const mockReviews: Review[] = [
     id: "R003",
     authorName: "Ananya Iyer",
     authorAvatar: "AI",
+    authorAvatarUrl: "https://i.pravatar.cc/80?img=21",
     rating: 4,
     date: "2026-03-18",
     projectTitle: "Kitchen Renovation Guidance",
@@ -72,6 +77,7 @@ const mockReviews: Review[] = [
     id: "R004",
     authorName: "Rajesh Sharma",
     authorAvatar: "RS",
+    authorAvatarUrl: "https://i.pravatar.cc/80?img=52",
     rating: 5,
     date: "2026-03-12",
     projectTitle: "Waterproofing & Exterior Cladding",
@@ -87,6 +93,7 @@ const mockReviews: Review[] = [
     id: "R005",
     authorName: "Priya Desai",
     authorAvatar: "PD",
+    authorAvatarUrl: "https://i.pravatar.cc/80?img=49",
     rating: 4,
     date: "2026-03-05",
     projectTitle: "Eco-Friendly Flooring Consultation",
@@ -99,6 +106,7 @@ const mockReviews: Review[] = [
     id: "R006",
     authorName: "Karthik Nair",
     authorAvatar: "KN",
+    authorAvatarUrl: "https://i.pravatar.cc/80?img=29",
     rating: 3,
     date: "2026-02-28",
     projectTitle: "Bathroom Renovation Materials",
@@ -114,6 +122,7 @@ const mockReviews: Review[] = [
     id: "R007",
     authorName: "Sunita Joshi",
     authorAvatar: "SJ",
+    authorAvatarUrl: "https://i.pravatar.cc/80?img=26",
     rating: 5,
     date: "2026-02-20",
     projectTitle: "Full Home Material Selection",
@@ -129,6 +138,7 @@ const mockReviews: Review[] = [
     id: "R008",
     authorName: "Amit Verma",
     authorAvatar: "AV",
+    authorAvatarUrl: "https://i.pravatar.cc/80?img=32",
     rating: 2,
     date: "2026-02-15",
     projectTitle: "Roofing Material Advice",
@@ -426,15 +436,7 @@ export default function StudioReviewsPage() {
           <div key={review.id} className="glass-card hover-lift p-5">
             <div className="flex items-start gap-4">
               {/* Avatar */}
-              <div
-                className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0"
-                style={{
-                  backgroundColor: "var(--accent-light)",
-                  color: "var(--accent)",
-                }}
-              >
-                {review.authorAvatar}
-              </div>
+              <AvatarImg src={review.authorAvatarUrl} fallback={review.authorAvatar} size={40} />
 
               {/* Content */}
               <div className="flex-1 min-w-0">

@@ -1,12 +1,11 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, ChevronRight, ChevronDown, Filter, Grid, Package, MapPin, X } from 'lucide-react';
+import { Search, ChevronRight, ChevronDown, Filter, Grid, Package, MapPin, X, Hourglass } from 'lucide-react';
 import { CATEGORY_TAXONOMY, CategoryNode, buildBreadcrumb, findCategoryByPath } from '../../utils/categoryTaxonomy';
 import { PRODUCTS, Product } from '../../utils/products';
 import { ImageWithFallback } from '../figma/ImageWithFallback';
-import { AdBanner } from '../AdBanner';
-import { MainFooter } from '../MainFooter';
-import { StickyPageNav } from '../StickyPageNav';
+import { ProductsHeroSearch } from './ProductsHeroSearch';
+import { ProductsBrandStrip } from './ProductsBrandStrip';
 import {
   Sheet,
   SheetClose,
@@ -15,7 +14,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "./ui/sheet";
+} from "../ui/sheet";
 
 interface ProductsListingPageProps {
   onProductClick: (productId: string) => void;
@@ -54,38 +53,35 @@ const calculateCategoryMetrics = (node: CategoryNode, allProducts: Product[]) =>
   // Determine if this is a leaf node (no children OR children have no further children)
   const isLeafNode = !node.children || node.children.length === 0;
   
-  // Count products in this category
+  // Count products whose path includes this node's slug (matches the full subtree,
+  // including leaf product-type nodes). Each slug occurs at most once per product.
   const products = allProducts.filter(p => {
-    return p.category === node.slug || 
-           p.subcategory === node.slug || 
-           p.subSubcategory === node.slug;
+    return p.category === node.slug ||
+           p.subcategory === node.slug ||
+           p.subSubcategory === node.slug ||
+           p.productType === node.slug;
   });
-  
+
   const productCount = products.length;
   const brandCount = new Set(products.map(p => p.brand)).size;
-  
+
   return { subcategoryCount, brandCount, productCount, isLeafNode };
 };
 
-// Helper to count products in a category tree node
+// Helper to count products in a category tree node.
+// A product belongs to this node's subtree iff the node's slug appears anywhere in
+// the product's path (category > subcategory > subSubcategory > productType). Each
+// slug occurs at most once per product, so this counts every product exactly once —
+// ancestor nodes include all descendants, leaf product-type nodes are counted, and
+// nothing is double-counted (the old recursive version summed each product at every
+// matching level, massively inflating counts).
 const countProductsInNode = (node: CategoryNode, allProducts: Product[]): number => {
-  let count = 0;
-  
-  // Count products directly in this category
-  count += allProducts.filter(p => 
-    p.category === node.slug || 
-    p.subcategory === node.slug || 
-    p.subSubcategory === node.slug
+  return allProducts.filter(p =>
+    p.category === node.slug ||
+    p.subcategory === node.slug ||
+    p.subSubcategory === node.slug ||
+    p.productType === node.slug
   ).length;
-  
-  // Recursively count products in children
-  if (node.children) {
-    node.children.forEach(child => {
-      count += countProductsInNode(child, allProducts);
-    });
-  }
-  
-  return count;
 };
 
 export function ProductsListingPage({ onProductClick, onBackToHome, initialPath = [] }: ProductsListingPageProps) {
@@ -93,6 +89,7 @@ export function ProductsListingPage({ onProductClick, onBackToHome, initialPath 
   const [searchQuery, setSearchQuery] = useState('');
   const [catSearch, setCatSearch] = useState('');
   const [brandSearch, setBrandSearch] = useState('');
+  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
   const [expandedCats, setExpandedCats] = useState<Set<string>>(new Set(initialPath));
   const [selectedAttributes, setSelectedAttributes] = useState<Set<string>>(new Set());
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
@@ -278,46 +275,17 @@ export function ProductsListingPage({ onProductClick, onBackToHome, initialPath 
     });
   };
 
-  // Filtering logic - UPDATED: Show only DIRECT products at current level
+  // Filtering logic — DESCENDANT-INCLUSIVE: at any level, show every product that
+  // sits anywhere under the current path (this level + all sub-categories below).
   const filteredProducts = useMemo(() => {
-    return extendedProducts.filter(p => {
-      // Category filter - ONLY DIRECT PRODUCTS AT CURRENT LEVEL
+    const list = extendedProducts.filter(p => {
+      // Category filter: each path segment must match the corresponding field.
+      // Levels deeper than the path are unconstrained → all descendants included.
       if (currentPath.length > 0) {
-        // Level 1: Only products where category matches AND no deeper assignment
-        if (currentPath.length === 1) {
-          if (p.category !== currentPath[0]) return false;
-          // Check if product is DIRECTLY assigned to this level (no subcategory)
-          // If it has a subcategory, it belongs to a deeper level
-          if (p.subcategory && currentCategoryNode?.children?.some(c => c.slug === p.subcategory)) {
-            return false; // This product belongs to a subcategory, not directly to this level
-          }
-        }
-        // Level 2: Only products where subcategory matches AND no deeper assignment
-        else if (currentPath.length === 2) {
-          if (p.category !== currentPath[0]) return false;
-          if (p.subcategory !== currentPath[1]) return false;
-          // Check if product is DIRECTLY assigned to this level (no sub-subcategory)
-          if (p.subSubcategory && currentCategoryNode?.children?.some(c => c.slug === p.subSubcategory)) {
-            return false; // This product belongs to a sub-subcategory
-          }
-        }
-        // Level 3: Only products where subSubcategory matches AND no deeper assignment
-        else if (currentPath.length === 3) {
-          if (p.category !== currentPath[0]) return false;
-          if (p.subcategory !== currentPath[1]) return false;
-          if (p.subSubcategory !== currentPath[2]) return false;
-          // Check if product is DIRECTLY assigned to this level (no productType)
-          if (p.productType && currentCategoryNode?.children?.some(c => c.slug === p.productType)) {
-            return false; // This product belongs to a product type level
-          }
-        }
-        // Level 4+: Show all matching products (leaf level)
-        else {
-          if (p.category !== currentPath[0]) return false;
-          if (currentPath.length > 1 && p.subcategory !== currentPath[1]) return false;
-          if (currentPath.length > 2 && p.subSubcategory !== currentPath[2]) return false;
-          if (currentPath.length > 3 && p.productType !== currentPath[3]) return false;
-        }
+        if (p.category !== currentPath[0]) return false;
+        if (currentPath.length > 1 && p.subcategory    !== currentPath[1]) return false;
+        if (currentPath.length > 2 && p.subSubcategory !== currentPath[2]) return false;
+        if (currentPath.length > 3 && p.productType    !== currentPath[3]) return false;
       }
 
       // Search filter
@@ -343,6 +311,34 @@ export function ProductsListingPage({ onProductClick, onBackToHome, initialPath 
 
       return true;
     });
+
+    // ─── Ranking: sponsored / featured / popularity ─────────────────────
+    // Higher score = higher in list. Drives "show me the good stuff first" feel
+    // and gets stronger as the user drills deeper (specificityBoost).
+    const specificityBoost = currentPath.length;
+    const badgeWeight: Record<string, number> = {
+      'Top Seller':   100,
+      'Premium':       80,
+      'New Launch':    65,
+      'Best Value':    55,
+      'Eco-Friendly':  50,
+    };
+    function pseudoPopularity(id: string) {
+      // Deterministic 0–40 from id hash — stands in for real interaction data.
+      let h = 0;
+      for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
+      return h % 40;
+    }
+    function score(p: ExtendedProduct) {
+      let s = pseudoPopularity(p.id);
+      if (p.badge) s += badgeWeight[p.badge] ?? 30;
+      if (p.stock === 'In Stock') s += 15;
+      // Closer match to current path → stronger signal
+      if (currentPath.length > 0 && p.subcategory === currentPath[currentPath.length - 1]) s += 10 * specificityBoost;
+      return s;
+    }
+    list.sort((a, b) => score(b) - score(a));
+    return list;
   }, [currentPath, searchQuery, selectedBrand, selectedAttributes, extendedProducts, currentCategoryNode]);
 
   // Group products by family
@@ -644,9 +640,12 @@ export function ProductsListingPage({ onProductClick, onBackToHome, initialPath 
   );
 
   return (
-    <div className="min-h-screen bg-[#FDFDFD] font-['Satoshi',sans-serif] pt-16 md:pt-20 lg:pt-24">
-      {/* Ad Banner */}
-      <AdBanner />
+    <div className="min-h-screen bg-[#FDFDFD] font-['Satoshi',sans-serif]">
+      {/* Hero search — AI / image / PDF / QR */}
+      <ProductsHeroSearch onSubmit={(q) => setSearchQuery(q)} />
+
+      {/* Featured brands marquee */}
+      <ProductsBrandStrip />
 
       <div className="mx-auto px-4 md:px-6 lg:px-8 pb-20">
         <div className="flex gap-8 relative">
@@ -680,30 +679,17 @@ export function ProductsListingPage({ onProductClick, onBackToHome, initialPath 
               ))}
             </div>
 
-            {/* Heading */}
-            <div className="mb-6 md:mb-8 text-center md:text-left">
-              <h1 className="text-[22px] md:text-[28px] font-medium text-[#101828] leading-tight mb-2 uppercase tracking-tight">
-                {currentCategoryNode?.name || 'DISCOVER MATERIALS'}
-              </h1>
-              <p className="text-[13px] md:text-[15px] text-[#667085]">
-                Explore verified products from leading brands across India
-              </p>
-            </div>
-
-            {/* Global Search & Filter Toggle */}
-            <div className="flex flex-col gap-3 mb-8">
-              <div className="relative w-full">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-                <input 
-                  type="text" 
-                  placeholder="Search products, brands, or categories..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full h-[54px] pl-12 pr-6 bg-white border border-gray-200 rounded-xl text-[14px] md:text-[15px] outline-none focus:border-[#FF6A3D]/50 shadow-sm transition-all placeholder:text-[#98A2B3]"
-                />
+            {/* Heading — shows only when drilled into a category */}
+            {currentCategoryNode?.name && (
+              <div className="mb-4 text-center md:text-left">
+                <h1 className="text-[22px] md:text-[28px] font-medium text-[#101828] leading-tight uppercase tracking-tight">
+                  {currentCategoryNode.name}
+                </h1>
               </div>
+            )}
 
-              {/* Mobile Filter Button */}
+            {/* Mobile Filter Toggle — only renders on <lg, no margin space on desktop */}
+            <div className="lg:hidden flex flex-col gap-3 mb-6">
               <Sheet>
                 <SheetTrigger asChild>
                   <button className="lg:hidden flex items-center justify-center gap-2 w-full h-[48px] bg-[#FF6A3D] text-white rounded-xl text-[12px] font-bold uppercase tracking-widest shadow-lg shadow-[#FF6A3D]/10">
@@ -741,9 +727,9 @@ export function ProductsListingPage({ onProductClick, onBackToHome, initialPath 
               </Sheet>
             </div>
 
-            {/* APPLIED FILTERS STRIP */}
-            {(selectedBrand || selectedAttributes.size > 0 || (currentPath.length > 0 && filteredProducts.length > 0)) && (
-              <motion.div 
+            {/* APPLIED FILTERS STRIP — brand/attribute only; category path is shown in breadcrumbs */}
+            {(selectedBrand || selectedAttributes.size > 0) && (
+              <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
@@ -751,35 +737,18 @@ export function ProductsListingPage({ onProductClick, onBackToHome, initialPath 
               >
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="text-[11px] font-bold text-gray-400 uppercase tracking-[0.2em]">Applied Filters</h3>
-                  <button 
-                    onClick={() => { 
-                      setSelectedAttributes(new Set()); 
-                      setSelectedBrand(null); 
-                      setSearchQuery('');
-                    }}
+                  <button
+                    onClick={() => { setSelectedAttributes(new Set()); setSelectedBrand(null); }}
                     className="text-[10px] font-bold text-[#FF6A3D] uppercase tracking-widest hover:underline"
                   >
                     Clear All
                   </button>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  {currentPath.length > 0 && currentCategoryNode && (
-                    <div className="flex items-center gap-1.5 h-7 px-3 bg-[#FFF3EF] border border-[#FF6A3D]/20 rounded-full">
-                      <span className="text-[11px] font-medium text-[#FF6A3D]">
-                        {currentCategoryNode.name}
-                      </span>
-                      <button 
-                        onClick={() => setCurrentPath([])}
-                        className="size-3.5 flex items-center justify-center text-[#FF6A3D] hover:bg-[#FF6A3D]/10 rounded-full transition-colors"
-                      >
-                        <X size={10} strokeWidth={3} />
-                      </button>
-                    </div>
-                  )}
                   {selectedBrand && (
                     <div className="flex items-center gap-1.5 h-7 px-3 bg-[#FFF3EF] border border-[#FF6A3D]/20 rounded-full">
                       <span className="text-[11px] font-medium text-[#FF6A3D]">{selectedBrand}</span>
-                      <button 
+                      <button
                         onClick={() => setSelectedBrand(null)}
                         className="size-3.5 flex items-center justify-center text-[#FF6A3D] hover:bg-[#FF6A3D]/10 rounded-full transition-colors"
                       >
@@ -790,7 +759,7 @@ export function ProductsListingPage({ onProductClick, onBackToHome, initialPath 
                   {Array.from(selectedAttributes).map(attr => (
                     <div key={attr} className="flex items-center gap-1.5 h-7 px-3 bg-[#FFF3EF] border border-[#FF6A3D]/20 rounded-full">
                       <span className="text-[11px] font-medium text-[#FF6A3D]">{attr}</span>
-                      <button 
+                      <button
                         onClick={() => toggleAttribute(attr)}
                         className="size-3.5 flex items-center justify-center text-[#FF6A3D] hover:bg-[#FF6A3D]/10 rounded-full transition-colors"
                       >
@@ -805,116 +774,66 @@ export function ProductsListingPage({ onProductClick, onBackToHome, initialPath 
             {/* Content Grid */}
             {/* Categories Section Wrapper - Always rendered for scroll anchor */}
             <div id="categories" className="scroll-mt-32">
-              {/* Subcategories Section - Always show if children exist */}
+              {/* Subcategories Section - compact cards with hover-expand */}
               {currentCategoryNode?.children && currentCategoryNode.children.length > 0 && (
-                <div className="mb-12">
-                  <h2 className="text-[11px] font-bold uppercase tracking-[0.15em] text-[#667085] mb-4 px-1">
+                <div className="mb-8">
+                  <h2 className="text-[11px] font-bold uppercase tracking-[0.15em] text-[#667085] mb-3 px-1">
                     SUBCATEGORIES
                   </h2>
-                  <div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
-                    <AnimatePresence mode="popLayout">
-                      {currentCategoryNode.children.map((child, idx) => {
-                        const metrics = calculateCategoryMetrics(child, PRODUCTS);
-                        
-                        return (
-                          <motion.div
-                            key={child.slug}
-                            layout
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.95 }}
-                            transition={{ duration: 0.3, delay: idx * 0.05 }}
-                            className="group cursor-pointer"
-                            onClick={() => {
-                              setCurrentPath([...currentPath, child.slug]);
-                              toggleCat(child.slug);
-                            }}
-                          >
-                            <div className="w-full aspect-[4/3] rounded-[12px] overflow-hidden bg-gray-100 mb-3 relative border border-gray-100 shadow-sm transition-all group-hover:shadow-md group-hover:border-[#FF6A3D]/20">
-                              <ImageWithFallback 
-                                src={`https://images.unsplash.com/photo-1595414440701-da000c40df9c?auto=format&fit=crop&q=80&w=600&sig=${idx + (currentPath.length * 10)}`}
-                                alt={child.name}
-                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                              />
-                            </div>
-                            <div>
-                              <h3 className="text-[14px] md:text-[16px] font-medium text-[#101828] uppercase tracking-wide group-hover:text-[#FF6A3D] transition-colors mb-1.5">
-                                {child.name}
-                              </h3>
-                              {/* Horizontal Metrics Row - Hierarchy-aware */}
-                              <div className="flex items-center gap-3 text-[11px] md:text-[12px] text-[#6B7280] px-1">
-                                {metrics.subcategoryCount > 0 && (
-                                  <span>{metrics.subcategoryCount} Subcategor{metrics.subcategoryCount === 1 ? 'y' : 'ies'}</span>
-                                )}
-                                {metrics.productCount > 0 && (
-                                  <span>•</span>
-                                )}
-                                {metrics.productCount > 0 && (
-                                  <span>{metrics.productCount} Product{metrics.productCount === 1 ? '' : 's'}</span>
-                                )}
-                              </div>
-                            </div>
-                          </motion.div>
-                        );
-                      })}
-                    </AnimatePresence>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                    {currentCategoryNode.children.map((child, idx) => (
+                      <CompactCategoryCard
+                        key={child.slug}
+                        node={child}
+                        idx={idx + currentPath.length * 10}
+                        hoveredId={hoveredCard}
+                        setHoveredId={setHoveredCard}
+                        onClick={() => {
+                          setCurrentPath([...currentPath, child.slug]);
+                          toggleCat(child.slug);
+                          setHoveredCard(null);
+                        }}
+                        onSubClick={(subSlug) => {
+                          setCurrentPath([...currentPath, child.slug, subSlug]);
+                          toggleCat(child.slug);
+                          toggleCat(subSlug);
+                          setHoveredCard(null);
+                        }}
+                      />
+                    ))}
                   </div>
                 </div>
               )}
 
-              {/* Top-level categories when no path */}
+              {/* Top-level categories when no path — compact cards with hover-expand */}
               {currentPath.length === 0 && (
-                <div className="mb-12">
-                  <h2 className="text-[11px] font-bold uppercase tracking-[0.15em] text-[#667085] mb-4 px-1">
+                <div className="mb-8">
+                  <h2 className="text-[11px] font-bold uppercase tracking-[0.15em] text-[#667085] mb-3 px-1">
                     CATEGORIES
                   </h2>
-                  <div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
-                    <AnimatePresence mode="popLayout">
-                      {CATEGORY_TAXONOMY.map((child, idx) => {
-                        const metrics = calculateCategoryMetrics(child, PRODUCTS);
-                        
-                        return (
-                          <motion.div
-                            key={child.slug}
-                            layout
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.95 }}
-                            transition={{ duration: 0.3, delay: idx * 0.05 }}
-                            className="group cursor-pointer"
-                            onClick={() => {
-                              setCurrentPath([child.slug]);
-                              toggleCat(child.slug);
-                              setActiveTopLevelCategory(child.slug);
-                            }}
-                          >
-                            <div className="w-full aspect-[4/3] rounded-[12px] overflow-hidden bg-gray-100 mb-3 relative border border-gray-100 shadow-sm transition-all group-hover:shadow-md group-hover:border-[#FF6A3D]/20">
-                              <ImageWithFallback 
-                                src={`https://images.unsplash.com/photo-1595414440701-da000c40df9c?auto=format&fit=crop&q=80&w=600&sig=${idx}`}
-                                alt={child.name}
-                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                              />
-                            </div>
-                            <div>
-                              <h3 className="text-[14px] md:text-[16px] font-medium text-[#101828] uppercase tracking-wide group-hover:text-[#FF6A3D] transition-colors mb-1.5">
-                                {child.name}
-                              </h3>
-                              <div className="flex items-center gap-3 text-[11px] md:text-[12px] text-[#6B7280] px-1">
-                                {metrics.subcategoryCount > 0 && (
-                                  <span>{metrics.subcategoryCount} Subcategor{metrics.subcategoryCount === 1 ? 'y' : 'ies'}</span>
-                                )}
-                                {metrics.productCount > 0 && (
-                                  <span>•</span>
-                                )}
-                                {metrics.productCount > 0 && (
-                                  <span>{metrics.productCount} Product{metrics.productCount === 1 ? '' : 's'}</span>
-                                )}
-                              </div>
-                            </div>
-                          </motion.div>
-                        );
-                      })}
-                    </AnimatePresence>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                    {CATEGORY_TAXONOMY.map((child, idx) => (
+                      <CompactCategoryCard
+                        key={child.slug}
+                        node={child}
+                        idx={idx}
+                        hoveredId={hoveredCard}
+                        setHoveredId={setHoveredCard}
+                        onClick={() => {
+                          setCurrentPath([child.slug]);
+                          toggleCat(child.slug);
+                          setActiveTopLevelCategory(child.slug);
+                          setHoveredCard(null);
+                        }}
+                        onSubClick={(subSlug) => {
+                          setCurrentPath([child.slug, subSlug]);
+                          toggleCat(child.slug);
+                          toggleCat(subSlug);
+                          setActiveTopLevelCategory(child.slug);
+                          setHoveredCard(null);
+                        }}
+                      />
+                    ))}
                   </div>
                 </div>
               )}
@@ -922,192 +841,34 @@ export function ProductsListingPage({ onProductClick, onBackToHome, initialPath 
 
             {/* Products Section Wrapper - Always rendered for scroll anchor */}
             <div id="products" className="scroll-mt-32">
-              {/* Products Section - Always show if products exist in current category */}
-              {filteredProducts.length > 0 && (
-                <div>
-                  {/* Section Heading */}
-                  <div className="mb-6 flex items-center justify-between">
-                    <h2 className="text-[11px] font-bold uppercase tracking-[0.15em] text-[#667085] px-1">
-                      {currentCategoryNode?.name 
-                        ? `PRODUCTS IN ${currentCategoryNode.name.toUpperCase()}`
-                        : 'FEATURED PRODUCTS'
-                      }
-                    </h2>
-                    <span className="text-[12px] text-[#98A2B3] font-medium">
-                      {filteredProducts.length} {filteredProducts.length === 1 ? 'product' : 'products'}
-                    </span>
-                  </div>
-
-                  {/* View Toggle - only show if at leaf level with multiple families */}
-                  {currentPath.length >= 3 && showFamilyToggle && (
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-gray-100">
-                      <span className="text-[11px] md:text-[12px] font-bold uppercase tracking-[0.15em] text-[#667085]">Display Mode</span>
-                      <div className="inline-flex items-center bg-gray-100 rounded-full p-1">
-                        <button
-                          onClick={() => setViewMode('byFamily')}
-                          className={`px-4 py-2 rounded-full text-[11px] md:text-[12px] font-bold uppercase tracking-wider transition-all ${
-                            viewMode === 'byFamily'
-                              ? 'bg-[#FF6A3D] text-white shadow-sm'
-                              : 'text-[#667085] hover:text-[#101828]'
-                          }`}
-                        >
-                          By Family
-                        </button>
-                        <button
-                          onClick={() => setViewMode('allProducts')}
-                          className={`px-4 py-2 rounded-full text-[11px] md:text-[12px] font-bold uppercase tracking-wider transition-all ${
-                            viewMode === 'allProducts'
-                              ? 'bg-[#FF6A3D] text-white shadow-sm'
-                              : 'text-[#667085] hover:text-[#101828]'
-                          }`}
-                        >
-                          All Products
-                        </button>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Products Display */}
-                  {viewMode === 'byFamily' && showFamilyToggle ? (
-                    // By Brand then Family View
-                    <div id="brands" className="space-y-12 scroll-mt-32">
-                      {Array.from(productsByBrandAndFamily.entries()).map(([brand, familyGroups]) => {
-                        const isBrandExpanded = expandedBrands.has(brand);
-                        const totalProducts = Array.from(familyGroups.values()).reduce((sum, products) => sum + products.length, 0);
-                        
-                        return (
-                          <div key={brand} className="border-b border-gray-100 pb-10 last:border-0">
-                            {/* Compact Brand Header */}
-                            <div 
-                              className="flex items-center justify-between h-[52px] px-4 mb-4 cursor-pointer group hover:bg-gray-50/50 rounded-lg transition-colors border-b border-gray-100"
-                              onClick={() => toggleBrand(brand)}
-                            >
-                              <div className="flex items-center gap-3">
-                                {/* Compact Brand Logo */}
-                                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200 flex items-center justify-center shrink-0">
-                                  <Package className="text-gray-400" size={16} />
-                                </div>
-                                
-                                {/* Brand Info - Compact */}
-                                <div className="flex items-baseline gap-3">
-                                  <h2 className="text-[16px] md:text-[17px] font-semibold text-[#101828] group-hover:text-[#FF6A3D] transition-colors">
-                                    {brand}
-                                  </h2>
-                                  <span className="text-[12px] text-[#98A2B3] font-normal hidden md:inline">
-                                    {familyGroups.size} {familyGroups.size === 1 ? 'family' : 'families'} · {totalProducts} {totalProducts === 1 ? 'product' : 'products'}
-                                  </span>
-                                </div>
-                              </div>
-                              
-                              {/* Collapse/Expand Icon - Smaller */}
-                              <motion.div
-                                initial={false}
-                                animate={{ rotate: isBrandExpanded ? 180 : 0 }}
-                                transition={{ duration: 0.2 }}
-                              >
-                                <ChevronDown 
-                                  className="text-gray-400 shrink-0" 
-                                  size={18}
-                                />
-                              </motion.div>
-                            </div>
-
-                            {/* Brand's Product Families */}
-                            <AnimatePresence>
-                              {isBrandExpanded && (
-                                <motion.div
-                                  initial={{ opacity: 0, height: 0 }}
-                                  animate={{ opacity: 1, height: 'auto' }}
-                                  exit={{ opacity: 0, height: 0 }}
-                                  transition={{ duration: 0.3 }}
-                                  className="space-y-8"
-                                >
-                                  {Array.from(familyGroups.entries()).map(([familyId, familyProducts]) => {
-                                    const firstProduct = familyProducts[0];
-                                    
-                                    return (
-                                      <div key={familyId} className="ml-0">
-                                        {/* Product Family Header */}
-                                        <div className="mb-4 px-4">
-                                          <div className="flex items-baseline gap-2.5 mb-1">
-                                            <h3 className="text-[15px] md:text-[16px] font-medium text-[#101828]">
-                                              {firstProduct.productFamily || `${firstProduct.subcategory.charAt(0).toUpperCase() + firstProduct.subcategory.slice(1)} Series`}
-                                            </h3>
-                                            <span className="text-[11px] text-[#98A2B3] font-medium">
-                                              ({familyProducts.length})
-                                            </span>
-                                          </div>
-                                          <p className="text-[12px] text-[#667085]">
-                                            Professional-grade {firstProduct.subcategory} products
-                                          </p>
-                                        </div>
-
-                                        {/* Product Cards Grid */}
-                                        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5 px-4">
-                                          {familyProducts.map((p, idx) => renderProductCard(p, idx))}
-                                        </div>
-                                      </div>
-                                    );
-                                  })}
-                                </motion.div>
-                              )}
-                            </AnimatePresence>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  ) : (
-                    // All Products View (Flat Grid)
-                    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-                      <AnimatePresence mode="popLayout">
-                        {filteredProducts.map((p, idx) => renderProductCard(p, idx))}
-                      </AnimatePresence>
-                    </div>
-                  )}
+              <div>
+                {/* Section Heading — always rendered */}
+                <div className="mb-6 flex items-center justify-between">
+                  <h2 className="text-[11px] font-bold uppercase tracking-[0.15em] text-[#667085] px-1">
+                    PRODUCT LISTING
+                  </h2>
+                  <span className="text-[12px] text-[#98A2B3] font-medium">
+                    {filteredProducts.length} {filteredProducts.length === 1 ? 'product' : 'products'}
+                  </span>
                 </div>
-              )}
 
-              {/* Empty State */}
-              {(filteredProducts.length === 0 && isLevel4) && (
-                <div className="py-20 text-center">
-                  <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Grid className="text-gray-300" size={32} />
+                {filteredProducts.length > 0 ? (
+                  /* Flat product grid */
+                  <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+                    <AnimatePresence mode="popLayout">
+                      {filteredProducts.map((p, idx) => renderProductCard(p, idx))}
+                    </AnimatePresence>
                   </div>
-                  <h3 className="text-[18px] font-medium text-[#101828] mb-1">No products found</h3>
-                  <p className="text-[#667085] text-[14px]">Try adjusting your search or filters to find what you're looking for.</p>
-                  <button 
-                    onClick={() => {
-                      setSearchQuery('');
-                      setSelectedAttributes(new Set());
-                      setSelectedBrand(null);
-                    }}
-                    className="mt-6 px-6 py-2 bg-[#FF6A3D] text-white rounded-lg text-[13px] font-bold uppercase tracking-widest hover:bg-[#E55A2D] transition-colors"
-                  >
-                    Clear all filters
-                  </button>
-                </div>
-              )}
+                ) : (
+                  /* Empty placeholder — "Data in Pipeline" with hourglass animation */
+                  <DataInPipeline />
+                )}
+              </div>
             </div>
           </main>
 
-          {/* Sticky Right-Side Page Navigation */}
-          <StickyPageNav 
-            sections={
-              viewMode === 'byFamily' && showFamilyToggle
-                ? [
-                    { id: 'categories', label: 'Categories' },
-                    { id: 'brands', label: 'Brands' },
-                    { id: 'products', label: 'Products' }
-                  ]
-                : [
-                    { id: 'categories', label: 'Categories' },
-                    { id: 'products', label: 'Products' }
-                  ]
-            } 
-          />
         </div>
       </div>
-      <MainFooter />
 
       <style>{`
         .custom-scrollbar::-webkit-scrollbar {
@@ -1131,6 +892,364 @@ export function ProductsListingPage({ onProductClick, onBackToHome, initialPath 
           scrollbar-width: none;
         }
       `}</style>
+    </div>
+  );
+}
+
+// ─── Empty-state placeholder: data not yet seeded for this scope ──────────
+function DataInPipeline() {
+  return (
+    <div
+      className="rounded-2xl py-16 px-6 text-center relative overflow-hidden"
+      style={{
+        background: "var(--glass)",
+        border: "var(--border-subtle)",
+      }}
+    >
+      {/* Subtle moving wash to convey "in transit" */}
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(115deg, transparent 0%, rgba(255,106,61,0.06) 45%, rgba(255,106,61,0.12) 50%, rgba(255,106,61,0.06) 55%, transparent 100%)",
+          backgroundSize: "200% 100%",
+          animation: "pipelineShimmer 3.6s linear infinite",
+        }}
+      />
+
+      <div className="relative">
+        <div
+          className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center"
+          style={{
+            background: "rgba(255,106,61,0.10)",
+            border: "1px solid rgba(255,106,61,0.20)",
+          }}
+        >
+          <Hourglass
+            className="w-7 h-7"
+            style={{
+              color: "var(--accent)",
+              animation: "hourglassFlip 2.4s ease-in-out infinite",
+              transformOrigin: "center",
+            }}
+          />
+        </div>
+        <h3
+          className="text-[15px] mb-1"
+          style={{ fontWeight: 700, color: "var(--text-primary)", letterSpacing: "0.02em" }}
+        >
+          Data in Pipeline
+        </h3>
+        <p className="text-[12.5px] max-w-xs mx-auto" style={{ color: "var(--text-secondary)" }}>
+          Products for this category are being ingested. Check back shortly or explore a sibling category.
+        </p>
+      </div>
+
+      <style>{`
+        @keyframes hourglassFlip {
+          0%   { transform: rotate(0deg); }
+          45%  { transform: rotate(0deg); }
+          55%  { transform: rotate(180deg); }
+          100% { transform: rotate(180deg); }
+        }
+        @keyframes pipelineShimmer {
+          0%   { background-position: -100% 0; }
+          100% { background-position:  100% 0; }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+// ─── Featured brands strip — relevant to the current drilled category ─────
+function CategoryFeaturedBrands({
+  products,
+  categoryName,
+  onBrandClick,
+  selectedBrand,
+}: {
+  products: ExtendedProduct[];
+  categoryName?: string;
+  onBrandClick: (brand: string) => void;
+  selectedBrand: string | null;
+}) {
+  // Unique brands with their product count, sorted by count desc
+  const brands = useMemo(() => {
+    const m = new Map<string, number>();
+    products.forEach((p) => m.set(p.brand, (m.get(p.brand) ?? 0) + 1));
+    return Array.from(m.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 12)
+      .map(([brand, count]) => ({ brand, count }));
+  }, [products]);
+
+  if (brands.length === 0) return null;
+
+  return (
+    <div className="mb-8">
+      <h2 className="text-[11px] font-bold uppercase tracking-[0.15em] text-[#667085] mb-3 px-1">
+        FEATURED BRANDS{categoryName ? ` IN ${categoryName.toUpperCase()}` : ""}
+      </h2>
+      <div className="flex flex-wrap gap-2">
+        {brands.map(({ brand, count }) => {
+          const active = selectedBrand === brand;
+          return (
+            <button
+              key={brand}
+              onClick={() => onBrandClick(brand)}
+              className="flex items-center gap-2 px-3.5 py-2 rounded-full text-[12px] transition-all"
+              style={{
+                fontWeight: 600,
+                letterSpacing: "0.02em",
+                color: active ? "white" : "var(--text-primary)",
+                background: active ? "var(--accent)" : "var(--glass-strong)",
+                border: active ? "1px solid var(--accent)" : "var(--border-subtle)",
+                boxShadow: active ? "0 4px 14px rgba(255,106,61,0.25)" : "0 1px 2px rgba(0,0,0,0.04)",
+              }}
+            >
+              <span
+                className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+                style={{ background: active ? "white" : "var(--accent)" }}
+              />
+              <span>{brand}</span>
+              <span
+                className="px-1.5 py-0.5 rounded-full text-[10px]"
+                style={{
+                  background: active ? "rgba(255,255,255,0.22)" : "rgba(0,0,0,0.06)",
+                  color: active ? "white" : "var(--text-muted)",
+                  fontWeight: 700,
+                  letterSpacing: "0.04em",
+                }}
+              >
+                {count}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ─── Featured products spotlight — top-ranked products at each level ──────
+function CategoryFeaturedProducts({
+  products,
+  categoryName,
+  onProductClick,
+}: {
+  products: ExtendedProduct[];
+  categoryName?: string;
+  onProductClick?: (id: string) => void;
+}) {
+  return (
+    <div className="mb-8">
+      <div className="flex items-center justify-between mb-3 px-1">
+        <h2 className="text-[11px] font-bold uppercase tracking-[0.15em] text-[#667085]">
+          FEATURED PRODUCTS{categoryName ? ` IN ${categoryName.toUpperCase()}` : ""}
+        </h2>
+        <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: "var(--accent)", letterSpacing: "0.1em" }}>
+          Top picks
+        </span>
+      </div>
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+        {products.map((p) => (
+          <button
+            key={p.id}
+            onClick={() => onProductClick?.(p.id)}
+            className="text-left rounded-2xl overflow-hidden transition-all hover:translate-y-[-2px] group"
+            style={{
+              background: "var(--glass-strong)",
+              border: "var(--border-subtle)",
+              boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
+            }}
+          >
+            <div className="relative aspect-[4/3] overflow-hidden">
+              <ImageWithFallback
+                src={p.image}
+                alt={p.name}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              {p.badge && (
+                <span
+                  className="absolute top-2 left-2 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider"
+                  style={{
+                    background: "var(--accent)",
+                    color: "white",
+                    letterSpacing: "0.08em",
+                  }}
+                >
+                  {p.badge}
+                </span>
+              )}
+            </div>
+            <div className="p-3">
+              <p className="text-[10px] uppercase tracking-widest mb-1" style={{ color: "var(--text-muted)", fontWeight: 700, letterSpacing: "0.08em" }}>
+                {p.brand}
+              </p>
+              <p className="text-[12.5px] line-clamp-2" style={{ fontWeight: 600, color: "var(--text-primary)", lineHeight: 1.3 }}>
+                {p.name}
+              </p>
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── Button-shaped category that morphs into a mini-card on hover ──────────
+// Idle: a pill button (small thumbnail + name + sub-count chevron).
+// Hover: the same wrapper expands in-place into a card showing up to 6
+//        next-level buttons. Clicking one bypasses the L1 listing.
+function CompactCategoryCard({
+  node,
+  idx,
+  hoveredId,
+  setHoveredId,
+  onClick,
+  onSubClick,
+}: {
+  node: CategoryNode;
+  idx: number;
+  hoveredId: string | null;
+  setHoveredId: (id: string | null) => void;
+  onClick: () => void;
+  onSubClick: (subSlug: string) => void;
+}) {
+  const isHovered = hoveredId === node.slug;
+  const children = node.children ?? [];
+  const showMore = children.length > 5;
+  const visible = children.slice(0, showMore ? 5 : 6);
+  const subCount = children.length;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _unusedIdx = idx;
+
+  return (
+    // Outer reserves only the button's idle height so neighbors don't shift on hover.
+    <div
+      className="relative"
+      style={{ height: 56 }}
+      onMouseEnter={() => setHoveredId(node.slug)}
+      onMouseLeave={() => setHoveredId(null)}
+    >
+      <div
+        className="absolute left-0 right-0 top-0 rounded-2xl overflow-hidden transition-all duration-200"
+        style={{
+          zIndex: isHovered ? 30 : 1,
+          background: isHovered ? "var(--glass-strong)" : "var(--glass-mid)",
+          backdropFilter: "blur(12px) saturate(1.2)",
+          WebkitBackdropFilter: "blur(12px) saturate(1.2)",
+          border: isHovered
+            ? "1.5px solid rgba(255,106,61,0.45)"
+            : "var(--border-subtle)",
+          boxShadow: isHovered
+            ? "0 22px 50px rgba(255,106,61,0.20), 0 0 0 4px var(--accent-light)"
+            : "0 1px 2px rgba(0,0,0,0.04)",
+        }}
+      >
+        {/* HEADER (button surface, always shown). Click → drill into this node. */}
+        <button
+          onClick={onClick}
+          className="group w-full flex items-center gap-2 px-4 cursor-pointer text-left"
+          style={{ height: 56 }}
+        >
+          <span
+            className="flex-1 truncate"
+            style={{
+              fontSize: "13px",
+              fontWeight: 600,
+              color: "var(--text-primary)",
+              letterSpacing: "0.01em",
+            }}
+            title={node.name}
+          >
+            {node.name}
+          </span>
+          {subCount > 0 && (
+            <span
+              className="flex items-center gap-1 px-2 py-0.5 rounded-full flex-shrink-0"
+              style={{
+                background: isHovered ? "var(--accent-light)" : "rgba(0,0,0,0.04)",
+                color: isHovered ? "var(--accent)" : "var(--text-muted)",
+                fontSize: "10px",
+                fontWeight: 700,
+                letterSpacing: "0.04em",
+                transition: "all 0.18s ease",
+              }}
+            >
+              {subCount}
+              <ChevronRight className="w-3 h-3" />
+            </span>
+          )}
+        </button>
+
+        {/* EXPANDED BODY (revealed on hover). Stays inside the card. */}
+        <AnimatePresence initial={false}>
+          {isHovered && children.length > 0 && (
+            <motion.div
+              key="body"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.18, ease: "easeOut" }}
+              className="overflow-hidden"
+            >
+              <div className="px-2 pb-2 pt-0">
+                {/* Hairline divider */}
+                <div
+                  className="h-px mx-1 mb-2"
+                  style={{ background: "rgba(0,0,0,0.06)" }}
+                />
+                {/* 6 next-level buttons in a 2-col grid */}
+                <div className="grid grid-cols-2 gap-1.5">
+                  {visible.map((sub) => (
+                    <button
+                      key={sub.slug}
+                      onClick={(e) => { e.stopPropagation(); onSubClick(sub.slug); }}
+                      className="text-left px-2.5 py-2 rounded-lg text-[11.5px] truncate transition-all"
+                      style={{
+                        fontWeight: 500,
+                        color: "var(--text-secondary)",
+                        background: "rgba(0,0,0,0.04)",
+                        border: "1px solid rgba(0,0,0,0.04)",
+                      }}
+                      onMouseEnter={(e) => {
+                        (e.currentTarget as HTMLElement).style.background = "var(--accent-light)";
+                        (e.currentTarget as HTMLElement).style.color = "var(--accent)";
+                        (e.currentTarget as HTMLElement).style.borderColor = "var(--accent-border)";
+                      }}
+                      onMouseLeave={(e) => {
+                        (e.currentTarget as HTMLElement).style.background = "rgba(0,0,0,0.04)";
+                        (e.currentTarget as HTMLElement).style.color = "var(--text-secondary)";
+                        (e.currentTarget as HTMLElement).style.borderColor = "rgba(0,0,0,0.04)";
+                      }}
+                      title={sub.name}
+                    >
+                      {sub.name}
+                    </button>
+                  ))}
+                  {showMore && (
+                    <button
+                      onClick={(e) => { e.stopPropagation(); onClick(); }}
+                      className="text-left px-2.5 py-2 rounded-lg text-[11.5px] truncate flex items-center justify-between gap-1"
+                      style={{
+                        fontWeight: 700,
+                        color: "var(--accent)",
+                        background: "var(--accent-light)",
+                        border: "1px solid var(--accent-border)",
+                        letterSpacing: "0.04em",
+                      }}
+                    >
+                      <span>More</span> <ChevronRight className="w-3 h-3" />
+                    </button>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   );
 }

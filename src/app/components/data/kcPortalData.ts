@@ -59,6 +59,8 @@ export interface RegisteredProfile {
   specializations: string[];
   priceRange: string;     // display string
   responseTime: string;   // "< 2 hrs"
+  profilePath?: string;   // override link destination (e.g. designer hub profile)
+  initials?: string;      // shown instead of logoUrl when set
 }
 
 // Category → image keyword tags for loremflickr
@@ -320,7 +322,38 @@ function buildProfiles<T extends { id: string; name: string; categoryIds: string
   return profiles;
 }
 
-export const REGISTERED_PROFESSIONALS: RegisteredProfile[] = buildProfiles(PROFESSIONAL_TYPES, "pro");
+const _ANKIT_SHARMA: RegisteredProfile = {
+  id: "designer-ankit-sharma",
+  slug: "ankit-sharma",
+  name: "Ankit Sharma",
+  typeId: "PRO-005",
+  typeName: "Interior Designer",
+  categoryId: "CAT-02",
+  tagline: "Crafting human-centred spaces across residential, hospitality & commercial projects.",
+  city: "Mumbai",
+  state: "Maharashtra",
+  avatar: "https://api.dicebear.com/7.x/initials/svg?seed=AS&backgroundColor=8b5cf6",
+  logoUrl: "https://api.dicebear.com/7.x/initials/svg?seed=AS&backgroundColor=8b5cf6",
+  coverImage: "https://loremflickr.com/800/400/interior,design,room?lock=42",
+  heroImage: "https://loremflickr.com/1200/600/interior,luxury,modern?lock=42",
+  rating: 4.9,
+  reviewCount: 127,
+  yearsExp: 6,
+  projectCount: 24,
+  teamSize: 1,
+  verified: true,
+  featured: true,
+  specializations: ["Luxury Residential", "Hospitality Design", "Material Specification"],
+  priceRange: "₹120 – ₹280 / sqft",
+  responseTime: "< 1 hr",
+  profilePath: "/designer/ankit-sharma",
+  initials: "AS",
+};
+
+export const REGISTERED_PROFESSIONALS: RegisteredProfile[] = [
+  _ANKIT_SHARMA,
+  ...buildProfiles(PROFESSIONAL_TYPES, "pro"),
+];
 export const REGISTERED_SERVICES: RegisteredProfile[] = buildProfiles(SERVICE_TYPES, "svc");
 
 // ────────────────────────────────────────────────────────────────────────────

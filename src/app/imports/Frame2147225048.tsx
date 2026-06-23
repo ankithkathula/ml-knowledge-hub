@@ -34,7 +34,7 @@ function Frame102() {
   return (
     <div className="content-stretch flex gap-[8px] h-[32px] items-center relative shrink-0 w-[164px]">
       <Frame />
-      <p className="font-['Satoshi:Medium',sans-serif] leading-[20px] not-italic relative shrink-0 text-[#171717] text-[16px] text-nowrap">Eco Surfaces Co.</p>
+      <p className="font-['Satoshi',sans-serif] leading-[20px] not-italic relative shrink-0 text-[#171717] text-[16px] text-nowrap">Eco Surfaces Co.</p>
     </div>
   );
 }
@@ -58,7 +58,7 @@ function Sidebar() {
   return (
     <div className="h-[19.983px] relative shrink-0 w-[57.091px]" data-name="Sidebar">
       <div className="bg-clip-padding border-0 border-[transparent] border-solid relative size-full">
-        <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[20px] left-0 not-italic text-[#FF6A3D] text-[14px] text-nowrap top-[0.83px]">Overview</p>
+        <p className="absolute font-['Satoshi',sans-serif] leading-[20px] left-0 not-italic text-[#FF6A3D] text-[14px] text-nowrap top-[0.83px]">Overview</p>
       </div>
     </div>
   );
@@ -94,7 +94,7 @@ function Text() {
   return (
     <div className="h-[19.983px] relative shrink-0 w-[83.504px]" data-name="Text">
       <div className="bg-clip-padding border-0 border-[transparent] border-solid relative size-full">
-        <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[20px] left-[42px] not-italic text-[#737373] text-[14px] text-center text-nowrap top-[0.83px] translate-x-[-50%]">Profile Details</p>
+        <p className="absolute font-['Satoshi',sans-serif] leading-[20px] left-[42px] not-italic text-[#737373] text-[14px] text-center text-nowrap top-[0.83px] translate-x-[-50%]">Profile Details</p>
       </div>
     </div>
   );
@@ -143,7 +143,7 @@ function Button() {
 function Link1() {
   return (
     <div className="h-[35.974px] relative rounded-[10px] shrink-0 w-[204.157px]" data-name="Link">
-      <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[20px] left-[15.99px] not-italic text-[#737373] text-[14px] text-nowrap top-[8.83px]">Basic Details</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[20px] left-[15.99px] not-italic text-[#737373] text-[14px] text-nowrap top-[8.83px]">Basic Details</p>
     </div>
   );
 }
@@ -151,7 +151,7 @@ function Link1() {
 function Link2() {
   return (
     <div className="h-[35.974px] relative rounded-[10px] shrink-0 w-full" data-name="Link">
-      <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[20px] left-[16.01px] not-italic text-[#737373] text-[14px] text-nowrap top-[8.27px]">Certifications</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[20px] left-[16.01px] not-italic text-[#737373] text-[14px] text-nowrap top-[8.27px]">Certifications</p>
     </div>
   );
 }
@@ -159,7 +159,7 @@ function Link2() {
 function Link3() {
   return (
     <div className="h-[35.974px] relative rounded-[10px] shrink-0 w-full" data-name="Link">
-      <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[20px] left-[16.01px] not-italic text-[#737373] text-[14px] text-nowrap top-[8.27px]">KYC Details</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[20px] left-[16.01px] not-italic text-[#737373] text-[14px] text-nowrap top-[8.27px]">KYC Details</p>
     </div>
   );
 }
@@ -167,7 +167,7 @@ function Link3() {
 function Link4() {
   return (
     <div className="h-[35.974px] relative rounded-[10px] shrink-0 w-full" data-name="Link">
-      <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[20px] left-[15.99px] not-italic text-[#737373] text-[14px] text-nowrap top-[8.83px]">Distribution Networks</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[20px] left-[15.99px] not-italic text-[#737373] text-[14px] text-nowrap top-[8.83px]">Distribution Networks</p>
     </div>
   );
 }
@@ -175,7 +175,7 @@ function Link4() {
 function Link5() {
   return (
     <div className="h-[35.974px] relative rounded-[10px] shrink-0 w-full" data-name="Link">
-      <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[20px] left-[15.99px] not-italic text-[#737373] text-[14px] text-nowrap top-[8.83px]">Categories</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[20px] left-[15.99px] not-italic text-[#737373] text-[14px] text-nowrap top-[8.83px]">Categories</p>
     </div>
   );
 }
@@ -183,7 +183,7 @@ function Link5() {
 function Link6() {
   return (
     <div className="h-[35.974px] relative rounded-[10px] shrink-0 w-full" data-name="Link">
-      <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[20px] left-[15.99px] not-italic text-[#737373] text-[14px] text-nowrap top-[8.83px]">Portfolio</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[20px] left-[15.99px] not-italic text-[#737373] text-[14px] text-nowrap top-[8.83px]">Portfolio</p>
     </div>
   );
 }
@@ -191,7 +191,7 @@ function Link6() {
 function Link7() {
   return (
     <div className="h-[35.974px] relative rounded-[10px] shrink-0 w-full" data-name="Link">
-      <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[20px] left-[15.99px] not-italic text-[#737373] text-[14px] text-nowrap top-[8.83px]">Leads</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[20px] left-[15.99px] not-italic text-[#737373] text-[14px] text-nowrap top-[8.83px]">Leads</p>
     </div>
   );
 }
@@ -244,7 +244,7 @@ function Text1() {
   return (
     <div className="h-[19.983px] relative shrink-0 w-[49.565px]" data-name="Text">
       <div className="bg-clip-padding border-0 border-[transparent] border-solid relative size-full">
-        <p className="absolute font-['Satoshi:Medium',sans-serif] leading-[20px] left-[25px] not-italic text-[#525252] text-[14px] text-center text-nowrap top-[0.83px] translate-x-[-50%]">Content</p>
+        <p className="absolute font-['Satoshi',sans-serif] leading-[20px] left-[25px] not-italic text-[#525252] text-[14px] text-center text-nowrap top-[0.83px] translate-x-[-50%]">Content</p>
       </div>
     </div>
   );
@@ -293,7 +293,7 @@ function Button1() {
 function Link8() {
   return (
     <div className="h-[35.974px] relative rounded-[10px] shrink-0 w-full" data-name="Link">
-      <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[20px] left-[15.99px] not-italic text-[#737373] text-[14px] text-nowrap top-[8.83px]">Stores</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[20px] left-[15.99px] not-italic text-[#737373] text-[14px] text-nowrap top-[8.83px]">Stores</p>
     </div>
   );
 }
@@ -301,7 +301,7 @@ function Link8() {
 function Link9() {
   return (
     <div className="h-[35.974px] relative rounded-[10px] shrink-0 w-full" data-name="Link">
-      <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[20px] left-[15.99px] not-italic text-[#737373] text-[14px] text-nowrap top-[8.83px]">Products</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[20px] left-[15.99px] not-italic text-[#737373] text-[14px] text-nowrap top-[8.83px]">Products</p>
     </div>
   );
 }
@@ -309,7 +309,7 @@ function Link9() {
 function Link10() {
   return (
     <div className="h-[35.974px] relative rounded-[10px] shrink-0 w-full" data-name="Link">
-      <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[20px] left-[15.99px] not-italic text-[#737373] text-[14px] text-nowrap top-[8.83px]">Catalogues</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[20px] left-[15.99px] not-italic text-[#737373] text-[14px] text-nowrap top-[8.83px]">Catalogues</p>
     </div>
   );
 }
@@ -364,7 +364,7 @@ export function Navigation() {
 function Heading() {
   return (
     <div className="h-[31.996px] relative shrink-0 w-full" data-name="Heading 1">
-      <p className="absolute font-['Satoshi:Medium',sans-serif] leading-[32px] left-0 not-italic text-[#171717] text-[24px] text-nowrap top-[0.83px]">Overview</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[32px] left-0 not-italic text-[#171717] text-[24px] text-nowrap top-[0.83px]">Overview</p>
     </div>
   );
 }
@@ -372,7 +372,7 @@ function Heading() {
 function Paragraph() {
   return (
     <div className="h-[19.983px] relative shrink-0 w-full" data-name="Paragraph">
-      <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[20px] left-0 not-italic text-[#737373] text-[14px] text-nowrap top-[0.83px]">Welcome Aakriti</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[20px] left-0 not-italic text-[#737373] text-[14px] text-nowrap top-[0.83px]">Welcome Aakriti</p>
     </div>
   );
 }
@@ -407,7 +407,7 @@ function Button2() {
 function TextInput() {
   return (
     <div className="absolute bg-[#f5f5f5] content-stretch flex h-[39.991px] items-center left-0 overflow-clip pl-[40px] pr-[16px] py-0 rounded-[10px] top-0 w-[319.996px]" data-name="Text Input">
-      <p className="font-['Satoshi:Regular',sans-serif] leading-[normal] not-italic relative shrink-0 text-[14px] text-[rgba(10,10,10,0.5)] text-nowrap">Search...</p>
+      <p className="font-['Satoshi',sans-serif] leading-[normal] not-italic relative shrink-0 text-[14px] text-[rgba(10,10,10,0.5)] text-nowrap">Search...</p>
     </div>
   );
 }
@@ -494,7 +494,7 @@ export function Header() {
 function Frame3() {
   return (
     <div className="content-stretch flex gap-[32px] items-center justify-center relative shrink-0 w-full">
-      <p className="basis-0 font-['Satoshi:Regular',sans-serif] grow leading-[21px] min-h-px min-w-px not-italic relative shrink-0 text-[16px] text-white">{`Profile `}</p>
+      <p className="basis-0 font-['Satoshi',sans-serif] grow leading-[21px] min-h-px min-w-px not-italic relative shrink-0 text-[16px] text-white">{`Profile `}</p>
     </div>
   );
 }
@@ -502,7 +502,7 @@ function Frame3() {
 function Frame5() {
   return (
     <div className="content-stretch flex gap-[32px] items-center relative shrink-0 w-full">
-      <p className="basis-0 font-['Satoshi:Regular',sans-serif] grow leading-[normal] min-h-px min-w-px not-italic relative shrink-0 text-[12px] text-white">Keep your profile updated</p>
+      <p className="basis-0 font-['Satoshi',sans-serif] grow leading-[normal] min-h-px min-w-px not-italic relative shrink-0 text-[12px] text-white">Keep your profile updated</p>
     </div>
   );
 }
@@ -563,7 +563,7 @@ function Frame119() {
 function Frame103() {
   return (
     <div className="bg-white content-stretch flex items-center justify-center mb-[-11px] px-[8px] py-[2px] relative rounded-[32px] shrink-0">
-      <p className="font-['Satoshi:Medium',sans-serif] leading-[normal] not-italic relative shrink-0 text-[#FF6A3D] text-[12px] text-nowrap">100%</p>
+      <p className="font-['Satoshi',sans-serif] leading-[normal] not-italic relative shrink-0 text-[#FF6A3D] text-[12px] text-nowrap">100%</p>
     </div>
   );
 }
@@ -588,8 +588,8 @@ function Content() {
 function Frame2() {
   return (
     <div className="content-stretch flex flex-col items-center leading-[20px] not-italic relative shrink-0 text-center text-white w-full">
-      <p className="font-['Satoshi:Medium',sans-serif] h-[20px] relative shrink-0 text-[16px] w-full">Eco Surfaces Co.</p>
-      <p className="font-['Satoshi:Regular',sans-serif] h-[20px] relative shrink-0 text-[10px] w-full">www.ecosurfaces.com</p>
+      <p className="font-['Satoshi',sans-serif] h-[20px] relative shrink-0 text-[16px] w-full">Eco Surfaces Co.</p>
+      <p className="font-['Satoshi',sans-serif] h-[20px] relative shrink-0 text-[10px] w-full">www.ecosurfaces.com</p>
     </div>
   );
 }
@@ -608,7 +608,7 @@ function Frame31() {
     <div className="bg-white relative rounded-[8px] shrink-0 w-full">
       <div className="flex flex-row items-center justify-center size-full">
         <div className="content-stretch flex items-center justify-center px-[16px] py-[4px] relative w-full">
-          <p className="font-['Satoshi:Medium',sans-serif] leading-[21px] not-italic relative shrink-0 text-[#FF6A3D] text-[12px] text-center text-nowrap">View Public Profile</p>
+          <p className="font-['Satoshi',sans-serif] leading-[21px] not-italic relative shrink-0 text-[#FF6A3D] text-[12px] text-center text-nowrap">View Public Profile</p>
         </div>
       </div>
     </div>
@@ -620,7 +620,7 @@ function Frame6() {
     <div className="bg-[#FF6A3D] opacity-80 relative rounded-[8px] shrink-0 w-full">
       <div className="flex flex-row items-center justify-center size-full">
         <div className="content-stretch flex items-center justify-center px-[16px] py-[4px] relative w-full">
-          <p className="font-['Satoshi:Medium',sans-serif] leading-[21px] not-italic relative shrink-0 text-[12px] text-center text-nowrap text-white">Edit Profile</p>
+          <p className="font-['Satoshi',sans-serif] leading-[21px] not-italic relative shrink-0 text-[12px] text-center text-nowrap text-white">Edit Profile</p>
         </div>
       </div>
     </div>
@@ -649,7 +649,7 @@ function Certifications() {
 function Frame4() {
   return (
     <div className="bg-[rgba(163,163,163,0.05)] content-stretch flex items-center px-[8px] py-[2px] relative rounded-[300px] shrink-0">
-      <p className="font-['Satoshi:Medium',sans-serif] leading-[normal] not-italic relative shrink-0 text-[#FF6A3D] text-[12px] text-nowrap">View All</p>
+      <p className="font-['Satoshi',sans-serif] leading-[normal] not-italic relative shrink-0 text-[#FF6A3D] text-[12px] text-nowrap">View All</p>
     </div>
   );
 }
@@ -657,7 +657,7 @@ function Frame4() {
 function Frame15() {
   return (
     <div className="basis-0 content-stretch flex gap-[8px] grow items-center min-h-px min-w-px relative shrink-0">
-      <p className="basis-0 font-['Satoshi:Regular',sans-serif] grow leading-[21px] min-h-px min-w-px not-italic relative shrink-0 text-[#171717] text-[16px]">{`Leads & Inquiries`}</p>
+      <p className="basis-0 font-['Satoshi',sans-serif] grow leading-[21px] min-h-px min-w-px not-italic relative shrink-0 text-[#171717] text-[16px]">{`Leads & Inquiries`}</p>
       <Frame4 />
     </div>
   );
@@ -674,7 +674,7 @@ function Frame7() {
 function Frame13() {
   return (
     <div className="content-stretch flex gap-[32px] items-center relative shrink-0 w-full">
-      <p className="basis-0 font-['Satoshi:Regular',sans-serif] grow leading-[normal] min-h-px min-w-px not-italic relative shrink-0 text-[#a3a3a3] text-[12px]">Track and manage inquiries from potential clients</p>
+      <p className="basis-0 font-['Satoshi',sans-serif] grow leading-[normal] min-h-px min-w-px not-italic relative shrink-0 text-[#a3a3a3] text-[12px]">Track and manage inquiries from potential clients</p>
     </div>
   );
 }
@@ -715,7 +715,7 @@ function Container9() {
   return (
     <div className="content-stretch flex items-center justify-between relative shrink-0 w-full" data-name="Container">
       <Container8 />
-      <p className="font-['Satoshi:Medium',sans-serif] leading-[normal] not-italic relative shrink-0 text-[18px] text-nowrap text-white">248</p>
+      <p className="font-['Satoshi',sans-serif] leading-[normal] not-italic relative shrink-0 text-[18px] text-nowrap text-white">248</p>
     </div>
   );
 }
@@ -723,8 +723,8 @@ function Container9() {
 function Frame19() {
   return (
     <div className="content-stretch flex flex-col gap-[4px] items-start leading-[normal] not-italic relative shrink-0 text-white w-full">
-      <p className="font-['Satoshi:Medium',sans-serif] relative shrink-0 text-[16px] w-full">Profile Views</p>
-      <p className="font-['Satoshi:Regular',sans-serif] relative shrink-0 text-[10px] w-full">Last 30 days</p>
+      <p className="font-['Satoshi',sans-serif] relative shrink-0 text-[16px] w-full">Profile Views</p>
+      <p className="font-['Satoshi',sans-serif] relative shrink-0 text-[10px] w-full">Last 30 days</p>
     </div>
   );
 }
@@ -769,7 +769,7 @@ function Container11() {
   return (
     <div className="content-stretch flex items-center justify-between relative shrink-0 w-full" data-name="Container">
       <Container10 />
-      <p className="font-['Satoshi:Medium',sans-serif] leading-[normal] not-italic relative shrink-0 text-[18px] text-nowrap text-white">1,240</p>
+      <p className="font-['Satoshi',sans-serif] leading-[normal] not-italic relative shrink-0 text-[18px] text-nowrap text-white">1,240</p>
     </div>
   );
 }
@@ -777,8 +777,8 @@ function Container11() {
 function Frame21() {
   return (
     <div className="content-stretch flex flex-col gap-[4px] items-start leading-[normal] not-italic relative shrink-0 text-white w-full">
-      <p className="font-['Satoshi:Medium',sans-serif] relative shrink-0 text-[16px] w-full">Product Clicks</p>
-      <p className="font-['Satoshi:Regular',sans-serif] relative shrink-0 text-[10px] w-full">Last 30 days</p>
+      <p className="font-['Satoshi',sans-serif] relative shrink-0 text-[16px] w-full">Product Clicks</p>
+      <p className="font-['Satoshi',sans-serif] relative shrink-0 text-[10px] w-full">Last 30 days</p>
     </div>
   );
 }
@@ -811,7 +811,7 @@ export function Frame105() {
       <div className="basis-0 grow flex flex-col gap-[24px] items-start min-h-px min-w-px relative shrink-0">
         <Frame8 />
         <div className="bg-[#f5f5f5] h-[200px] relative rounded-[10px] shrink-0 w-full">
-          <p className="absolute font-['Satoshi:Regular',sans-serif] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-gray-400">Leads Activity Chart</p>
+          <p className="absolute font-['Satoshi',sans-serif] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-gray-400">Leads Activity Chart</p>
         </div>
       </div>
       <Certifications />

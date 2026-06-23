@@ -659,7 +659,7 @@ export function BrandsPage({ onBrandClick, onViewProducts }: { onBrandClick?: (b
   }, [mainSearch, selectedLocation, selectedBrands]);
 
   return (
-    <div className="min-h-screen bg-white font-['Satoshi',sans-serif] pt-16 md:pt-20 lg:pt-24">
+    <div className="min-h-screen bg-white font-['Satoshi',sans-serif]">
       
       {/* Auto-Scrolling Banner */}
       <BannerCarousel />
@@ -722,7 +722,8 @@ export function BrandsPage({ onBrandClick, onViewProducts }: { onBrandClick?: (b
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.2 }}
-                    className="group bg-white rounded-[16px] border border-[#E6E8EC] overflow-hidden shadow-[0px_4px_16px_rgba(0,0,0,0.06)] hover:shadow-xl transition-all flex flex-col h-[340px] md:h-[360px] relative w-full"
+                    className="group bg-white rounded-[16px] border border-[#E6E8EC] overflow-hidden shadow-[0px_4px_16px_rgba(0,0,0,0.06)] hover:shadow-xl transition-all flex flex-col h-[340px] md:h-[360px] relative w-full cursor-pointer"
+                    onClick={() => onBrandClick?.(brand.name)}
                   >
                     {/* BANNER IMAGE */}
                     <div className="h-[120px] md:h-[140px] shrink-0 w-full overflow-hidden">
@@ -756,14 +757,14 @@ export function BrandsPage({ onBrandClick, onViewProducts }: { onBrandClick?: (b
                       <div className="flex-1 w-full" />
                       
                       <div className="flex items-center gap-2 md:gap-3 w-full shrink-0">
-                        <button 
-                          onClick={() => onBrandClick?.(brand.name)}
+                        <button
+                          onClick={(e) => { e.stopPropagation(); onBrandClick?.(brand.name); }}
                           className="h-10 md:h-11 flex-1 bg-[#FF6A3D] text-white text-[12px] md:text-[14px] font-medium rounded-[8px] md:rounded-[10px] hover:bg-[#E55A2D] transition-colors whitespace-nowrap uppercase cursor-pointer"
                         >
                           PROFILE
                         </button>
-                        <button 
-                          onClick={() => onViewProducts?.(brand.name)}
+                        <button
+                          onClick={(e) => { e.stopPropagation(); onViewProducts?.(brand.name); }}
                           className="h-10 md:h-11 flex-1 border-[1.5px] border-[#FF6A3D] text-[#FF6A3D] text-[12px] md:text-[14px] font-medium rounded-[8px] md:rounded-[10px] hover:bg-[#FF6A3D]/[0.08] transition-all whitespace-nowrap uppercase cursor-pointer"
                         >
                           PRODUCTS

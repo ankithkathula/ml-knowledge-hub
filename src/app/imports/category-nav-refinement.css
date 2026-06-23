@@ -1,0 +1,145 @@
+Refine the category navigation bar and dropdown menus in the hero section of the Material Library customer portal homepage.
+
+Important constraints:
+
+• Do not change the layout structure
+• Do not move elements
+• Do not change the content
+• Do not change category names or navigation hierarchy
+• Maintain the exact same design concept
+
+Only refine the visual behavior and styling so the category navigation feels more subtle, attached to the header, and less visually overpowering.
+
+1. Attach Category Navigation to Header
+
+Currently the category navigation appears as a floating element in the hero section.
+
+Update it so it feels visually connected to the header while still remaining positioned in the hero area.
+
+Apply a very subtle overlap relationship.
+
+Position:
+
+• Reduce the vertical gap between header and category navigation
+• The category bar should sit closer to the header
+
+Spacing:
+
+margin-top: 12px
+
+This makes the navigation feel anchored to the header rather than floating independently.
+
+2. Reduce Category Bar Visual Weight
+
+Make the category container more subtle so it does not compete with the hero headline and search.
+
+Current design appears slightly heavy.
+
+Refine it with softer styling.
+
+Background:
+
+rgba(255,255,255,0.85)
+
+Backdrop blur:
+
+backdrop-filter: blur(10px)
+
+Border:
+
+1px solid rgba(0,0,0,0.06)
+
+Shadow (very subtle):
+
+0 6px 16px rgba(0,0,0,0.06)
+3. Reduce Category Bar Height
+
+Make the navigation slightly more compact.
+
+Category container padding:
+
+padding-top: 10px
+padding-bottom: 10px
+padding-left: 18px
+padding-right: 18px
+
+Item spacing:
+
+gap: 28px
+
+This keeps the navigation readable but lighter.
+
+4. Make Dropdown Menus Smaller & More Subtle
+
+Currently dropdown panels may feel too large.
+
+Refine them to be more compact and minimal.
+
+Dropdown width:
+
+320px – 380px max
+
+Dropdown padding:
+
+16px
+
+Item spacing:
+
+8px – 10px
+5. Dropdown Styling
+
+Use a clean minimal panel.
+
+Background:
+
+#FFFFFF
+
+Border:
+
+1px solid rgba(0,0,0,0.08)
+
+Shadow:
+
+0 10px 25px rgba(0,0,0,0.08)
+
+Border radius:
+
+10px
+
+This keeps the dropdown elegant and lightweight.
+
+6. Hover Interaction
+
+Add a subtle dropdown animation.
+
+Animation:
+
+fade-in + slight slide down
+
+Timing:
+
+120ms ease-out
+
+This improves perceived responsiveness.
+
+7. Maintain Hero Balance
+
+Ensure the refined category navigation does not visually overpower:
+
+• hero headline
+• search bar
+• search tabs (Brands / Products / Services)
+
+The category navigation should feel like a supporting navigation layer, not the dominant element.
+
+Final Result
+
+The category navigation should now:
+
+• feel attached to the header
+• look lighter and more refined
+• have smaller dropdown panels
+• avoid distracting from the hero content
+• maintain the exact same layout and structure
+
+The change should be purely visual refinement, not structural redesign.

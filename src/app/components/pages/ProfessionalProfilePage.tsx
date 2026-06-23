@@ -8,9 +8,6 @@ import {
   UserPlus, Mail, GraduationCap, BadgeCheck, Languages,
   FolderOpen, MessageSquare, Link2, Activity,
 } from "lucide-react";
-import { Navbar } from "../Navbar";
-import { Footer } from "../Footer";
-
 /* ── types ──────────────────────────────────────────────────── */
 
 interface PortfolioProject {
@@ -357,8 +354,6 @@ export function ProfessionalProfilePage() {
 
   return (
     <div className="min-h-screen" style={{ background: "var(--bg-base)" }}>
-      <Navbar />
-
       {/* ── Profile Header ──────────────────────────────────── */}
       <section className="px-4 pt-8 pb-6">
         <div className="max-w-6xl mx-auto">
@@ -798,7 +793,6 @@ export function ProfessionalProfilePage() {
         </div>
       </section>
 
-      <Footer />
     </div>
   );
 }

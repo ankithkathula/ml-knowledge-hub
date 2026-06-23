@@ -7,8 +7,6 @@ import {
   PenLine, Trophy, Briefcase, BarChart3, Globe,
   ChevronDown, Send, Search, List, Share2, Plus,
 } from "lucide-react";
-import { Navbar } from "../Navbar";
-import { Footer } from "../Footer";
 import { consultants } from "../data/consultantData";
 import {
   getNode, getChildren, getBreadcrumb, getBrandsForLayer,
@@ -69,7 +67,7 @@ function HorizontalBar({ items, activeId, onSelect }: { items: HierarchyNode[]; 
   return (
     <div className="relative">
       {canScrollLeft && (
-        <button onClick={() => scroll("left")} className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "rgba(255,255,255,0.95)", boxShadow: "0 2px 8px rgba(0,0,0,0.1)", border: "1px solid rgba(0,0,0,0.08)" }}>
+        <button onClick={() => scroll("left")} className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "var(--glass-strong)", boxShadow: "0 2px 8px rgba(0,0,0,0.1)", border: "var(--border-subtle)" }}>
           <ChevronLeft className="w-4 h-4" style={{ color: "var(--text-primary)" }} />
         </button>
       )}
@@ -89,7 +87,7 @@ function HorizontalBar({ items, activeId, onSelect }: { items: HierarchyNode[]; 
         })}
       </div>
       {canScrollRight && (
-        <button onClick={() => scroll("right")} className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "rgba(255,255,255,0.95)", boxShadow: "0 2px 8px rgba(0,0,0,0.1)", border: "1px solid rgba(0,0,0,0.08)" }}>
+        <button onClick={() => scroll("right")} className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "var(--glass-strong)", boxShadow: "0 2px 8px rgba(0,0,0,0.1)", border: "var(--border-subtle)" }}>
           <ChevronRight className="w-4 h-4" style={{ color: "var(--text-primary)" }} />
         </button>
       )}
@@ -101,7 +99,7 @@ function HorizontalBar({ items, activeId, onSelect }: { items: HierarchyNode[]; 
 function CategoryCard({ node, linkTo }: { node: HierarchyNode; linkTo: string }) {
   return (
     <Link to={linkTo} className="group gl-card cursor-pointer overflow-hidden" style={{ padding: 0 }}>
-      <div className="relative h-36 overflow-hidden" style={{ background: "linear-gradient(135deg, rgba(255,106,61,0.06) 0%, rgba(245,247,251,1) 100%)" }}>
+      <div className="relative h-36 overflow-hidden" style={{ background: "var(--bg-hero)" }}>
         {node.image ? (
           <>
             <img src={node.image} alt={node.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
@@ -113,7 +111,7 @@ function CategoryCard({ node, linkTo }: { node: HierarchyNode; linkTo: string })
           </div>
         )}
         {node.childCount !== undefined && node.childCount > 0 && (
-          <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full" style={{ background: "rgba(255,255,255,0.9)", fontSize: "0.7rem", fontWeight: 600, color: "var(--text-primary)" }}>
+          <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full" style={{ background: "var(--glass-strong)", fontSize: "0.7rem", fontWeight: 600, color: "var(--text-primary)" }}>
             {node.childCount} subcategories
           </div>
         )}
@@ -168,7 +166,7 @@ function QuickFactsCard({ node, children, brands }: { node: HierarchyNode; child
   if (facts.length === 0) return null;
 
   return (
-    <div className="w-[300px] flex-shrink-0" style={{ background: "rgba(255,255,255,0.35)", backdropFilter: "blur(20px) saturate(1.4)", WebkitBackdropFilter: "blur(20px) saturate(1.4)", borderRadius: "var(--r-md)", border: "1px solid rgba(255,255,255,0.5)", boxShadow: "0 8px 32px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.5)", padding: "20px 24px" }}>
+    <div className="w-[300px] flex-shrink-0" style={{ background: "var(--glass)", backdropFilter: "blur(20px) saturate(1.4)", WebkitBackdropFilter: "blur(20px) saturate(1.4)", borderRadius: "var(--r-md)", border: "1px solid rgba(255,255,255,0.5)", boxShadow: "0 8px 32px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.5)", padding: "20px 24px" }}>
       <div style={{ fontSize: "0.68rem", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.8px", marginBottom: 14 }}>Quick Facts</div>
       <div className="space-y-3">
         {facts.map((f, i) => (
@@ -182,10 +180,10 @@ function QuickFactsCard({ node, children, brands }: { node: HierarchyNode; child
         View All Brands <ArrowRight className="w-4 h-4" />
       </Link>
       <div className="flex gap-2 mt-3">
-        <button className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg" style={{ background: "rgba(0,0,0,0.04)", border: "1px solid rgba(0,0,0,0.08)", fontSize: "0.75rem", fontWeight: 500, color: "var(--text-secondary)" }}>
+        <button className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg" style={{ background: "var(--glass)", border: "var(--border-subtle)", fontSize: "0.75rem", fontWeight: 500, color: "var(--text-secondary)" }}>
           <Share2 className="w-3.5 h-3.5" /> Share
         </button>
-        <Link to="/blog/create" className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg" style={{ background: "rgba(0,0,0,0.04)", border: "1px solid rgba(0,0,0,0.08)", fontSize: "0.75rem", fontWeight: 500, color: "var(--text-secondary)" }}>
+        <Link to="/blog/create" className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg" style={{ background: "var(--glass)", border: "var(--border-subtle)", fontSize: "0.75rem", fontWeight: 500, color: "var(--text-secondary)" }}>
           <Plus className="w-3.5 h-3.5" /> Contribute
         </Link>
       </div>
@@ -443,7 +441,7 @@ function BlogsSection({ categoryName }: { categoryName: string }) {
               </p>
               
               {/* Author Info */}
-              <div className="flex items-center gap-3 pt-3" style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }}>
+              <div className="flex items-center gap-3 pt-3" style={{ borderTop: "var(--border-subtle)" }}>
                 <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: "linear-gradient(135deg, #ff6a3d 0%, #ff8f6d 100%)", color: "#fff", fontSize: "0.65rem", fontWeight: 700 }}>
                   {blog.author.split(" ").map(n => n[0]).join("").slice(0, 2)}
                 </div>
@@ -479,7 +477,7 @@ function ContributeSection({ categoryName }: { categoryName: string }) {
   return (
     <div>
       <SectionHeader icon={<Users className="w-5 h-5" style={{ color: "#ff6a3d" }} />} title="Contributors" />
-      <div className="flex items-center gap-4 p-5 rounded-2xl" style={{ background: "rgba(255,255,255,0.8)", border: "1px solid rgba(0,0,0,0.06)" }}>
+      <div className="flex items-center gap-4 p-5 rounded-2xl" style={{ background: "var(--glass-mid)", border: "var(--border-subtle)" }}>
         {/* Stacked avatars */}
         <div className="flex -space-x-2.5 flex-shrink-0">
           {contributors.slice(0, 5).map((c, i) => (
@@ -510,7 +508,7 @@ function NewsletterSignup({ categoryName }: { categoryName: string }) {
   const [subscribed, setSubscribed] = useState(false);
 
   return (
-    <div className="flex items-center gap-4 p-5 rounded-2xl" style={{ background: "rgba(255,255,255,0.8)", border: "1px solid rgba(0,0,0,0.06)" }}>
+    <div className="flex items-center gap-4 p-5 rounded-2xl" style={{ background: "var(--glass-mid)", border: "var(--border-subtle)" }}>
       <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: "rgba(255,106,61,0.08)" }}>
         <Mail className="w-5 h-5" style={{ color: "#ff6a3d" }} />
       </div>
@@ -532,7 +530,7 @@ function NewsletterSignup({ categoryName }: { categoryName: string }) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="px-3 py-2 rounded-lg w-44"
-            style={{ border: "1px solid rgba(0,0,0,0.1)", fontSize: "0.78rem", background: "rgba(255,255,255,0.9)", outline: "none" }}
+            style={{ border: "var(--border)", fontSize: "0.78rem", background: "var(--glass-strong)", outline: "none" }}
           />
           <button
             onClick={() => { if (email) setSubscribed(true); }}
@@ -572,7 +570,7 @@ function TableOfContents({ activeSection }: { activeSection: string }) {
   return (
     <div style={{ width: 224, flexShrink: 0, position: "sticky", top: 96, alignSelf: "flex-start", maxHeight: "calc(100vh - 120px)" }}>
       <div className="gl-card" style={{ padding: "16px 0", overflowY: "auto", maxHeight: "calc(100vh - 120px)" }}>
-        <div style={{ padding: "0 16px 12px", borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
+        <div style={{ padding: "0 16px 12px", borderBottom: "var(--border-subtle)" }}>
           <h3 style={{ fontSize: "0.8rem", fontWeight: 700, color: "var(--text-primary)", textTransform: "uppercase", letterSpacing: "0.5px" }}>Contents</h3>
         </div>
         <div className="mt-2">
@@ -636,13 +634,11 @@ export function HierarchyPage() {
   if (!node) {
     return (
       <div className="min-h-screen" style={{ background: "var(--bg-base)" }}>
-        <Navbar />
         <div className="max-w-7xl mx-auto px-6 py-20 text-center">
           <h1 style={{ fontSize: "1.5rem", fontWeight: 700, color: "var(--text-primary)" }}>Category not found</h1>
           <p style={{ color: "var(--text-secondary)", marginTop: 8 }}>The requested category does not exist.</p>
           <Link to="/" className="btn-primary mt-6 inline-flex">Back to Home</Link>
         </div>
-        <Footer />
       </div>
     );
   }
@@ -660,8 +656,6 @@ export function HierarchyPage() {
 
   return (
     <div className="min-h-screen" style={{ background: "var(--bg-base)" }}>
-      <Navbar />
-
       {/* ===== BANNER SECTION — matches uploaded image style ===== */}
       <div className="relative overflow-hidden" style={{ background: "linear-gradient(135deg, #fff8f5 0%, #f5f7fb 50%, #fdf4ef 100%)" }}>
         {/* Decorative gradient blobs */}
@@ -696,7 +690,7 @@ export function HierarchyPage() {
                     {parentNode.name}
                   </span>
                 )}
-                <span className="px-3 py-1 rounded-full" style={{ fontSize: "0.7rem", fontWeight: 500, background: "rgba(0,0,0,0.06)", color: "var(--text-secondary)", border: "1px solid rgba(0,0,0,0.08)" }}>
+                <span className="px-3 py-1 rounded-full" style={{ fontSize: "0.7rem", fontWeight: 500, background: "var(--glass)", color: "var(--text-secondary)", border: "var(--border-subtle)" }}>
                   {levelLabels[node.level] || `Level ${node.level}`}
                 </span>
                 <span className="flex items-center gap-1.5 px-3 py-1 rounded-full" style={{ fontSize: "0.7rem", fontWeight: 500, color: "#16a34a", background: "rgba(34,197,94,0.08)", border: "1px solid rgba(34,197,94,0.15)" }}>
@@ -724,7 +718,7 @@ export function HierarchyPage() {
 
       {/* ===== HORIZONTAL BAR ===== */}
       {siblings.length > 1 && (
-        <div className="sticky top-[58px] z-30" style={{ background: "rgba(245,247,251,0.92)", backdropFilter: "blur(12px)", borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
+        <div className="sticky top-[58px] z-30" style={{ background: "rgba(245,247,251,0.92)", backdropFilter: "blur(12px)", borderBottom: "var(--border-subtle)" }}>
           <div className="max-w-7xl mx-auto px-6">
             <HorizontalBar items={siblings} activeId={activeBarId} onSelect={handleBarSelect} />
           </div>
@@ -822,7 +816,6 @@ export function HierarchyPage() {
         </div>
       </div>
 
-      <Footer />
     </div>
   );
 }

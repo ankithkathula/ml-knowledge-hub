@@ -5,8 +5,6 @@ import {
   IndianRupee, Star, Send, MessageCircle, X, ChevronLeft,
   Share2, Building2, Image as ImageIcon, ExternalLink,
 } from "lucide-react";
-import { Navbar } from "../Navbar";
-import { Footer } from "../Footer";
 import { PROJECTS, CONSULTANTS } from "../data/consultantData";
 
 export function ConsultantProjectDetailPage() {
@@ -27,12 +25,10 @@ export function ConsultantProjectDetailPage() {
   if (!project) {
     return (
       <div className="min-h-screen" style={{ background: "var(--bg-base)" }}>
-        <Navbar />
         <div className="max-w-4xl mx-auto px-6 py-20 text-center">
           <h1 style={{ fontSize: "1.5rem", fontWeight: 700 }}>Project not found</h1>
           <Link to="/services" className="btn-primary mt-6 inline-flex">Browse Services</Link>
         </div>
-        <Footer />
       </div>
     );
   }
@@ -65,8 +61,6 @@ export function ConsultantProjectDetailPage() {
 
   return (
     <div className="min-h-screen" style={{ background: "var(--bg-base)" }}>
-      <Navbar />
-
       {/* ── Breadcrumb ── */}
       <div style={{ background: "var(--glass-strong)", borderBottom: "var(--border)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3">
@@ -377,7 +371,6 @@ export function ConsultantProjectDetailPage() {
         </div>
       )}
 
-      <Footer />
     </div>
   );
 }

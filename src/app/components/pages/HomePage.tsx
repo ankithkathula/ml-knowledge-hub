@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router";
 import { Search, TrendingUp, Star, ChevronRight, Sparkles } from "lucide-react";
-import { Navbar } from "../Navbar";
-import { Footer } from "../Footer";
 import { L1_DATA, getChildren } from "../data/hierarchyData";
+import { BrandMarquee } from "../brand/BrandMarquee";
 
 export function HomePage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -15,16 +14,14 @@ export function HomePage() {
   );
 
   return (
-    <div className="min-h-screen" style={{ background: "linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%)" }}>
-      <Navbar />
-      
+    <div className="min-h-screen" style={{ background: "var(--bg-hero)" }}>
       {/* Hero Section */}
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 opacity-5">
           <div className="absolute top-20 left-10 w-72 h-72 rounded-full bg-orange-500 blur-3xl" />
           <div className="absolute bottom-10 right-20 w-96 h-96 rounded-full bg-orange-400 blur-3xl" />
         </div>
-        
+
         <div className="relative max-w-7xl mx-auto px-6 pt-16 pb-12">
           <div className="text-center max-w-4xl mx-auto">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card mb-6">
@@ -33,13 +30,13 @@ export function HomePage() {
                 India's Comprehensive Construction Material Encyclopedia
               </span>
             </div>
-            
+
             <h1 className="text-5xl md:text-6xl mb-6" style={{ fontWeight: 800, color: "var(--text-primary)", lineHeight: 1.15 }}>
               Material Library
             </h1>
-            
+
             <p className="text-lg md:text-xl mb-8 max-w-3xl mx-auto" style={{ color: "var(--text-secondary)", fontWeight: 400 }}>
-              Navigate from broad categories to specific products across 6 levels of hierarchy. 
+              Navigate from broad categories to specific products across 6 levels of hierarchy.
               11 top-level categories, 53,000+ subcategories, and 2M+ products from verified brands.
             </p>
 
@@ -79,6 +76,8 @@ export function HomePage() {
         </div>
       </div>
 
+      <BrandMarquee />
+
       {/* Filter Tabs */}
       <div className="max-w-7xl mx-auto px-6 pb-6">
         <div className="flex items-center gap-3">
@@ -87,7 +86,7 @@ export function HomePage() {
             className={`px-5 py-2.5 rounded-xl text-sm font-medium transition-all ${
               selectedFilter === "all" ? "glass-card" : "glass-card-subtle"
             }`}
-            style={{ 
+            style={{
               color: selectedFilter === "all" ? "var(--accent)" : "var(--text-secondary)",
               fontWeight: selectedFilter === "all" ? 600 : 500
             }}
@@ -99,7 +98,7 @@ export function HomePage() {
             className={`px-5 py-2.5 rounded-xl text-sm font-medium transition-all flex items-center gap-2 ${
               selectedFilter === "popular" ? "glass-card" : "glass-card-subtle"
             }`}
-            style={{ 
+            style={{
               color: selectedFilter === "popular" ? "var(--accent)" : "var(--text-secondary)",
               fontWeight: selectedFilter === "popular" ? 600 : 500
             }}
@@ -112,7 +111,7 @@ export function HomePage() {
             className={`px-5 py-2.5 rounded-xl text-sm font-medium transition-all flex items-center gap-2 ${
               selectedFilter === "new" ? "glass-card" : "glass-card-subtle"
             }`}
-            style={{ 
+            style={{
               color: selectedFilter === "new" ? "var(--accent)" : "var(--text-secondary)",
               fontWeight: selectedFilter === "new" ? 600 : 500
             }}
@@ -141,7 +140,7 @@ export function HomePage() {
                   alt={category.name}
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
-                
+
                 {/* Gradient Overlay — becomes glass on hover */}
                 <div
                   className="absolute inset-0 transition-all duration-500 group-hover:backdrop-blur-md"
@@ -222,8 +221,6 @@ export function HomePage() {
           </div>
         )}
       </div>
-
-      <Footer />
     </div>
   );
 }

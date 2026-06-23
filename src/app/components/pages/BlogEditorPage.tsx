@@ -6,9 +6,6 @@ import {
   User, Tag, Sparkles, FileText, ChevronDown, AlignLeft,
   AlignCenter, Heading1, Heading2, Quote,
 } from "lucide-react";
-import { Navbar } from "../Navbar";
-import { Footer } from "../Footer";
-
 interface MediaItem {
   id: string;
   type: "image" | "video";
@@ -99,8 +96,6 @@ export function BlogEditorPage() {
 
   return (
     <div className="min-h-screen" style={{ background: "var(--bg-base)" }}>
-      <Navbar />
-
       {/* Header */}
       <div className="relative overflow-hidden" style={{ background: "linear-gradient(135deg, #fff8f5 0%, #f5f7fb 50%, #fdf4ef 100%)", borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
         <div className="absolute top-0 right-0 w-[500px] h-[300px] opacity-20" style={{ background: "radial-gradient(ellipse, rgba(255,106,61,0.25) 0%, transparent 70%)" }} />
@@ -568,8 +563,6 @@ export function BlogEditorPage() {
           </div>
         )}
       </div>
-
-      <Footer />
 
       <style>{`
         .editor-btn {

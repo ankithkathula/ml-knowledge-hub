@@ -4,8 +4,6 @@ import {
   ArrowLeft, ArrowRight, Star, MapPin, CheckCircle, Mail, Phone, Globe,
   Instagram, Linkedin, Award, Users, Calendar, Layers,
 } from "lucide-react";
-import { Navbar } from "../Navbar";
-import { Footer } from "../Footer";
 import {
   RegisteredProfile,
   PROFESSIONAL_TYPES,
@@ -39,36 +37,28 @@ const TEAM_ROLES = [
   "Interior Designer", "Junior Architect", "BIM Coordinator", "Office Manager",
 ];
 
+// Portrait indices verified visually for South Asian appearance
 const TEAM_MEMBERS_POOL = [
-  { name: "Ananya Rao", gender: "women" as const },
-  { name: "Rohan Mehta", gender: "men" as const },
-  { name: "Priya Iyer", gender: "women" as const },
-  { name: "Kabir Shah", gender: "men" as const },
-  { name: "Ishaan Kapoor", gender: "men" as const },
-  { name: "Nisha Verma", gender: "women" as const },
-  { name: "Aarav Singh", gender: "men" as const },
-  { name: "Meera Joshi", gender: "women" as const },
+  { name: "Ananya Rao",    gender: "women" as const, portraitIdx: 4  },
+  { name: "Rohan Mehta",   gender: "men"   as const, portraitIdx: 1  },
+  { name: "Priya Iyer",    gender: "women" as const, portraitIdx: 19 },
+  { name: "Kabir Shah",    gender: "men"   as const, portraitIdx: 58 },
+  { name: "Ishaan Kapoor", gender: "men"   as const, portraitIdx: 31 },
+  { name: "Nisha Verma",   gender: "women" as const, portraitIdx: 30 },
+  { name: "Aarav Singh",   gender: "men"   as const, portraitIdx: 34 },
+  { name: "Meera Joshi",   gender: "women" as const, portraitIdx: 56 },
 ];
-
-// Simple stable hash so each studio gets its own portrait indices
-function hashStr(s: string): number {
-  let h = 0;
-  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
-  return Math.abs(h);
-}
 
 function buildTeam(profile: RegisteredProfile) {
   const count = Math.min(6, profile.teamSize);
-  const base = hashStr(profile.id);
   return Array.from({ length: count }).map((_, i) => {
     const person = TEAM_MEMBERS_POOL[i % TEAM_MEMBERS_POOL.length];
-    // randomuser.me has portraits 0–99 per gender — pick deterministically per studio
-    const portraitIdx = (base + i * 17) % 100;
     return {
       id: `${profile.id}-team-${i}`,
       name: person.name,
+      slug: person.name.toLowerCase().replace(/\s+/g, "-"),
       role: TEAM_ROLES[(i + profile.name.length) % TEAM_ROLES.length],
-      avatar: `https://randomuser.me/api/portraits/${person.gender}/${portraitIdx}.jpg`,
+      avatar: `https://randomuser.me/api/portraits/${person.gender}/${person.portraitIdx}.jpg`,
     };
   });
 }
@@ -82,6 +72,7 @@ export function ProfessionalMicrosite({ profile }: Props) {
   const team = useMemo(() => buildTeam(profile), [profile]);
   const offerings = type?.offerings || [];
 
+
   const alsoOfNote = useMemo(
     () =>
       REGISTERED_PROFESSIONALS.filter(
@@ -92,8 +83,6 @@ export function ProfessionalMicrosite({ profile }: Props) {
 
   return (
     <div className="min-h-screen" style={{ background: "var(--bg-base)" }}>
-      <Navbar />
-
       {/* ── Back nav ── */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-6">
         <Link
@@ -492,14 +481,21 @@ export function ProfessionalMicrosite({ profile }: Props) {
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
             {team.map((member) => (
-              <div key={member.id} className="text-center">
+              <Link
+                key={member.id}
+                to={`/designer/${member.slug}`}
+                className="text-center group"
+                style={{ textDecoration: "none" }}
+              >
                 <div
-                  className="w-full rounded-xl overflow-hidden mb-4"
+                  className="w-full rounded-xl overflow-hidden mb-4 transition-all"
                   style={{
                     aspectRatio: "1/1",
                     background: "rgba(0,0,0,0.03)",
                     border: "1px solid rgba(0,0,0,0.04)",
                   }}
+                  onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.boxShadow = "0 4px 16px rgba(0,0,0,0.1)")}
+                  onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.boxShadow = "none")}
                 >
                   <img
                     src={member.avatar}
@@ -507,13 +503,18 @@ export function ProfessionalMicrosite({ profile }: Props) {
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <p style={{ fontSize: "0.86rem", fontWeight: 600, color: "var(--text-primary)", letterSpacing: "-0.005em" }}>
+                <p
+                  className="transition-colors"
+                  style={{ fontSize: "0.86rem", fontWeight: 600, color: "var(--text-primary)", letterSpacing: "-0.005em" }}
+                  onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--accent)")}
+                  onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "var(--text-primary)")}
+                >
                   {member.name}
                 </p>
                 <p style={{ fontSize: "0.72rem", color: "var(--text-muted)", marginTop: 2 }}>
                   {member.role}
                 </p>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -722,7 +723,6 @@ export function ProfessionalMicrosite({ profile }: Props) {
         </section>
       )}
 
-      <Footer />
     </div>
   );
 }

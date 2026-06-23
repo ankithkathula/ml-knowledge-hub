@@ -1,7 +1,31 @@
 // ============================================
 // 6-LEVEL HIERARCHY DATA MODEL
-// L1 (11) → L2 (41) → L3 (195) → L4 (6,330) → L5 (53,717) → L6 (2M+ products)
+// L1 → L2 → L3 → L4 → L5 → L6 (products)
+//
+// L1–L5 are sourced from `taxonomyGenerated.ts`, which is built from
+// `taxonomy.csv` (Marketplace Taxonomy V6). The generated module is the
+// single source of truth for the category tree. Regenerate it via:
+//   node scripts/generateTaxonomy.mjs
+//
+// L6 products and BRANDS are still mock data — they reference the L5/L4 ids
+// that exist in the generated taxonomy.
 // ============================================
+
+import {
+  GEN_L1,
+  GEN_L2,
+  GEN_L3,
+  GEN_L4,
+  GEN_L5,
+  type TaxonomyRow4,
+  type TaxonomyRow6,
+} from "./taxonomyGenerated";
+import {
+  getBrandLogo,
+  getBrandCover,
+  getBrandAccent,
+  getProductImage,
+} from "../../utils/brandAssets";
 
 export interface HierarchyNode {
   id: string;
@@ -14,12 +38,18 @@ export interface HierarchyNode {
   childCount?: number;
   brandCount?: number;
   color?: string;
+  /** L5 only: comma-separated domain tags (Arch | Int, etc.) */
+  domains?: string;
+  /** L5 only: onboarding priority (High / Medium / Low). */
+  priority?: string;
 }
 
 export interface BrandInfo {
   id: string;
   name: string;
   tagline: string;
+  /** Square logo URL (Clearbit / UI Avatars). */
+  logo: string;
   coverImage: string;
   rating: number;
   productCount: number;
@@ -28,7 +58,7 @@ export interface BrandInfo {
   accentColor: string;
   tier: "Premium" | "Standard" | "Emerging";
   isFeatured: boolean;
-  // Which hierarchy nodes this brand appears on
+  /** Hierarchy node ids (any level) where this brand should surface. */
   layerIds: string[];
 }
 
@@ -43,379 +73,294 @@ export interface ProductItem {
   image: string;
   specs: Record<string, string>;
   inStock: boolean;
+  /** Parent L5 id from the generated taxonomy. */
   l5Id: string;
 }
 
 // ============================================
-// L1 CATEGORIES (11 items) — Home Page Cards
+// L1–L5: derived from taxonomyGenerated
 // ============================================
-export const L1_DATA: HierarchyNode[] = [
-  {
-    id: "building-envelope",
-    name: "Building Envelope",
-    description: "Doors, windows, curtain walls, cladding, roofing, and facade systems for weather-tight building enclosures",
-    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
+//
+// Decorative metadata (icons, colours, hero images) is layered on top of the
+// generated rows for L1 only — every other level inherits sensible defaults so
+// pages don't need to special-case missing values.
+
+const L1_META: Record<string, { icon: string; color: string; image: string; description: string }> = {
+  "building-envelope": {
     icon: "🏢",
-    parentId: null,
-    level: 1,
-    childCount: 5,
-    brandCount: 680,
     color: "#2a9d8f",
+    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
+    description: "Doors, windows, curtain walls, cladding, roofing, and facade systems for weather-tight building enclosures",
   },
-  {
-    id: "structural-systems",
-    name: "Structural Systems",
-    description: "Concrete, cement, steel, reinforcement, and structural framing for load-bearing construction",
-    image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
-    icon: "🏗️",
-    parentId: null,
-    level: 1,
-    childCount: 4,
-    brandCount: 520,
-    color: "#6c757d",
-  },
-  {
-    id: "mep-systems",
-    name: "MEP Systems",
-    description: "Mechanical, electrical, plumbing, HVAC, fire safety, and smart building automation systems",
-    image: "https://images.unsplash.com/photo-1621905251918-48416bd8575a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
-    icon: "⚡",
-    parentId: null,
-    level: 1,
-    childCount: 5,
-    brandCount: 920,
-    color: "#ff6a3d",
-  },
-  {
-    id: "interior-finishes",
-    name: "Interior Finishes",
-    description: "Flooring, tiles, paints, coatings, wall finishes, and decorative surfaces for interior spaces",
-    image: "https://images.unsplash.com/photo-1615873968403-89e068629265?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
-    icon: "🎨",
-    parentId: null,
-    level: 1,
-    childCount: 4,
-    brandCount: 750,
-    color: "#e63946",
-  },
-  {
-    id: "wet-areas",
-    name: "Wet Areas & Plumbing",
-    description: "Bathroom fittings, sanitaryware, kitchen systems, water supply, and drainage solutions",
-    image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
-    icon: "🚿",
-    parentId: null,
-    level: 1,
-    childCount: 3,
-    brandCount: 560,
-    color: "#457b9d",
-  },
-  {
-    id: "insulation-protection",
-    name: "Insulation & Protection",
-    description: "Thermal insulation, waterproofing, acoustic treatment, and fire protection systems",
+  "building-materials": {
+    icon: "🧱",
+    color: "#8d6e63",
     image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
-    icon: "🛡️",
-    parentId: null,
-    level: 1,
-    childCount: 3,
-    brandCount: 310,
-    color: "#ffb703",
+    description: "Bulk construction materials — metals, wood, glass, stone, plastics and composite systems",
   },
-  {
-    id: "furniture-fittings",
-    name: "Furniture & Fittings",
-    description: "Furniture, joinery, hardware, architectural ironmongery, and modular storage systems",
-    image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
-    icon: "🛋️",
-    parentId: null,
-    level: 1,
-    childCount: 3,
-    brandCount: 650,
-    color: "#795548",
-  },
-  {
-    id: "ceiling-partition",
-    name: "Ceiling & Partition",
-    description: "False ceilings, drywall partitions, acoustic panels, and grid suspension systems",
-    image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
-    icon: "📐",
-    parentId: null,
-    level: 1,
-    childCount: 3,
-    brandCount: 280,
-    color: "#90e0ef",
-  },
-  {
-    id: "outdoor-landscape",
-    name: "Outdoor & Landscape",
-    description: "Landscaping materials, outdoor furniture, paving, swimming pools, and garden systems",
-    image: "https://images.unsplash.com/photo-1558904541-efa843a96f01?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
-    icon: "🌳",
-    parentId: null,
-    level: 1,
-    childCount: 4,
-    brandCount: 220,
+  "energy-and-sustainability": {
+    icon: "🌱",
     color: "#38b000",
-  },
-  {
-    id: "safety-security",
-    name: "Safety & Security",
-    description: "Fire safety, access control, CCTV, alarm systems, and safety equipment",
-    image: "https://images.unsplash.com/photo-1558002038-bb4237bb0e30?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
-    icon: "🔒",
-    parentId: null,
-    level: 1,
-    childCount: 4,
-    brandCount: 340,
-    color: "#d62828",
-  },
-  {
-    id: "specialty-materials",
-    name: "Specialty Materials",
-    description: "Green building materials, sustainable products, specialty chemicals, and construction innovations",
     image: "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
-    icon: "🔬",
-    parentId: null,
-    level: 1,
-    childCount: 3,
-    brandCount: 190,
-    color: "#023e8a",
+    description: "Solar, storage, EV charging, water recycling and carbon-reduction solutions for sustainable building",
   },
-];
+  "furniture-and-interiors": {
+    icon: "🛋️",
+    color: "#795548",
+    image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
+    description: "Furniture, lighting, soft furnishings, décor, linen and full interior fit-out products",
+  },
+  "hardware-tools-and-services": {
+    icon: "🛠️",
+    color: "#ffb703",
+    image: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
+    description: "Tools, accessories, decorative hardware, staircases, railings and on-site services",
+  },
+  "interior-surfaces-and-finishes": {
+    icon: "🎨",
+    color: "#e63946",
+    image: "https://images.unsplash.com/photo-1615873968403-89e068629265?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
+    description: "Flooring, tiles, paints, plasters, wallpapers and decorative surface finishes",
+  },
+  "kitchen-and-bathroom": {
+    icon: "🚿",
+    color: "#457b9d",
+    image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
+    description: "Bathroom fittings, sanitaryware, kitchen systems, modular kitchens and commercial kitchen equipment",
+  },
+  "mep-systems": {
+    icon: "⚡",
+    color: "#ff6a3d",
+    image: "https://images.unsplash.com/photo-1621905251918-48416bd8575a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
+    description: "Mechanical, electrical, plumbing, HVAC, smart-home and structured cabling systems",
+  },
+  "outdoor-and-landscape": {
+    icon: "🌳",
+    color: "#56c596",
+    image: "https://images.unsplash.com/photo-1558904541-efa843a96f01?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
+    description: "Landscape, hardscape, paving, decking, pool, sports surface and traffic-management systems",
+  },
+  "safety-and-compliance": {
+    icon: "🔒",
+    color: "#d62828",
+    image: "https://images.unsplash.com/photo-1558002038-bb4237bb0e30?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
+    description: "Fire protection, access control, CCTV, accessibility and PPE / safety compliance products",
+  },
+  "structure-and-civil-works": {
+    icon: "🏗️",
+    color: "#6c757d",
+    image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
+    description: "Concrete, cement, steel, masonry, precast and structural / civil construction systems",
+  },
+};
+
+function fromRow4(row: TaxonomyRow4, level: 1 | 2 | 3 | 4): HierarchyNode {
+  const [id, name, parentId, childCount] = row;
+  if (level === 1) {
+    const meta = L1_META[id];
+    return {
+      id,
+      name,
+      parentId,
+      level,
+      childCount,
+      description: meta?.description ?? name,
+      image: meta?.image,
+      icon: meta?.icon,
+      color: meta?.color,
+    };
+  }
+  return {
+    id,
+    name,
+    parentId,
+    level,
+    childCount,
+    description: name,
+  };
+}
+
+function fromRow6(row: TaxonomyRow6): HierarchyNode {
+  const [id, name, parentId, childCount, domains, priority] = row;
+  return {
+    id,
+    name,
+    parentId,
+    level: 5,
+    childCount,
+    description: name,
+    domains: domains || undefined,
+    priority: priority || undefined,
+  };
+}
+
+export const L1_DATA: HierarchyNode[] = GEN_L1.map((r) => fromRow4(r, 1));
+export const L2_DATA: HierarchyNode[] = GEN_L2.map((r) => fromRow4(r, 2));
+export const L3_DATA: HierarchyNode[] = GEN_L3.map((r) => fromRow4(r, 3));
+export const L4_DATA: HierarchyNode[] = GEN_L4.map((r) => fromRow4(r, 4));
+export const L5_DATA: HierarchyNode[] = GEN_L5.map(fromRow6);
 
 // ============================================
-// L2 DATA (subset shown — children of L1)
+// L6 — PRODUCTS (mock — references real L5 ids from the generated taxonomy)
 // ============================================
-export const L2_DATA: HierarchyNode[] = [
-  // --- Building Envelope children ---
-  { id: "doors-windows", name: "Doors & Windows", description: "Internal/external doors, uPVC windows, aluminum systems, fire doors", parentId: "building-envelope", level: 2, childCount: 8, brandCount: 260, icon: "🚪" },
-  { id: "cladding-facade", name: "Cladding & Facades", description: "Metal cladding, stone cladding, terracotta, and composite facade systems", parentId: "building-envelope", level: 2, childCount: 6, brandCount: 180, icon: "🧱" },
-  { id: "roofing-systems", name: "Roofing Systems", description: "Roofing sheets, tiles, skylights, green roofing, and waterproof membranes", parentId: "building-envelope", level: 2, childCount: 5, brandCount: 150, icon: "🏠" },
-  { id: "glass-glazing", name: "Glass & Glazing", description: "Architectural glass, laminated glass, IGUs, curtain walls", parentId: "building-envelope", level: 2, childCount: 7, brandCount: 165, icon: "🪟" },
-  { id: "sealants-gaskets", name: "Sealants & Gaskets", description: "Weather seals, structural sealants, expansion joints", parentId: "building-envelope", level: 2, childCount: 4, brandCount: 90, icon: "🔧" },
-
-  // --- Structural Systems children ---
-  { id: "concrete-cement", name: "Concrete & Cement", description: "Ready-mix concrete, precast elements, cement, admixtures", parentId: "structural-systems", level: 2, childCount: 8, brandCount: 280, icon: "🧱" },
-  { id: "steel-metals", name: "Steel & Metals", description: "Structural steel, reinforcement bars, metal decking", parentId: "structural-systems", level: 2, childCount: 6, brandCount: 245, icon: "🔩" },
-  { id: "masonry-blocks", name: "Masonry & Blocks", description: "Clay bricks, AAC blocks, concrete blocks, mortar", parentId: "structural-systems", level: 2, childCount: 5, brandCount: 195, icon: "🧱" },
-  { id: "wood-timber", name: "Wood & Timber", description: "Hardwood lumber, engineered wood, plywood, MDF", parentId: "structural-systems", level: 2, childCount: 8, brandCount: 220, icon: "🌲" },
-
-  // --- MEP Systems children ---
-  { id: "electrical-systems", name: "Electrical Systems", description: "Wiring, switchgear, panels, transformers, and power distribution", parentId: "mep-systems", level: 2, childCount: 7, brandCount: 350, icon: "⚡" },
-  { id: "plumbing-water", name: "Plumbing & Water", description: "Pipes, fittings, valves, pumps, and water treatment", parentId: "mep-systems", level: 2, childCount: 6, brandCount: 275, icon: "🔧" },
-  { id: "hvac-ventilation", name: "HVAC & Ventilation", description: "Air conditioning, heating, ventilation, and climate control", parentId: "mep-systems", level: 2, childCount: 5, brandCount: 180, icon: "❄️" },
-  { id: "fire-safety", name: "Fire Safety Systems", description: "Fire alarms, sprinklers, suppression, and fire doors", parentId: "mep-systems", level: 2, childCount: 4, brandCount: 120, icon: "🔥" },
-  { id: "smart-home-automation", name: "Smart Home & Automation", description: "Home automation, building management, IoT sensors, and smart controls", parentId: "mep-systems", level: 2, childCount: 6, brandCount: 210, icon: "🏠" },
-
-  // --- Interior Finishes children ---
-  { id: "flooring-tiles", name: "Flooring & Tiles", description: "Porcelain, ceramic, hardwood, vinyl, carpet tiles", parentId: "interior-finishes", level: 2, childCount: 12, brandCount: 380, icon: "🏗️" },
-  { id: "paints-coatings", name: "Paints & Coatings", description: "Interior/exterior paints, primers, protective coatings", parentId: "interior-finishes", level: 2, childCount: 8, brandCount: 320, icon: "🎨" },
-  { id: "wall-finishes", name: "Wall Finishes", description: "Wallpapers, textured finishes, decorative panels", parentId: "interior-finishes", level: 2, childCount: 5, brandCount: 140, icon: "🖼️" },
-  { id: "decorative-surfaces", name: "Decorative Surfaces", description: "Laminates, veneers, solid surfaces, countertops", parentId: "interior-finishes", level: 2, childCount: 6, brandCount: 180, icon: "✨" },
-
-  // --- Wet Areas children ---
-  { id: "bathroom-sanitaryware", name: "Bathroom & Sanitaryware", description: "WCs, showers, taps, mixers, bathroom fittings", parentId: "wet-areas", level: 2, childCount: 10, brandCount: 290, icon: "🚿" },
-  { id: "kitchen-systems", name: "Kitchen Systems", description: "Modular kitchens, sinks, chimneys, cooking appliances", parentId: "wet-areas", level: 2, childCount: 8, brandCount: 195, icon: "🍳" },
-  { id: "drainage-waste", name: "Drainage & Waste", description: "Floor drains, waste pipes, manholes, sewage systems", parentId: "wet-areas", level: 2, childCount: 4, brandCount: 85, icon: "🔧" },
-
-  // Other L1 children (abbreviated)
-  { id: "thermal-insulation", name: "Thermal Insulation", description: "EPS, XPS, mineral wool, spray foam insulation", parentId: "insulation-protection", level: 2, childCount: 5, brandCount: 125, icon: "🧵" },
-  { id: "waterproofing", name: "Waterproofing", description: "Membranes, coatings, sealants, injection systems", parentId: "insulation-protection", level: 2, childCount: 6, brandCount: 145, icon: "💧" },
-  { id: "acoustic-treatment", name: "Acoustic Treatment", description: "Sound absorption, acoustic barriers, vibration isolation", parentId: "insulation-protection", level: 2, childCount: 4, brandCount: 80, icon: "🔇" },
-
-  { id: "furniture-joinery", name: "Furniture & Joinery", description: "Seating, tables, wardrobes, custom joinery", parentId: "furniture-fittings", level: 2, childCount: 12, brandCount: 310, icon: "🛋️" },
-  { id: "hardware-ironmongery", name: "Hardware & Ironmongery", description: "Handles, locks, hinges, fasteners", parentId: "furniture-fittings", level: 2, childCount: 14, brandCount: 340, icon: "🔩" },
-  { id: "modular-storage", name: "Modular Storage", description: "Shelving, racking, locker systems", parentId: "furniture-fittings", level: 2, childCount: 4, brandCount: 90, icon: "📦" },
-
-  { id: "false-ceilings", name: "False Ceilings", description: "Gypsum boards, metal ceilings, acoustic tiles", parentId: "ceiling-partition", level: 2, childCount: 7, brandCount: 155, icon: "📐" },
-  { id: "drywall-partitions", name: "Drywall & Partitions", description: "Gypsum partitions, glass partitions, demountable walls", parentId: "ceiling-partition", level: 2, childCount: 5, brandCount: 95, icon: "🧱" },
-  { id: "grid-suspension", name: "Grid & Suspension", description: "T-grid systems, concealed grids, suspension hardware", parentId: "ceiling-partition", level: 2, childCount: 3, brandCount: 45, icon: "📏" },
-
-  { id: "landscaping-materials", name: "Landscaping Materials", description: "Paving, decking, retaining walls, soil systems", parentId: "outdoor-landscape", level: 2, childCount: 6, brandCount: 85, icon: "🌿" },
-  { id: "outdoor-furniture", name: "Outdoor Furniture", description: "Garden furniture, poolside, outdoor dining", parentId: "outdoor-landscape", level: 2, childCount: 5, brandCount: 65, icon: "🪑" },
-  { id: "swimming-pools", name: "Swimming Pools", description: "Pool construction, filtration, heating, covers", parentId: "outdoor-landscape", level: 2, childCount: 4, brandCount: 40, icon: "🏊" },
-  { id: "irrigation-systems", name: "Irrigation Systems", description: "Drip irrigation, sprinklers, smart watering", parentId: "outdoor-landscape", level: 2, childCount: 3, brandCount: 30, icon: "💦" },
-
-  { id: "access-control", name: "Access Control", description: "Biometric, card readers, turnstiles, barriers", parentId: "safety-security", level: 2, childCount: 5, brandCount: 110, icon: "🔑" },
-  { id: "surveillance-cctv", name: "Surveillance & CCTV", description: "IP cameras, NVR, video analytics", parentId: "safety-security", level: 2, childCount: 4, brandCount: 95, icon: "📹" },
-  { id: "alarm-detection", name: "Alarm & Detection", description: "Intrusion alarms, smoke detectors, gas sensors", parentId: "safety-security", level: 2, childCount: 4, brandCount: 80, icon: "🚨" },
-  { id: "safety-equipment", name: "Safety Equipment", description: "PPE, safety barriers, signage, first aid", parentId: "safety-security", level: 2, childCount: 3, brandCount: 55, icon: "🦺" },
-
-  { id: "green-materials", name: "Green Building Materials", description: "Sustainable, recycled, and eco-certified materials", parentId: "specialty-materials", level: 2, childCount: 5, brandCount: 75, icon: "🌱" },
-  { id: "construction-chemicals", name: "Construction Chemicals", description: "Admixtures, repair compounds, grouts, adhesives", parentId: "specialty-materials", level: 2, childCount: 6, brandCount: 85, icon: "🧪" },
-  { id: "prefab-modular", name: "Prefab & Modular", description: "Prefabricated buildings, modular pods, portable structures", parentId: "specialty-materials", level: 2, childCount: 4, brandCount: 45, icon: "🏭" },
-];
-
-// ============================================
-// L3 DATA — children of L2 (showing key chains)
-// ============================================
-export const L3_DATA: HierarchyNode[] = [
-  // --- Doors & Windows → L3 ---
-  { id: "curtain-wall-facade", name: "Curtain Wall & Facade Systems", description: "Unitized and stick curtain walls, structural glazing, double-skin facades, and rainscreen cladding systems", parentId: "doors-windows", level: 3, childCount: 8, brandCount: 45, icon: "🏢", image: "https://images.unsplash.com/photo-1774099690798-c4fe300374b2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800" },
-  { id: "aluminium-windows", name: "Aluminium Windows", description: "Casement, sliding, tilt-turn, and fixed aluminium window systems", parentId: "doors-windows", level: 3, childCount: 6, brandCount: 78, icon: "🪟" },
-  { id: "upvc-windows", name: "uPVC Windows & Doors", description: "Energy-efficient uPVC casement, sliding, and French door systems", parentId: "doors-windows", level: 3, childCount: 5, brandCount: 55, icon: "🚪" },
-  { id: "wooden-doors", name: "Wooden Doors", description: "Solid wood, engineered wood, flush doors, and panel doors", parentId: "doors-windows", level: 3, childCount: 7, brandCount: 92, icon: "🚪" },
-  { id: "fire-doors", name: "Fire Doors", description: "Fire-rated steel, timber, and glass doors with certified ratings", parentId: "doors-windows", level: 3, childCount: 4, brandCount: 35, icon: "🔥" },
-  { id: "automatic-doors", name: "Automatic Doors", description: "Sliding, swing, revolving, and folding automatic door systems", parentId: "doors-windows", level: 3, childCount: 5, brandCount: 28, icon: "🔄" },
-  { id: "garage-industrial-doors", name: "Garage & Industrial Doors", description: "Roller shutters, sectional doors, high-speed doors", parentId: "doors-windows", level: 3, childCount: 4, brandCount: 32, icon: "🏭" },
-  { id: "skylight-roof-windows", name: "Skylight & Roof Windows", description: "Fixed and operable skylights, roof windows, smoke vents", parentId: "doors-windows", level: 3, childCount: 3, brandCount: 22, icon: "☀️" },
-
-  // --- Smart Home & Automation → L3 ---
-  { id: "smart-home-building-auto", name: "Smart Home & Building Automation", description: "Complete home automation platforms, BMS, and IoT integration for residential and commercial buildings", parentId: "smart-home-automation", level: 3, childCount: 7, brandCount: 65, icon: "🏠", image: "https://images.unsplash.com/photo-1759647020638-72224b9003b1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800" },
-  { id: "smart-security", name: "Smart Security", description: "Smart locks, video doorbells, motion sensors, and integrated security", parentId: "smart-home-automation", level: 3, childCount: 5, brandCount: 48, icon: "🔒" },
-  { id: "smart-energy", name: "Smart Energy Management", description: "Smart meters, energy monitors, solar inverters, and EV charging", parentId: "smart-home-automation", level: 3, childCount: 4, brandCount: 35, icon: "🔋" },
-  { id: "voice-assistants", name: "Voice Assistants & Hubs", description: "Smart speakers, voice controllers, and central hub systems", parentId: "smart-home-automation", level: 3, childCount: 3, brandCount: 18, icon: "🗣️" },
-  { id: "smart-sensors", name: "Smart Sensors", description: "Occupancy, temperature, humidity, air quality, and leak sensors", parentId: "smart-home-automation", level: 3, childCount: 5, brandCount: 40, icon: "📡" },
-  { id: "smart-shading", name: "Smart Shading & Blinds", description: "Motorized curtains, smart blinds, automated shading systems", parentId: "smart-home-automation", level: 3, childCount: 3, brandCount: 22, icon: "🪟" },
-
-  // A few more L3s for other L2 nodes (abbreviated)
-  { id: "rmc", name: "Ready-Mix Concrete", description: "Factory-batched concrete in standard and specialty grades", parentId: "concrete-cement", level: 3, childCount: 5, brandCount: 85, icon: "🏗️" },
-  { id: "precast-concrete", name: "Precast Concrete", description: "Factory-manufactured structural and architectural concrete elements", parentId: "concrete-cement", level: 3, childCount: 4, brandCount: 42, icon: "🧱" },
-  { id: "cement-types", name: "Cement Types", description: "OPC, PPC, PSC, white cement, and specialty cements", parentId: "concrete-cement", level: 3, childCount: 6, brandCount: 65, icon: "🏗️" },
-];
-
-// ============================================
-// L4 DATA — children of L3 (showing key chains)
-// ============================================
-export const L4_DATA: HierarchyNode[] = [
-  // --- Curtain Wall & Facade Systems → L4 ---
-  { id: "composite-rainscreen", name: "Composite Rainscreen Panels", description: "Aluminium composite, HPL, fibre cement, and terracotta rainscreen cladding panels with ventilated cavity systems", parentId: "curtain-wall-facade", level: 4, childCount: 6, brandCount: 18, icon: "🧱", image: "https://images.unsplash.com/photo-1618985821760-a9544b92cc14?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800" },
-  { id: "unitized-curtain-wall", name: "Unitized Curtain Wall", description: "Factory-assembled curtain wall modules for high-rise buildings", parentId: "curtain-wall-facade", level: 4, childCount: 4, brandCount: 15, icon: "🏢" },
-  { id: "stick-curtain-wall", name: "Stick Curtain Wall", description: "Site-assembled mullion and transom curtain wall systems", parentId: "curtain-wall-facade", level: 4, childCount: 3, brandCount: 12, icon: "🏢" },
-  { id: "structural-glazing", name: "Structural Glazing", description: "Frameless and semi-frameless structural glass systems", parentId: "curtain-wall-facade", level: 4, childCount: 4, brandCount: 14, icon: "🪟" },
-  { id: "double-skin-facade", name: "Double-Skin Facade", description: "Ventilated double-layer facade systems for energy efficiency", parentId: "curtain-wall-facade", level: 4, childCount: 3, brandCount: 8, icon: "🏢" },
-  { id: "point-fixed-glazing", name: "Point-Fixed Glazing", description: "Spider fitting and bolt-fixed structural glass systems", parentId: "curtain-wall-facade", level: 4, childCount: 3, brandCount: 10, icon: "🔩" },
-  { id: "metal-cladding-panels", name: "Metal Cladding Panels", description: "Zinc, copper, stainless steel, and aluminium panel cladding", parentId: "curtain-wall-facade", level: 4, childCount: 4, brandCount: 16, icon: "🔧" },
-  { id: "terracotta-facades", name: "Terracotta Facades", description: "Extruded terracotta and ceramic facade panel systems", parentId: "curtain-wall-facade", level: 4, childCount: 2, brandCount: 6, icon: "🧱" },
-
-  // --- Smart Home & Building Automation → L4 ---
-  { id: "smart-lighting-switches", name: "Smart Lighting (Switches)", description: "WiFi, Zigbee, Z-Wave, and Bluetooth smart light switches and dimmers for automated lighting control", parentId: "smart-home-building-auto", level: 4, childCount: 5, brandCount: 32, icon: "💡", image: "https://images.unsplash.com/photo-1570781921561-39a8a5d57313?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800" },
-  { id: "smart-thermostats", name: "Smart Thermostats", description: "Connected thermostats for HVAC control and energy management", parentId: "smart-home-building-auto", level: 4, childCount: 3, brandCount: 18, icon: "🌡️" },
-  { id: "smart-plugs-outlets", name: "Smart Plugs & Outlets", description: "WiFi and Zigbee smart plugs, in-wall outlets, and power strips", parentId: "smart-home-building-auto", level: 4, childCount: 3, brandCount: 25, icon: "🔌" },
-  { id: "home-automation-hubs", name: "Home Automation Hubs", description: "Central controllers, gateways, and protocol bridges", parentId: "smart-home-building-auto", level: 4, childCount: 3, brandCount: 15, icon: "🏠" },
-  { id: "smart-ir-blasters", name: "Smart IR Blasters", description: "Infrared controllers for AC, TV, and legacy appliance automation", parentId: "smart-home-building-auto", level: 4, childCount: 2, brandCount: 12, icon: "📡" },
-  { id: "bms-controllers", name: "BMS Controllers", description: "Building management system controllers and software platforms", parentId: "smart-home-building-auto", level: 4, childCount: 4, brandCount: 20, icon: "🖥️" },
-  { id: "scene-controllers", name: "Scene Controllers", description: "Multi-button scene panels for preset lighting and ambiance control", parentId: "smart-home-building-auto", level: 4, childCount: 2, brandCount: 14, icon: "🎛️" },
-];
-
-// ============================================
-// L5 DATA — children of L4 (showing key chains)
-// ============================================
-export const L5_DATA: HierarchyNode[] = [
-  // --- Composite Rainscreen Panels → L5 ---
-  { id: "composite-rainscreen-dg-igu", name: "Composite Rainscreen Panels — Double-Glazed (IGU)", description: "Insulated glass unit integrated composite rainscreen panels for superior thermal performance and aesthetics", parentId: "composite-rainscreen", level: 5, childCount: 0, brandCount: 6, icon: "🪟" },
-  { id: "composite-rainscreen-acp", name: "Composite Rainscreen — ACP (Aluminium Composite)", description: "Aluminium composite panel rainscreen cladding for commercial and residential facades", parentId: "composite-rainscreen", level: 5, childCount: 0, brandCount: 12, icon: "🧱" },
-  { id: "composite-rainscreen-hpl", name: "Composite Rainscreen — HPL (High Pressure Laminate)", description: "Compact HPL panels for weather-resistant ventilated facade systems", parentId: "composite-rainscreen", level: 5, childCount: 0, brandCount: 8, icon: "🧱" },
-  { id: "composite-rainscreen-fibre-cement", name: "Composite Rainscreen — Fibre Cement", description: "Fibre cement boards for durable, fire-resistant rainscreen cladding", parentId: "composite-rainscreen", level: 5, childCount: 0, brandCount: 7, icon: "🧱" },
-  { id: "composite-rainscreen-ceramic", name: "Composite Rainscreen — Ceramic", description: "Ceramic-faced composite panels for premium architectural facades", parentId: "composite-rainscreen", level: 5, childCount: 0, brandCount: 4, icon: "🧱" },
-  { id: "composite-rainscreen-natural-stone", name: "Composite Rainscreen — Natural Stone", description: "Stone-faced composite panels combining natural aesthetics with lightweight structure", parentId: "composite-rainscreen", level: 5, childCount: 0, brandCount: 5, icon: "🪨" },
-
-  // --- Smart Lighting (Switches) → L5 ---
-  { id: "smart-lighting-zwave", name: "Smart Lighting — Z-Wave Protocol", description: "Z-Wave based smart switches and dimmers offering mesh networking, low interference, and reliable whole-home lighting control", parentId: "smart-lighting-switches", level: 5, childCount: 0, brandCount: 8, icon: "📡" },
-  { id: "smart-lighting-zigbee", name: "Smart Lighting — Zigbee Protocol", description: "Zigbee-based smart switches for mesh-networked lighting automation", parentId: "smart-lighting-switches", level: 5, childCount: 0, brandCount: 14, icon: "📡" },
-  { id: "smart-lighting-wifi", name: "Smart Lighting — WiFi", description: "WiFi-connected smart switches requiring no hub for simple installation", parentId: "smart-lighting-switches", level: 5, childCount: 0, brandCount: 22, icon: "📶" },
-  { id: "smart-lighting-bluetooth", name: "Smart Lighting — Bluetooth Mesh", description: "Bluetooth mesh smart switches for localized room-level control", parentId: "smart-lighting-switches", level: 5, childCount: 0, brandCount: 10, icon: "📡" },
-  { id: "smart-lighting-dali", name: "Smart Lighting — DALI Protocol", description: "DALI-2 and DALI+ certified smart controllers for commercial lighting", parentId: "smart-lighting-switches", level: 5, childCount: 0, brandCount: 6, icon: "🏢" },
-];
-
-// ============================================
-// L6 — PRODUCTS (mock for the two entries)
-// ============================================
+//
+// Description and specs are intentionally rich because they drive what users
+// see on /products/:l5Id pages. Images are picked from the centralized
+// brandAssets registry so they stay aligned with the product family.
 export const L6_PRODUCTS: ProductItem[] = [
-  // Products for: Composite Rainscreen Panels — Double-Glazed (IGU)
+  // -------- Composite Rainscreen Panels — Double-Glazed (IGU) --------
   {
     id: "ml-composite-rainscreen-dg-igu-001",
-    name: "ML Brand Composite Rainscreen Panels — Double-Glazed (IGU)",
+    name: "ML Sky-Wall™ IGU Rainscreen Cassette",
     brand: "ML Brand",
     brandId: "ml-brand",
     price: "₹4,850/sq.ft",
     rating: 4.6,
     reviews: 128,
-    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
-    specs: { "Glass Type": "Double-Glazed IGU", "Panel Thickness": "45mm", "U-Value": "1.1 W/m²K", "Fire Rating": "Class A2-s1,d0", "Wind Load": "3.5 kPa" },
+    image: getProductImage("composite-rainscreen-panels-double-glazed-igu"),
+    specs: {
+      "Glass Make-up": "8mm Tempered + 16Ar + 8mm Low-E (IGU)",
+      "Panel Thickness": "45 mm cassette + 50 mm ventilated cavity",
+      "U-Value": "1.10 W/m²K",
+      "SHGC": "0.28",
+      "Fire Rating": "EN 13501-1 Class A2-s1, d0",
+      "Wind Load": "3.5 kPa (tested to EN 13116)",
+      "Module Size": "Up to 1,800 × 3,300 mm",
+      "Warranty": "10 years system / 25 years coating",
+    },
     inStock: true,
-    l5Id: "composite-rainscreen-dg-igu",
+    l5Id: "composite-rainscreen-panels-double-glazed-igu",
   },
   {
     id: "alucobond-dg-igu-002",
-    name: "Alucobond A2 IGU Rainscreen Panel",
+    name: "Alucobond® A2 IGU Rainscreen Panel",
     brand: "Alucobond (3A Composites)",
     brandId: "alucobond",
     price: "₹5,200/sq.ft",
     rating: 4.8,
     reviews: 245,
-    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
-    specs: { "Glass Type": "Double-Glazed IGU", "Panel Thickness": "50mm", "U-Value": "0.9 W/m²K", "Fire Rating": "A2-s1,d0", "Wind Load": "4.0 kPa" },
+    image: getProductImage("composite-rainscreen-panels-double-glazed-igu"),
+    specs: {
+      "Core": "Mineral-filled non-combustible core (A2-grade)",
+      "Glass Make-up": "Double-Glazed IGU, argon-filled",
+      "Panel Thickness": "4 mm ACP + 50 mm cassette depth",
+      "U-Value": "0.90 W/m²K",
+      "Fire Rating": "EN 13501-1 A2-s1, d0",
+      "Wind Load": "4.0 kPa",
+      "PVDF Coating": "Lumiflon® 70% PVDF, BS EN 12206 Class 2",
+      "Standards": "EN 13501-1, ASTM E84, IS 14276",
+    },
     inStock: true,
-    l5Id: "composite-rainscreen-dg-igu",
+    l5Id: "composite-rainscreen-panels-double-glazed-igu",
   },
   {
     id: "hunter-douglas-igu-003",
-    name: "Hunter Douglas QuadroClad IGU",
+    name: "Hunter Douglas QuadroClad® IGU Facade",
     brand: "Hunter Douglas",
     brandId: "hunter-douglas",
     price: "₹6,100/sq.ft",
     rating: 4.7,
     reviews: 189,
-    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
-    specs: { "Glass Type": "Triple-option IGU", "Panel Thickness": "55mm", "U-Value": "0.8 W/m²K", "Fire Rating": "A2-s1,d0", "Wind Load": "4.5 kPa" },
+    image: getProductImage("composite-rainscreen-panels-double-glazed-igu"),
+    specs: {
+      "System": "QuadroClad QC10 unitised IGU rainscreen",
+      "Panel Thickness": "55 mm sandwich + 12.7 mm IGU lite",
+      "U-Value": "0.80 W/m²K",
+      "Acoustic Rating": "Rw 38 dB",
+      "Fire Rating": "A2-s1, d0",
+      "Wind Load": "4.5 kPa (Miami-Dade tested)",
+      "Finish": "Architectural PVDF in 28 standard colours",
+      "Sustainability": "Cradle-to-Cradle® Silver",
+    },
     inStock: true,
-    l5Id: "composite-rainscreen-dg-igu",
+    l5Id: "composite-rainscreen-panels-double-glazed-igu",
   },
-
-  // Products for: Smart Lighting — Z-Wave Protocol
+  // -------- Smart Lighting Switches — Warm White 3000K --------
   {
-    id: "ml-smart-lighting-zwave-001",
-    name: "ML Brand Smart Lighting — Z-Wave Protocol",
+    id: "ml-smart-lighting-switches-001",
+    name: "ML SmartTouch™ 1-Gang Wi-Fi Dimmer (Warm White)",
     brand: "ML Brand",
     brandId: "ml-brand",
     price: "₹3,499",
     rating: 4.5,
     reviews: 312,
-    image: "https://images.unsplash.com/photo-1621905251918-48416bd8575a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
-    specs: { "Protocol": "Z-Wave Plus (700 Series)", "Load": "600W Incandescent / 200W LED", "Voltage": "110-240V AC", "Range": "100m (open air)", "Dimming": "Yes (trailing edge)" },
+    image: getProductImage("smart-lighting-switches-warm-white-3000k"),
+    specs: {
+      "Form Factor": "Single-gang glass-touch retrofit",
+      "Load": "300 W LED / 600 W incandescent",
+      "Colour Temp": "Warm White 3000K (tunable 2700–3500K)",
+      "Voltage": "110–240 V AC, 50 / 60 Hz",
+      "Dimming": "Trailing-edge, 1% min, 200-step",
+      "Connectivity": "Wi-Fi 2.4 GHz + BLE",
+      "Voice Assistants": "Alexa, Google Assistant, Apple Home",
+      "Certifications": "BIS, CE, FCC",
+    },
     inStock: true,
-    l5Id: "smart-lighting-zwave",
+    l5Id: "smart-lighting-switches-warm-white-3000k",
   },
   {
-    id: "aeotec-zwave-switch-002",
-    name: "Aeotec Smart Dimmer 7 (Z-Wave)",
-    brand: "Aeotec",
-    brandId: "aeotec",
-    price: "₹4,299",
-    rating: 4.7,
-    reviews: 567,
-    image: "https://images.unsplash.com/photo-1621905251918-48416bd8575a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
-    specs: { "Protocol": "Z-Wave Plus (700 Series)", "Load": "800W Incandescent / 250W LED", "Voltage": "100-240V AC", "Range": "150m (open air)", "Dimming": "Yes (auto-detect)" },
-    inStock: true,
-    l5Id: "smart-lighting-zwave",
-  },
-  {
-    id: "fibaro-dimmer2-003",
-    name: "Fibaro Dimmer 2 Z-Wave",
+    id: "fibaro-switch-003",
+    name: "FIBARO Dimmer 2 (Z-Wave Plus)",
     brand: "Fibaro",
     brandId: "fibaro",
     price: "₹5,199",
     rating: 4.8,
     reviews: 423,
-    image: "https://images.unsplash.com/photo-1621905251918-48416bd8575a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
-    specs: { "Protocol": "Z-Wave Plus (500 Series)", "Load": "500W Incandescent / 250W LED", "Voltage": "110-240V AC", "Range": "50m (indoor)", "Dimming": "Yes (leading/trailing)" },
+    image: getProductImage("smart-lighting-switches-warm-white-3000k"),
+    specs: {
+      "Module": "In-wall micromodule (behind-switch)",
+      "Load": "250 W LED / 500 W incandescent",
+      "Colour Temp": "Warm White 3000K (load-independent)",
+      "Voltage": "110–240 V AC",
+      "Dimming": "Auto-detect leading/trailing edge",
+      "Connectivity": "Z-Wave Plus 500-series",
+      "Energy Monitoring": "Yes, ±1% accuracy",
+      "Certifications": "CE, RoHS, Z-Wave Plus",
+    },
     inStock: true,
-    l5Id: "smart-lighting-zwave",
+    l5Id: "smart-lighting-switches-warm-white-3000k",
+  },
+  // -------- Smart Lighting Switches — Neutral White 4000K --------
+  {
+    id: "aeotec-smart-switch-002",
+    name: "Aeotec Smart Dimmer 7 (Neutral White)",
+    brand: "Aeotec",
+    brandId: "aeotec",
+    price: "₹4,299",
+    rating: 4.7,
+    reviews: 567,
+    image: getProductImage("smart-lighting-switches-neutral-white-4000k"),
+    specs: {
+      "Form Factor": "In-wall micromodule (700-series)",
+      "Load": "250 W LED / 800 W incandescent",
+      "Colour Temp": "Neutral White 4000K",
+      "Voltage": "100–240 V AC",
+      "Dimming": "Auto-detect (leading & trailing edge)",
+      "Connectivity": "Z-Wave Plus V2",
+      "Range": "150 m line-of-sight",
+      "Energy Monitoring": "Yes, real-time + historical",
+    },
+    inStock: true,
+    l5Id: "smart-lighting-switches-neutral-white-4000k",
   },
 ];
 
 // ============================================
-// BRANDS DATA — with layerIds mapping
+// BRANDS DATA — layerIds reference real generated ids
 // ============================================
+//
+// Logos come from the Clearbit Logo API via getBrandLogo(). For the fictional
+// in-house "ML Brand" entry we fall back to UI Avatars. Cover imagery is
+// picked from the curated Unsplash photo set in brandAssets.ts so every brand
+// shows a category-appropriate hero.
 export const HIERARCHY_BRANDS: BrandInfo[] = [
-  // Building Envelope / Facade brands
+  // Facade / Building Envelope
   {
     id: "ml-brand",
     name: "ML Brand",
     tagline: "Innovation in Every Layer",
-    coverImage: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
+    logo: getBrandLogo("ML Brand"),
+    coverImage: getBrandCover("ML Brand"),
     rating: 4.6,
     productCount: 340,
     city: "Mumbai",
@@ -423,150 +368,248 @@ export const HIERARCHY_BRANDS: BrandInfo[] = [
     accentColor: "#ff6a3d",
     tier: "Premium",
     isFeatured: true,
-    layerIds: ["building-envelope", "doors-windows", "curtain-wall-facade", "composite-rainscreen", "composite-rainscreen-dg-igu", "mep-systems", "smart-home-automation", "smart-home-building-auto", "smart-lighting-switches", "smart-lighting-zwave"],
+    layerIds: [
+      "building-envelope",
+      "doors-and-windows",
+      "curtain-wall-and-facade-systems",
+      "composite-rainscreen-panels",
+      "composite-rainscreen-panels-double-glazed-igu",
+      "mep-systems",
+      "smart-home-and-automation",
+      "smart-home-and-building-automation",
+      "smart-lighting-switches",
+      "smart-lighting-switches-warm-white-3000k",
+    ],
   },
   {
     id: "schuco",
     name: "Schuco",
     tagline: "Systems for the Future",
-    coverImage: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
+    logo: getBrandLogo("Schuco"),
+    coverImage: getBrandCover("Schuco"),
     rating: 4.9,
     productCount: 520,
     city: "Bangalore",
     region: "National",
-    accentColor: "#1565c0",
+    accentColor: getBrandAccent("Schuco"),
     tier: "Premium",
     isFeatured: true,
-    layerIds: ["building-envelope", "doors-windows", "curtain-wall-facade", "composite-rainscreen", "unitized-curtain-wall"],
+    layerIds: ["building-envelope", "doors-and-windows", "curtain-wall-and-facade-systems", "window-systems-and-frames"],
   },
   {
     id: "alucobond",
     name: "Alucobond (3A Composites)",
     tagline: "The Original Since 1969",
-    coverImage: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
+    logo: getBrandLogo("Alucobond"),
+    coverImage: getBrandCover("Alucobond"),
     rating: 4.8,
     productCount: 280,
     city: "New Delhi",
     region: "North",
-    accentColor: "#d32f2f",
+    accentColor: getBrandAccent("Alucobond"),
     tier: "Premium",
     isFeatured: true,
-    layerIds: ["building-envelope", "doors-windows", "curtain-wall-facade", "composite-rainscreen", "composite-rainscreen-dg-igu", "composite-rainscreen-acp"],
+    layerIds: [
+      "building-envelope",
+      "doors-and-windows",
+      "curtain-wall-and-facade-systems",
+      "composite-rainscreen-panels",
+      "composite-rainscreen-panels-double-glazed-igu",
+    ],
   },
   {
     id: "hunter-douglas",
     name: "Hunter Douglas",
     tagline: "Architecture. Reimagined.",
-    coverImage: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
+    logo: getBrandLogo("Hunter Douglas"),
+    coverImage: getBrandCover("Hunter Douglas"),
     rating: 4.7,
     productCount: 390,
     city: "Mumbai",
     region: "West",
-    accentColor: "#388e3c",
+    accentColor: getBrandAccent("Hunter Douglas"),
     tier: "Premium",
     isFeatured: true,
-    layerIds: ["building-envelope", "doors-windows", "curtain-wall-facade", "composite-rainscreen", "composite-rainscreen-dg-igu"],
+    layerIds: [
+      "building-envelope",
+      "doors-and-windows",
+      "curtain-wall-and-facade-systems",
+      "composite-rainscreen-panels",
+      "composite-rainscreen-panels-double-glazed-igu",
+    ],
   },
   {
     id: "fenesta",
     name: "Fenesta (DCM Shriram)",
     tagline: "India's No.1 Window Brand",
-    coverImage: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
+    logo: getBrandLogo("Fenesta"),
+    coverImage: getBrandCover("Fenesta"),
     rating: 4.6,
     productCount: 210,
     city: "New Delhi",
     region: "North",
-    accentColor: "#1976d2",
+    accentColor: getBrandAccent("Fenesta"),
     tier: "Premium",
     isFeatured: true,
-    layerIds: ["building-envelope", "doors-windows", "aluminium-windows", "upvc-windows"],
+    layerIds: ["building-envelope", "doors-and-windows", "window-systems-and-frames"],
   },
-  // MEP / Smart Home brands
+  // MEP / Smart Home
   {
     id: "aeotec",
     name: "Aeotec",
     tagline: "Smart Home Made Simple",
-    coverImage: "https://images.unsplash.com/photo-1621905251918-48416bd8575a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
+    logo: getBrandLogo("Aeotec"),
+    coverImage: getBrandCover("Aeotec"),
     rating: 4.7,
     productCount: 180,
     city: "Bangalore",
     region: "South",
-    accentColor: "#0097a7",
+    accentColor: getBrandAccent("Aeotec"),
     tier: "Premium",
     isFeatured: true,
-    layerIds: ["mep-systems", "smart-home-automation", "smart-home-building-auto", "smart-lighting-switches", "smart-lighting-zwave", "smart-lighting-zigbee"],
+    layerIds: [
+      "mep-systems",
+      "smart-home-and-automation",
+      "smart-home-and-building-automation",
+      "smart-lighting-switches",
+      "smart-lighting-switches-neutral-white-4000k",
+    ],
   },
   {
     id: "fibaro",
     name: "Fibaro",
     tagline: "Beautifully Smart Home",
-    coverImage: "https://images.unsplash.com/photo-1621905251918-48416bd8575a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
+    logo: getBrandLogo("Fibaro"),
+    coverImage: getBrandCover("Fibaro"),
     rating: 4.8,
     productCount: 145,
     city: "Mumbai",
     region: "West",
-    accentColor: "#7b1fa2",
+    accentColor: getBrandAccent("Fibaro"),
     tier: "Premium",
     isFeatured: true,
-    layerIds: ["mep-systems", "smart-home-automation", "smart-home-building-auto", "smart-lighting-switches", "smart-lighting-zwave"],
+    layerIds: [
+      "mep-systems",
+      "smart-home-and-automation",
+      "smart-home-and-building-automation",
+      "smart-lighting-switches",
+      "smart-lighting-switches-warm-white-3000k",
+    ],
   },
   {
     id: "schneider-electric",
     name: "Schneider Electric",
     tagline: "Life Is On",
-    coverImage: "https://images.unsplash.com/photo-1621905251918-48416bd8575a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
+    logo: getBrandLogo("Schneider Electric"),
+    coverImage: getBrandCover("Schneider Electric"),
     rating: 4.7,
     productCount: 850,
     city: "Gurgaon",
     region: "North",
-    accentColor: "#2e7d32",
+    accentColor: getBrandAccent("Schneider Electric"),
     tier: "Premium",
     isFeatured: true,
-    layerIds: ["mep-systems", "electrical-systems", "smart-home-automation", "smart-home-building-auto", "smart-lighting-switches", "smart-lighting-wifi", "smart-lighting-zigbee"],
+    layerIds: [
+      "mep-systems",
+      "electrical-and-wiring",
+      "electrical-systems",
+      "smart-home-and-automation",
+      "smart-home-and-building-automation",
+      "smart-lighting-switches",
+    ],
   },
   {
     id: "havells",
     name: "Havells India",
     tagline: "Wires That Don't Catch Fire",
-    coverImage: "https://images.unsplash.com/photo-1621905251918-48416bd8575a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
+    logo: getBrandLogo("Havells India"),
+    coverImage: getBrandCover("Havells India"),
     rating: 4.6,
     productCount: 720,
     city: "Noida",
     region: "North",
-    accentColor: "#c62828",
+    accentColor: getBrandAccent("Havells"),
     tier: "Premium",
     isFeatured: true,
-    layerIds: ["mep-systems", "electrical-systems", "smart-home-automation", "smart-home-building-auto", "smart-lighting-switches", "smart-lighting-wifi"],
+    layerIds: [
+      "mep-systems",
+      "electrical-and-wiring",
+      "electrical-systems",
+      "smart-home-and-automation",
+      "smart-home-and-building-automation",
+      "smart-lighting-switches",
+    ],
   },
   {
     id: "legrand",
     name: "Legrand India",
     tagline: "Specialist in Electrical",
-    coverImage: "https://images.unsplash.com/photo-1621905251918-48416bd8575a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800",
+    logo: getBrandLogo("Legrand India"),
+    coverImage: getBrandCover("Legrand India"),
     rating: 4.5,
     productCount: 640,
     city: "Mumbai",
     region: "West",
-    accentColor: "#e65100",
+    accentColor: getBrandAccent("Legrand"),
     tier: "Premium",
     isFeatured: false,
-    layerIds: ["mep-systems", "electrical-systems", "smart-home-automation", "smart-home-building-auto", "smart-lighting-switches"],
+    layerIds: [
+      "mep-systems",
+      "electrical-and-wiring",
+      "electrical-systems",
+      "smart-home-and-automation",
+      "smart-home-and-building-automation",
+      "smart-lighting-switches",
+    ],
   },
 ];
 
 // ============================================
-// HELPER: Get children by parentId & level
+// HELPERS — indexed lookups for fast queries
 // ============================================
-function getAllData(): HierarchyNode[] {
-  return [...L1_DATA, ...L2_DATA, ...L3_DATA, ...L4_DATA, ...L5_DATA];
+
+const ALL_LEVELS: HierarchyNode[][] = [L1_DATA, L2_DATA, L3_DATA, L4_DATA, L5_DATA];
+
+let _byId: Map<string, HierarchyNode> | null = null;
+let _byParent: Map<string, HierarchyNode[]> | null = null;
+
+function indexById(): Map<string, HierarchyNode> {
+  if (_byId) return _byId;
+  const m = new Map<string, HierarchyNode>();
+  for (const arr of ALL_LEVELS) {
+    for (const n of arr) m.set(n.id, n);
+  }
+  _byId = m;
+  return m;
 }
 
-export function getChildren(parentId: string): HierarchyNode[] {
-  return getAllData().filter((n) => n.parentId === parentId);
+function indexByParent(): Map<string, HierarchyNode[]> {
+  if (_byParent) return _byParent;
+  const m = new Map<string, HierarchyNode[]>();
+  for (const arr of ALL_LEVELS) {
+    for (const n of arr) {
+      const key = n.parentId ?? "__root__";
+      const list = m.get(key);
+      if (list) list.push(n);
+      else m.set(key, [n]);
+    }
+  }
+  _byParent = m;
+  return m;
 }
 
 export function getNode(id: string): HierarchyNode | undefined {
-  return getAllData().find((n) => n.id === id);
+  return indexById().get(id);
+}
+
+export function getChildren(parentId: string): HierarchyNode[] {
+  return indexByParent().get(parentId) ?? [];
+}
+
+export function getSiblings(nodeId: string): HierarchyNode[] {
+  const node = getNode(nodeId);
+  if (!node || !node.parentId) return [];
+  return getChildren(node.parentId);
 }
 
 export function getBreadcrumb(nodeId: string): HierarchyNode[] {
@@ -579,6 +622,10 @@ export function getBreadcrumb(nodeId: string): HierarchyNode[] {
   return trail;
 }
 
+export function getNodesAtLevel(level: 1 | 2 | 3 | 4 | 5): HierarchyNode[] {
+  return ALL_LEVELS[level - 1];
+}
+
 export function getBrandsForLayer(nodeId: string): BrandInfo[] {
   return HIERARCHY_BRANDS.filter((b) => b.layerIds.includes(nodeId));
 }
@@ -587,10 +634,43 @@ export function getProductsForL5(l5Id: string): ProductItem[] {
   return L6_PRODUCTS.filter((p) => p.l5Id === l5Id);
 }
 
-export function getSiblings(nodeId: string): HierarchyNode[] {
+/**
+ * Returns the set of leaf L5 ids reachable from any node id.
+ * Useful for filters that want to roll up a category to "all L5s in subtree".
+ */
+export function getDescendantL5Ids(nodeId: string): string[] {
   const node = getNode(nodeId);
-  if (!node || !node.parentId) return [];
-  return getAllData().filter((n) => n.parentId === node.parentId);
+  if (!node) return [];
+  if (node.level === 5) return [node.id];
+  const out: string[] = [];
+  const stack: string[] = [nodeId];
+  while (stack.length) {
+    const cur = stack.pop()!;
+    const kids = getChildren(cur);
+    for (const k of kids) {
+      if (k.level === 5) out.push(k.id);
+      else stack.push(k.id);
+    }
+  }
+  return out;
+}
+
+/**
+ * Returns brands that surface anywhere within the subtree rooted at nodeId
+ * (i.e. their layerIds intersect the node or any of its descendants).
+ */
+export function getBrandsForSubtree(nodeId: string): BrandInfo[] {
+  const ids = new Set<string>([nodeId, ...getDescendantL5Ids(nodeId)]);
+  // walk inner levels too
+  const stack: string[] = [nodeId];
+  while (stack.length) {
+    const cur = stack.pop()!;
+    for (const k of getChildren(cur)) {
+      ids.add(k.id);
+      stack.push(k.id);
+    }
+  }
+  return HIERARCHY_BRANDS.filter((b) => b.layerIds.some((id) => ids.has(id)));
 }
 
 // Layer-specific metadata for sections

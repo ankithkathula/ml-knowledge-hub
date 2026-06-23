@@ -27,7 +27,7 @@ export function BrandAccountSuccess({ onContinue }: BrandAccountSuccessProps) {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white flex flex-col lg:flex-row overflow-hidden pt-[64px] md:pt-[80px]">
+    <div className="min-h-screen bg-white flex flex-col lg:flex-row overflow-hidden">
       {/* Left Panel - Image Carousel (Hidden on mobile) */}
       <div className="hidden lg:block lg:w-1/2 relative h-[calc(100vh-80px)] overflow-hidden">
         <AnimatePresence mode="wait">

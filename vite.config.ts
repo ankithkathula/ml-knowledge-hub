@@ -16,6 +16,9 @@ function figmaAssetResolver() {
 }
 
 export default defineConfig({
+  // Served from https://<user>.github.io/ml-knowledge-hub/ in production (GitHub
+  // Pages project site); root in dev so `npm run dev` stays at localhost:5173/.
+  base: process.env.NODE_ENV === 'production' ? '/ml-knowledge-hub/' : '/',
   plugins: [
     figmaAssetResolver(),
     // The React and Tailwind plugins are both required for Make, even if

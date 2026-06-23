@@ -5,6 +5,7 @@ import {
   Award, FileText, Globe, Briefcase, Star, Camera, Save,
   ToggleLeft, ToggleRight, IndianRupee,
 } from "lucide-react";
+import { AvatarImg } from "../ui/AvatarImg";
 
 // --- Types ---
 
@@ -14,6 +15,7 @@ interface TeamMember {
   role: string;
   email: string;
   avatar: string;
+  avatarUrl?: string;
   status: "Active" | "Invited";
   joinedDate: string;
 }
@@ -64,11 +66,11 @@ interface BusinessHours {
 // --- Mock Data ---
 
 const mockTeam: TeamMember[] = [
-  { id: "1", name: "Ar. Vikram Deshmukh", role: "Principal Architect", email: "vikram@designstudio.in", avatar: "VD", status: "Active", joinedDate: "2024-01-15" },
-  { id: "2", name: "Neha Kulkarni", role: "Senior Interior Designer", email: "neha@designstudio.in", avatar: "NK", status: "Active", joinedDate: "2024-06-20" },
-  { id: "3", name: "Rohan Joshi", role: "Project Manager", email: "rohan@designstudio.in", avatar: "RJ", status: "Active", joinedDate: "2025-02-10" },
-  { id: "4", name: "Sneha Patil", role: "Junior Architect", email: "sneha@designstudio.in", avatar: "SP", status: "Active", joinedDate: "2025-08-01" },
-  { id: "5", name: "Amit Rao", role: "MEP Consultant", email: "amit.rao@gmail.com", avatar: "AR", status: "Invited", joinedDate: "" },
+  { id: "1", name: "Ar. Vikram Deshmukh", role: "Principal Architect", email: "vikram@designstudio.in", avatar: "VD", avatarUrl: "https://i.pravatar.cc/80?img=37", status: "Active", joinedDate: "2024-01-15" },
+  { id: "2", name: "Neha Kulkarni", role: "Senior Interior Designer", email: "neha@designstudio.in", avatar: "NK", avatarUrl: "https://i.pravatar.cc/80?img=39", status: "Active", joinedDate: "2024-06-20" },
+  { id: "3", name: "Rohan Joshi", role: "Project Manager", email: "rohan@designstudio.in", avatar: "RJ", avatarUrl: "https://i.pravatar.cc/80?img=24", status: "Active", joinedDate: "2025-02-10" },
+  { id: "4", name: "Sneha Patil", role: "Junior Architect", email: "sneha@designstudio.in", avatar: "SP", avatarUrl: "https://i.pravatar.cc/80?img=50", status: "Active", joinedDate: "2025-08-01" },
+  { id: "5", name: "Amit Rao", role: "MEP Consultant", email: "amit.rao@gmail.com", avatar: "AR", avatarUrl: "https://i.pravatar.cc/80?img=6", status: "Invited", joinedDate: "" },
 ];
 
 const mockServices: ServiceItem[] = [
@@ -368,12 +370,7 @@ export function StudioStudioManagePage() {
                 className="flex items-center gap-3 p-3 rounded-xl transition-all"
                 style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)" }}
               >
-                <div
-                  className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
-                  style={{ background: "rgba(255,106,61,0.12)", color: "var(--accent)", border: "1px solid rgba(255,106,61,0.2)" }}
-                >
-                  {member.avatar}
-                </div>
+                <AvatarImg src={member.avatarUrl} fallback={member.avatar} size={36} />
                 <div className="flex-1 min-w-0">
                   <p className="truncate" style={{ fontSize: "0.82rem", fontWeight: 600, color: "var(--text-primary)" }}>{member.name}</p>
                   <p style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>{member.role}</p>

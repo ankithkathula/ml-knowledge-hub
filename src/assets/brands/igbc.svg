@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 44">
+  <!-- Circle emblem -->
+  <circle cx="22" cy="22" r="20" fill="#1b5e20"/>
+  <circle cx="22" cy="22" r="16" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
+  <!-- Leaf arc -->
+  <path d="M12,22 Q22,10 32,22 Q22,32 12,22Z" fill="rgba(255,255,255,0.85)"/>
+  <path d="M22,22 L22,32" stroke="rgba(255,255,255,0.6)" stroke-width="1.5"/>
+  <!-- IGBC text in circle -->
+  <text x="22" y="19" text-anchor="middle" font-family="Arial,sans-serif" font-size="6.5" font-weight="900" fill="white" letter-spacing="0.5">IGBC</text>
+  <!-- Right side text -->
+  <text x="49" y="16" font-family="Arial,sans-serif" font-size="8" font-weight="700" fill="#2e7d32" letter-spacing="0.3">INDIAN GREEN</text>
+  <text x="49" y="26" font-family="Arial,sans-serif" font-size="8" font-weight="700" fill="#2e7d32" letter-spacing="0.3">BUILDING COUNCIL</text>
+  <text x="49" y="36" font-family="Arial,sans-serif" font-size="6.5" fill="#66bb6a" letter-spacing="0.5">CII – IGBC</text>
+</svg>

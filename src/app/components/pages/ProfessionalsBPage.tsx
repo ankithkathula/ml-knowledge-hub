@@ -4,9 +4,6 @@ import {
   Search, Heart, MessageCircle, Share2, Bookmark, ChevronLeft, ChevronRight,
   FileText, Award, Download, Eye, Copy, Mail, Users, MapPin, Briefcase,
 } from "lucide-react";
-import { Navbar } from "../Navbar";
-import { Footer } from "../Footer";
-
 /* ── Types ── */
 
 type Tab = "feed" | "discover" | "people" | "pdf";
@@ -734,9 +731,7 @@ export function ProfessionalsBPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: "#f8f8f6" }}>
-      <Navbar />
-
+    <div className="min-h-screen flex flex-col" style={{ background: "var(--bg-base)" }}>
       {/* Tab Bar */}
       <div className="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-gray-100">
         <div className="max-w-5xl mx-auto px-4 flex items-center justify-between h-12">
@@ -790,7 +785,6 @@ export function ProfessionalsBPage() {
         {activeTab === "pdf" && renderPdfLibrary()}
       </main>
 
-      <Footer />
     </div>
   );
 }

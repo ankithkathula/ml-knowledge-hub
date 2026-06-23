@@ -158,7 +158,7 @@ function Heading() {
   return (
     <div className="h-[260px] opacity-3 relative shrink-0 w-[2427px]" data-name="Heading 2">
       <div className="bg-clip-padding border-0 border-[transparent] border-solid relative size-full">
-        <p className="absolute font-['Satoshi:Black',sans-serif] leading-[260px] left-0 not-italic text-[#0a0a0a] text-[260px] top-[12.61px] tracking-[-4px] whitespace-nowrap">MATERIAL LIBRARY</p>
+        <p className="absolute font-['Satoshi',sans-serif] leading-[260px] left-0 not-italic text-[#0a0a0a] text-[260px] top-[12.61px] tracking-[-4px] whitespace-nowrap">MATERIAL LIBRARY</p>
       </div>
     </div>
   );
@@ -193,7 +193,7 @@ function Container5() {
 function Heading1() {
   return (
     <div className="h-[16.487px] opacity-90 relative shrink-0 w-full" data-name="Heading 4">
-      <p className="absolute font-['Satoshi:Bold',sans-serif] leading-[16.5px] left-0 not-italic text-[11px] text-white top-[0.83px] tracking-[1.65px] uppercase whitespace-nowrap">COMPANY</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[16.5px] left-0 not-italic text-[11px] text-white top-[0.83px] tracking-[1.65px] uppercase whitespace-nowrap">COMPANY</p>
     </div>
   );
 }
@@ -201,7 +201,7 @@ function Heading1() {
 function Link() {
   return (
     <div className="absolute h-[19.5px] left-0 top-[3.34px] w-[52.487px]" data-name="Link">
-      <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">About Us</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">About Us</p>
     </div>
   );
 }
@@ -219,7 +219,7 @@ function ListItem() {
 function Link1() {
   return (
     <div className="absolute h-[19.5px] left-0 top-[3.34px] w-[44.23px]" data-name="Link">
-      <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Careers</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Careers</p>
     </div>
   );
 }
@@ -237,7 +237,7 @@ function ListItem1() {
 function Link2() {
   return (
     <div className="absolute h-[19.5px] left-0 top-[3.34px] w-[30.13px]" data-name="Link">
-      <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">FAQs</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">FAQs</p>
     </div>
   );
 }
@@ -255,7 +255,7 @@ function ListItem2() {
 function Link3() {
   return (
     <div className="absolute h-[19.5px] left-0 top-[3.34px] w-[63.574px]" data-name="Link">
-      <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Contact Us</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Contact Us</p>
     </div>
   );
 }
@@ -293,7 +293,7 @@ function Container8() {
 function Heading2() {
   return (
     <div className="h-[16.487px] opacity-90 relative shrink-0 w-full" data-name="Heading 4">
-      <p className="absolute font-['Satoshi:Bold',sans-serif] leading-[16.5px] left-0 not-italic text-[11px] text-white top-[0.83px] tracking-[1.65px] uppercase whitespace-nowrap">OFFERINGS</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[16.5px] left-0 not-italic text-[11px] text-white top-[0.83px] tracking-[1.65px] uppercase whitespace-nowrap">OFFERINGS</p>
     </div>
   );
 }
@@ -301,7 +301,7 @@ function Heading2() {
 function Link4() {
   return (
     <div className="absolute h-[19.5px] left-0 top-[3.34px] w-[50.53px]" data-name="Link">
-      <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Products</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Products</p>
     </div>
   );
 }
@@ -319,7 +319,7 @@ function ListItem4() {
 function Link5() {
   return (
     <div className="absolute h-[19.5px] left-0 top-[3.34px] w-[39.73px]" data-name="Link">
-      <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Brands</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Brands</p>
     </div>
   );
 }
@@ -337,7 +337,7 @@ function ListItem5() {
 function Link6() {
   return (
     <div className="absolute h-[19.5px] left-0 top-[3.34px] w-[41.635px]" data-name="Link">
-      <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Studios</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Studios</p>
     </div>
   );
 }
@@ -355,7 +355,7 @@ function ListItem6() {
 function Link7() {
   return (
     <div className="absolute h-[19.5px] left-0 top-[3.34px] w-[119.257px]" data-name="Link">
-      <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Professional Services</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Professional Services</p>
     </div>
   );
 }
@@ -373,7 +373,7 @@ function ListItem7() {
 function Link8() {
   return (
     <div className="absolute h-[19.5px] left-0 top-[3.34px] w-[37.122px]" data-name="Link">
-      <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Events</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Events</p>
     </div>
   );
 }
@@ -391,7 +391,7 @@ function ListItem8() {
 function Link9() {
   return (
     <div className="absolute h-[19.5px] left-0 top-[3.34px] w-[64.083px]" data-name="Link">
-      <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Jobs Portal</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Jobs Portal</p>
     </div>
   );
 }
@@ -431,7 +431,7 @@ function Container9() {
 function Heading3() {
   return (
     <div className="h-[16.487px] opacity-90 relative shrink-0 w-full" data-name="Heading 4">
-      <p className="absolute font-['Satoshi:Bold',sans-serif] leading-[16.5px] left-0 not-italic text-[11px] text-white top-[0.83px] tracking-[1.65px] uppercase whitespace-nowrap">PARTNER WITH US</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[16.5px] left-0 not-italic text-[11px] text-white top-[0.83px] tracking-[1.65px] uppercase whitespace-nowrap">PARTNER WITH US</p>
     </div>
   );
 }
@@ -439,7 +439,7 @@ function Heading3() {
 function Link10() {
   return (
     <div className="absolute h-[19.5px] left-0 top-[3.34px] w-[34.083px]" data-name="Link">
-      <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Brand</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Brand</p>
     </div>
   );
 }
@@ -457,7 +457,7 @@ function ListItem10() {
 function Link11() {
   return (
     <div className="absolute h-[19.5px] left-0 top-[3.34px] w-[36px]" data-name="Link">
-      <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Studio</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Studio</p>
     </div>
   );
 }
@@ -475,7 +475,7 @@ function ListItem11() {
 function Link12() {
   return (
     <div className="absolute h-[19.5px] left-0 top-[3.34px] w-[56.335px]" data-name="Link">
-      <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Designers</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Designers</p>
     </div>
   );
 }
@@ -493,7 +493,7 @@ function ListItem12() {
 function Link13() {
   return (
     <div className="absolute h-[19.5px] left-0 top-[3.34px] w-[98.165px]" data-name="Link">
-      <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Service Providers</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Service Providers</p>
     </div>
   );
 }
@@ -511,7 +511,7 @@ function ListItem13() {
 function Link14() {
   return (
     <div className="absolute h-[19.5px] left-0 top-[3.34px] w-[50.087px]" data-name="Link">
-      <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Institutes</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Institutes</p>
     </div>
   );
 }
@@ -529,7 +529,7 @@ function ListItem14() {
 function Link15() {
   return (
     <div className="absolute h-[19.5px] left-0 top-[3.34px] w-[43.891px]" data-name="Link">
-      <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Student</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Student</p>
     </div>
   );
 }
@@ -569,7 +569,7 @@ function Container10() {
 function Heading4() {
   return (
     <div className="h-[16.487px] opacity-90 relative shrink-0 w-full" data-name="Heading 4">
-      <p className="absolute font-['Satoshi:Bold',sans-serif] leading-[16.5px] left-0 not-italic text-[11px] text-white top-[0.83px] tracking-[1.65px] uppercase whitespace-nowrap">RESOURCES</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[16.5px] left-0 not-italic text-[11px] text-white top-[0.83px] tracking-[1.65px] uppercase whitespace-nowrap">RESOURCES</p>
     </div>
   );
 }
@@ -577,7 +577,7 @@ function Heading4() {
 function Link16() {
   return (
     <div className="absolute h-[19.5px] left-0 top-[3.34px] w-[30.365px]" data-name="Link">
-      <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Press</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Press</p>
     </div>
   );
 }
@@ -595,7 +595,7 @@ function ListItem16() {
 function Link17() {
   return (
     <div className="absolute h-[19.5px] left-0 top-[3.34px] w-[62.439px]" data-name="Link">
-      <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">E-Learning</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">E-Learning</p>
     </div>
   );
 }
@@ -613,7 +613,7 @@ function ListItem17() {
 function Link18() {
   return (
     <div className="absolute h-[19.5px] left-0 top-[3.34px] w-[31.643px]" data-name="Link">
-      <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Blogs</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Blogs</p>
     </div>
   );
 }
@@ -631,7 +631,7 @@ function ListItem18() {
 function Link19() {
   return (
     <div className="absolute h-[19.5px] left-0 top-[3.34px] w-[68.87px]" data-name="Link">
-      <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Help Center</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Help Center</p>
     </div>
   );
 }
@@ -669,7 +669,7 @@ function Container11() {
 function Heading5() {
   return (
     <div className="h-[16.487px] opacity-90 relative shrink-0 w-full" data-name="Heading 4">
-      <p className="absolute font-['Satoshi:Bold',sans-serif] leading-[16.5px] left-0 not-italic text-[11px] text-white top-[0.83px] tracking-[1.65px] uppercase whitespace-nowrap">LEGAL</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[16.5px] left-0 not-italic text-[11px] text-white top-[0.83px] tracking-[1.65px] uppercase whitespace-nowrap">LEGAL</p>
     </div>
   );
 }
@@ -677,7 +677,7 @@ function Heading5() {
 function Link20() {
   return (
     <div className="absolute h-[19.5px] left-0 top-[3.34px] w-[77.87px]" data-name="Link">
-      <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Privacy Policy</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Privacy Policy</p>
     </div>
   );
 }
@@ -695,7 +695,7 @@ function ListItem20() {
 function Link21() {
   return (
     <div className="absolute h-[19.5px] left-0 top-[3.34px] w-[93.835px]" data-name="Link">
-      <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Terms of Service</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Terms of Service</p>
     </div>
   );
 }
@@ -713,7 +713,7 @@ function ListItem21() {
 function Link22() {
   return (
     <div className="absolute h-[19.5px] left-0 top-[3.34px] w-[77.204px]" data-name="Link">
-      <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Cookie Policy</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[19.5px] left-0 not-italic text-[#9ca3af] text-[13px] top-[-0.17px] whitespace-nowrap">Cookie Policy</p>
     </div>
   );
 }
@@ -762,7 +762,7 @@ function Container7() {
 function Paragraph() {
   return (
     <div className="absolute h-[35.713px] left-0 top-[25.98px] w-[259.996px]" data-name="Paragraph">
-      <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[17.875px] left-0 not-italic text-[#9ca3af] text-[11px] top-[0.67px] w-[208px]">{`India's first digital platform transforming the construction industry ecosystem.`}</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[17.875px] left-0 not-italic text-[#9ca3af] text-[11px] top-[0.67px] w-[208px]">{`India's first digital platform transforming the construction industry ecosystem.`}</p>
     </div>
   );
 }
@@ -820,7 +820,7 @@ function Container14() {
 function Heading6() {
   return (
     <div className="h-[16.487px] opacity-90 relative shrink-0 w-full" data-name="Heading 4">
-      <p className="absolute font-['Satoshi:Bold',sans-serif] leading-[16.5px] left-0 not-italic text-[11px] text-white top-[0.83px] tracking-[1.65px] uppercase whitespace-nowrap">Get In Touch</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[16.5px] left-0 not-italic text-[11px] text-white top-[0.83px] tracking-[1.65px] uppercase whitespace-nowrap">Get In Touch</p>
     </div>
   );
 }
@@ -829,7 +829,7 @@ function Link23() {
   return (
     <div className="h-[18px] relative shrink-0 w-[413.335px]" data-name="Link">
       <div className="bg-clip-padding border-0 border-[transparent] border-solid relative size-full">
-        <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[18px] left-0 not-italic text-[#9ca3af] text-[12px] top-[-0.17px] whitespace-nowrap">connect@materiallibrary.com</p>
+        <p className="absolute font-['Satoshi',sans-serif] leading-[18px] left-0 not-italic text-[#9ca3af] text-[12px] top-[-0.17px] whitespace-nowrap">connect@materiallibrary.com</p>
       </div>
     </div>
   );
@@ -839,7 +839,7 @@ function Link24() {
   return (
     <div className="h-[18px] relative shrink-0 w-[413.335px]" data-name="Link">
       <div className="bg-clip-padding border-0 border-[transparent] border-solid relative size-full">
-        <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[18px] left-0 not-italic text-[#9ca3af] text-[12px] top-[-0.17px] whitespace-nowrap">+91 234 567 890</p>
+        <p className="absolute font-['Satoshi',sans-serif] leading-[18px] left-0 not-italic text-[#9ca3af] text-[12px] top-[-0.17px] whitespace-nowrap">+91 234 567 890</p>
       </div>
     </div>
   );
@@ -849,7 +849,7 @@ function Text() {
   return (
     <div className="h-[18px] relative shrink-0 w-[413.335px]" data-name="Text">
       <div className="bg-clip-padding border-0 border-[transparent] border-solid relative size-full">
-        <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[18px] left-0 not-italic text-[#9ca3af] text-[12px] top-[-0.17px] whitespace-nowrap">Mumbai, India</p>
+        <p className="absolute font-['Satoshi',sans-serif] leading-[18px] left-0 not-italic text-[#9ca3af] text-[12px] top-[-0.17px] whitespace-nowrap">Mumbai, India</p>
       </div>
     </div>
   );
@@ -877,7 +877,7 @@ function Container15() {
 function Heading7() {
   return (
     <div className="h-[16.487px] opacity-90 relative shrink-0 w-full" data-name="Heading 4">
-      <p className="absolute font-['Satoshi:Bold',sans-serif] leading-[16.5px] left-0 not-italic text-[11px] text-white top-[0.83px] tracking-[1.65px] uppercase whitespace-nowrap">Follow Us</p>
+      <p className="absolute font-['Satoshi',sans-serif] leading-[16.5px] left-0 not-italic text-[11px] text-white top-[0.83px] tracking-[1.65px] uppercase whitespace-nowrap">Follow Us</p>
     </div>
   );
 }
@@ -1032,7 +1032,7 @@ function Paragraph1() {
   return (
     <div className="h-[24px] relative shrink-0 w-[168.17px]" data-name="Paragraph">
       <div className="bg-clip-padding border-0 border-[transparent] border-solid relative size-full">
-        <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[24px] left-0 not-italic text-[16px] text-[rgba(255,255,255,0.6)] top-[0.67px] whitespace-nowrap">© 2026 Material Library</p>
+        <p className="absolute font-['Satoshi',sans-serif] leading-[24px] left-0 not-italic text-[16px] text-[rgba(255,255,255,0.6)] top-[0.67px] whitespace-nowrap">© 2026 Material Library</p>
       </div>
     </div>
   );
@@ -1042,7 +1042,7 @@ function Link29() {
   return (
     <div className="h-[16.487px] relative shrink-0 w-[38.987px]" data-name="Link">
       <div className="bg-clip-padding border-0 border-[transparent] border-solid relative size-full">
-        <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[16.5px] left-0 not-italic text-[11px] text-[rgba(255,255,255,0.6)] top-[0.83px] whitespace-nowrap">Sitemap</p>
+        <p className="absolute font-['Satoshi',sans-serif] leading-[16.5px] left-0 not-italic text-[11px] text-[rgba(255,255,255,0.6)] top-[0.83px] whitespace-nowrap">Sitemap</p>
       </div>
     </div>
   );
@@ -1052,7 +1052,7 @@ function Text1() {
   return (
     <div className="h-[16.487px] relative shrink-0 w-[4.135px]" data-name="Text">
       <div className="bg-clip-padding border-0 border-[transparent] border-solid relative size-full">
-        <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[16.5px] left-0 not-italic text-[11px] text-[rgba(255,255,255,0.2)] top-[0.83px] whitespace-nowrap">•</p>
+        <p className="absolute font-['Satoshi',sans-serif] leading-[16.5px] left-0 not-italic text-[11px] text-[rgba(255,255,255,0.2)] top-[0.83px] whitespace-nowrap">•</p>
       </div>
     </div>
   );
@@ -1062,7 +1062,7 @@ function Link30() {
   return (
     <div className="h-[16.487px] relative shrink-0 w-[58.004px]" data-name="Link">
       <div className="bg-clip-padding border-0 border-[transparent] border-solid relative size-full">
-        <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[16.5px] left-0 not-italic text-[11px] text-[rgba(255,255,255,0.6)] top-[0.83px] whitespace-nowrap">Accessibility</p>
+        <p className="absolute font-['Satoshi',sans-serif] leading-[16.5px] left-0 not-italic text-[11px] text-[rgba(255,255,255,0.6)] top-[0.83px] whitespace-nowrap">Accessibility</p>
       </div>
     </div>
   );
@@ -1072,7 +1072,7 @@ function Text2() {
   return (
     <div className="h-[16.487px] relative shrink-0 w-[4.135px]" data-name="Text">
       <div className="bg-clip-padding border-0 border-[transparent] border-solid relative size-full">
-        <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[16.5px] left-0 not-italic text-[11px] text-[rgba(255,255,255,0.2)] top-[0.83px] whitespace-nowrap">•</p>
+        <p className="absolute font-['Satoshi',sans-serif] leading-[16.5px] left-0 not-italic text-[11px] text-[rgba(255,255,255,0.2)] top-[0.83px] whitespace-nowrap">•</p>
       </div>
     </div>
   );
@@ -1082,7 +1082,7 @@ function Link31() {
   return (
     <div className="h-[16.487px] relative shrink-0 w-[29.048px]" data-name="Link">
       <div className="bg-clip-padding border-0 border-[transparent] border-solid relative size-full">
-        <p className="absolute font-['Satoshi:Regular',sans-serif] leading-[16.5px] left-0 not-italic text-[11px] text-[rgba(255,255,255,0.6)] top-[0.83px] whitespace-nowrap">Status</p>
+        <p className="absolute font-['Satoshi',sans-serif] leading-[16.5px] left-0 not-italic text-[11px] text-[rgba(255,255,255,0.6)] top-[0.83px] whitespace-nowrap">Status</p>
       </div>
     </div>
   );
