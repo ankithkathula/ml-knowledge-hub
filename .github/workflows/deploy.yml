@@ -25,8 +25,12 @@ jobs:
         with:
           node-version: 20
 
-      # Figma-exported deps have loose peer ranges, so allow legacy peer resolution.
-      - run: npm install --legacy-peer-deps
+      # Install exactly from the committed lockfile. react/react-dom are declared as
+      # optional peerDependencies (Figma export quirk), so a plain `npm install` /
+      # `--legacy-peer-deps` skips them and the build can't resolve react/jsx-runtime.
+      # `npm ci` installs the full locked tree (which includes react), reproducing the
+      # working local build.
+      - run: npm ci
 
       - run: npm run build
 
