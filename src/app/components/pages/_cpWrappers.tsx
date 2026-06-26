@@ -1,4 +1,4 @@
-import { useNavigate, useParams, NavigateFunction } from "react-router";
+import { useNavigate, useParams, useSearchParams, NavigateFunction } from "react-router";
 import { findPathToCategory } from "../../utils/categoryTaxonomy";
 import { StudentLandingTutorial } from "../student/tutorial/StudentLandingTutorial";
 import { setAuthUser, DEFAULT_USER, INSTITUTE_USER, BRAND_USER, STUDENT_USER, FACULTY_USER, STUDIO_USER, RETAIL_USER, ADMIN_USER, DEALER_USER } from "../../utils/auth";
@@ -124,7 +124,7 @@ export function CpBrandsPage() {
     <BrandsPageInner
       onBrandClick={(brandName) => navigate(`/brand/${encodeURIComponent(brandName)}`)}
       onViewProducts={(brandName) =>
-        navigate(`/products/${encodeURIComponent(brandName ?? "all")}`)
+        navigate(brandName ? `/products?brand=${encodeURIComponent(brandName)}` : "/products")
       }
     />
   );
@@ -144,10 +144,16 @@ export function CpBrandProfilePage() {
   const navigate = useNavigate();
   const { brandId, brandName } = useParams();
   const name = brandId ?? brandName ?? "";
+  const decoded = decodeURIComponent(name);
   return (
     <BrandProfileInner
-      brandName={decodeURIComponent(name)}
+      brandName={decoded}
       onBack={() => navigate(-1)}
+      onViewProducts={(category) => {
+        const params = new URLSearchParams({ brand: decoded });
+        if (category) params.set("q", category);
+        navigate(`/products?${params.toString()}`);
+      }}
     />
   );
 }
@@ -174,6 +180,9 @@ export function CpBrandThankYou() {
 export function CpProductsListingPage() {
   const navigate = useNavigate();
   const { l5Id } = useParams();
+  const [searchParams] = useSearchParams();
+  const brand = searchParams.get("brand") ?? undefined;
+  const q = searchParams.get("q") ?? undefined;
   const slug = l5Id ? decodeURIComponent(l5Id) : undefined;
   const initialPath = slug ? (findPathToCategory(slug) ?? [slug]) : undefined;
   return (
@@ -181,6 +190,8 @@ export function CpProductsListingPage() {
       onProductClick={(productId) => navigate(`/product/${encodeURIComponent(productId)}`)}
       onBackToHome={() => navigate("/v1")}
       initialPath={initialPath}
+      initialBrand={brand}
+      initialSearch={q}
     />
   );
 }

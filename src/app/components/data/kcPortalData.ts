@@ -63,25 +63,63 @@ export interface RegisteredProfile {
   initials?: string;      // shown instead of logoUrl when set
 }
 
-// Category → image keyword tags for loremflickr
-const CATEGORY_IMAGE_KEYWORDS: Record<string, string> = {
-  "CAT-01": "architecture,building,modern",
-  "CAT-02": "interior,design,room",
-  "CAT-03": "landscape,garden,outdoor",
-  "CAT-04": "structure,steel,engineering",
-  "CAT-05": "construction,crane,building",
-  "CAT-06": "electrical,pipe,industrial",
-  "CAT-07": "renovation,paint,interior",
-  "CAT-08": "roof,house,building",
-  "CAT-09": "solar,green,sustainable",
-  "CAT-10": "security,safety,building",
-  "CAT-11": "blueprint,plan,office",
-  "CAT-12": "architecture,render,modern",
-  "CAT-13": "survey,measure,site",
-  "CAT-14": "construction,modern,architecture",
-  "CAT-15": "concrete,steel,factory",
-  "CAT-16": "office,building,corporate",
+// Category → curated, stable Unsplash photo pool (replaces flaky loremflickr).
+// Photo IDs are drawn from the set already used across this project, so they
+// are known to resolve. Each pool is themed to its discipline so cover/hero
+// images read as relevant — not random.
+const CATEGORY_IMAGE_POOL: Record<string, string[]> = {
+  // Architecture / boutique studios / heritage / design-build / BIM viz
+  "CAT-01": ["photo-1486406146926-c627a92ad1ab", "photo-1600585154340-be6161a56a0c", "photo-1545324418-cc1a3fa10c00", "photo-1487958449943-2429e8be8625"],
+  // Interior design & fit-out
+  "CAT-02": ["photo-1618221195710-dd6b41faaea6", "photo-1567694876529-44ef2c44ad99", "photo-1493809842364-78817add7ffb", "photo-1512917774080-9991f1c4c750"],
+  // Landscape & outdoor
+  "CAT-03": ["photo-1600596542815-ffad4c1539a9", "photo-1600607687939-ce8a6c25118c", "photo-1558904541-efa843a96f01", "photo-1416879595882-3373a0480b5b"],
+  // Structural engineering
+  "CAT-04": ["photo-1587293852726-70cdb56c2866", "photo-1504917595217-d4dc5ebe6122", "photo-1558618666-fcd25c85cd64", "photo-1590496793929-36417d3117de"],
+  // Civil engineering & construction
+  "CAT-05": ["photo-1541008022357-e6195d1af8cc", "photo-1589939705384-5185137a7f0f", "photo-1517089152318-42ec560349c0", "photo-1581094288338-2314dddb7ece"],
+  // MEP systems
+  "CAT-06": ["photo-1581094794329-c8112a89af12", "photo-1524758631624-e2822e304c36", "photo-1565814329452-e1efa11c5b89", "photo-1558002038-1055907df827"],
+  // Finishing & interior trades
+  "CAT-07": ["photo-1562259949-e8e7689d7828", "photo-1513467535987-fd81bc7d62f8", "photo-1493809842364-78817add7ffb", "photo-1600585154340-be6161a56a0c"],
+  // Roofing & waterproofing
+  "CAT-08": ["photo-1632759145351-1d592919f522", "photo-1600585154340-be6161a56a0c", "photo-1486406146926-c627a92ad1ab", "photo-1545324418-cc1a3fa10c00"],
+  // Sustainability & energy
+  "CAT-09": ["photo-1542601906990-b4d3fb778b09", "photo-1509391366360-2e959784a276", "photo-1560179707-f14e90ef3623", "photo-1466611653911-95081537e5b7"],
+  // Safety, fire & security
+  "CAT-10": ["photo-1558002038-1055907df827", "photo-1497366216548-37526070297c", "photo-1581091226825-a6a2a5aee158", "photo-1486406146926-c627a92ad1ab"],
+  // Planning & advisory
+  "CAT-11": ["photo-1497366754035-f200968a6e72", "photo-1504328345606-18bbc8c9d7d1", "photo-1497366811353-6870744d04b2", "photo-1524758631624-e2822e304c36"],
+  // Visualization & BIM
+  "CAT-12": ["photo-1487958449943-2429e8be8625", "photo-1600585154340-be6161a56a0c", "photo-1486406146926-c627a92ad1ab", "photo-1545324418-cc1a3fa10c00"],
+  // Surveying & testing
+  "CAT-13": ["photo-1581094288338-2314dddb7ece", "photo-1541008022357-e6195d1af8cc", "photo-1504917595217-d4dc5ebe6122", "photo-1589939705384-5185137a7f0f"],
+  // Design-build & turnkey
+  "CAT-14": ["photo-1541008022357-e6195d1af8cc", "photo-1486406146926-c627a92ad1ab", "photo-1600585154340-be6161a56a0c", "photo-1517089152318-42ec560349c0"],
+  // Material suppliers
+  "CAT-15": ["photo-1589939705384-5185137a7f0f", "photo-1587293852726-70cdb56c2866", "photo-1504917595217-d4dc5ebe6122", "photo-1416879595882-3373a0480b5b"],
+  // Facility management & support
+  "CAT-16": ["photo-1497366754035-f200968a6e72", "photo-1497366811353-6870744d04b2", "photo-1504328345606-18bbc8c9d7d1", "photo-1524758631624-e2822e304c36"],
 };
+
+const FALLBACK_PHOTOS = ["photo-1486406146926-c627a92ad1ab", "photo-1497366216548-37526070297c", "photo-1600585154340-be6161a56a0c"];
+
+function unsplash(id: string, w = 800): string {
+  return `https://images.unsplash.com/${id}?auto=format&fit=crop&q=80&w=${w}`;
+}
+
+// Deterministic pick from a category's pool, locked by seed for stability.
+export function categoryImage(categoryId: string, seed: number, w = 800): string {
+  const pool = CATEGORY_IMAGE_POOL[categoryId] || FALLBACK_PHOTOS;
+  return unsplash(pool[Math.abs(seed) % pool.length], w);
+}
+
+// Clean monogram logo (initials) instead of abstract blobs.
+const LOGO_BG = ["ff6a3d", "6366f1", "10b981", "f59e0b", "8b5cf6", "ec4899", "0ea5e9", "14b8a6"];
+export function monogramLogo(name: string, seed: number): string {
+  const bg = LOGO_BG[Math.abs(seed) % LOGO_BG.length];
+  return `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name)}&backgroundColor=${bg}&fontWeight=600&chars=2`;
+}
 
 // ────────────────────────────────────────────────────────────────────────────
 // UNIFIED CATEGORIES (16)
@@ -282,15 +320,13 @@ function buildProfiles<T extends { id: string; name: string; categoryIds: string
       const specs = kind === "pro" ? SPECIALIZATIONS_PRO : SPECIALIZATIONS_SVC;
       const prices = kind === "pro" ? PRICE_RANGES_PRO : PRICE_RANGES_SVC;
       const rating = 4.3 + ((seed % 7) * 0.1);
-      const avatarSeed = `${kind}-${type.id}-${i}`;
       const categoryId = type.categoryIds[0];
-      const keywords = CATEGORY_IMAGE_KEYWORDS[categoryId] || "architecture,building";
-      // loremflickr — keyword-tagged stock photos, locked by seed for stability
+      // Curated, stable Unsplash photos — themed to the discipline, locked by seed.
       const imgLock = ti * 97 + i * 13 + 11;
-      const coverImage = `https://loremflickr.com/800/500/${keywords}?lock=${imgLock}`;
-      const heroImage = `https://loremflickr.com/1600/900/${keywords}?lock=${imgLock + 1000}`;
-      // dicebear shapes — abstract geometric logo marks
-      const logoUrl = `https://api.dicebear.com/7.x/shapes/svg?seed=${avatarSeed}&backgroundType=gradientLinear&backgroundColor=ff6a3d,6366f1,10b981,f59e0b,8b5cf6,ec4899`;
+      const coverImage = categoryImage(categoryId, imgLock, 800);
+      const heroImage = categoryImage(categoryId, imgLock + 1, 1600);
+      // Clean monogram logo derived from the practice name.
+      const logoUrl = monogramLogo(name, imgLock);
       const profile: RegisteredProfile = {
         id: `${kind.toUpperCase()}-${type.id}-${i + 1}`,
         slug: slugify(`${name}-${loc.city}-${ti}-${i}`),
@@ -334,8 +370,8 @@ const _ANKIT_SHARMA: RegisteredProfile = {
   state: "Maharashtra",
   avatar: "https://api.dicebear.com/7.x/initials/svg?seed=AS&backgroundColor=8b5cf6",
   logoUrl: "https://api.dicebear.com/7.x/initials/svg?seed=AS&backgroundColor=8b5cf6",
-  coverImage: "https://loremflickr.com/800/400/interior,design,room?lock=42",
-  heroImage: "https://loremflickr.com/1200/600/interior,luxury,modern?lock=42",
+  coverImage: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=800",
+  heroImage: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1600",
   rating: 4.9,
   reviewCount: 127,
   yearsExp: 6,

@@ -9,7 +9,18 @@ import {
   PROFESSIONAL_TYPES,
   getCategoryById,
   REGISTERED_PROFESSIONALS,
+  categoryImage,
 } from "../data/kcPortalData";
+import teamAnanya from "../../../assets/team/ananya-rao.jpg";
+import teamDaniel from "../../../assets/team/daniel-foster.jpg";
+import teamPriya from "../../../assets/team/priya-iyer.jpg";
+import teamMarcus from "../../../assets/team/marcus-bennett.jpg";
+import teamIshaan from "../../../assets/team/ishaan-kapoor.jpg";
+import teamSofia from "../../../assets/team/sofia-rossi.jpg";
+import teamAarav from "../../../assets/team/aarav-singh.jpg";
+import teamEmily from "../../../assets/team/emily-carter.jpg";
+import teamRohan from "../../../assets/team/rohan-mehta.jpg";
+import teamHannah from "../../../assets/team/hannah-schmidt.jpg";
 
 interface Props {
   profile: RegisteredProfile;
@@ -17,8 +28,6 @@ interface Props {
 
 // ─── Generated editorial "projects" from specializations ──
 function buildProjects(profile: RegisteredProfile) {
-  const cat = getCategoryById(profile.categoryId);
-  const keywords = cat?.slug.replace(/-/g, ",") || "architecture";
   return profile.specializations.slice(0, 6).map((spec, i) => {
     const lock = profile.id.length * 7 + i * 23 + 41;
     return {
@@ -26,7 +35,8 @@ function buildProjects(profile: RegisteredProfile) {
       title: `${spec} — ${["Residence", "Pavilion", "Headquarters", "Atelier", "Retreat", "Courtyard"][i % 6]}`,
       year: 2020 + (i % 5),
       location: profile.city,
-      image: `https://loremflickr.com/1200/800/${keywords},${spec.toLowerCase().replace(/\s+/g, ",")}?lock=${lock}`,
+      // Curated, stable Unsplash photo themed to the practice's discipline.
+      image: categoryImage(profile.categoryId, lock, 1200),
       type: spec,
     };
   });
@@ -37,28 +47,33 @@ const TEAM_ROLES = [
   "Interior Designer", "Junior Architect", "BIM Coordinator", "Office Manager",
 ];
 
-// Portrait indices verified visually for South Asian appearance
+// Real, diverse (Indian + Western) headshots — bundled locally so they always
+// load and read as actual studio people, not random/broken live thumbnails.
 const TEAM_MEMBERS_POOL = [
-  { name: "Ananya Rao",    gender: "women" as const, portraitIdx: 4  },
-  { name: "Rohan Mehta",   gender: "men"   as const, portraitIdx: 1  },
-  { name: "Priya Iyer",    gender: "women" as const, portraitIdx: 19 },
-  { name: "Kabir Shah",    gender: "men"   as const, portraitIdx: 58 },
-  { name: "Ishaan Kapoor", gender: "men"   as const, portraitIdx: 31 },
-  { name: "Nisha Verma",   gender: "women" as const, portraitIdx: 30 },
-  { name: "Aarav Singh",   gender: "men"   as const, portraitIdx: 34 },
-  { name: "Meera Joshi",   gender: "women" as const, portraitIdx: 56 },
+  { name: "Ananya Rao",     avatar: teamAnanya },
+  { name: "Daniel Foster",  avatar: teamDaniel },
+  { name: "Priya Iyer",     avatar: teamPriya },
+  { name: "Marcus Bennett", avatar: teamMarcus },
+  { name: "Ishaan Kapoor",  avatar: teamIshaan },
+  { name: "Sofia Rossi",    avatar: teamSofia },
+  { name: "Aarav Singh",    avatar: teamAarav },
+  { name: "Emily Carter",   avatar: teamEmily },
+  { name: "Rohan Mehta",    avatar: teamRohan },
+  { name: "Hannah Schmidt", avatar: teamHannah },
 ];
 
 function buildTeam(profile: RegisteredProfile) {
   const count = Math.min(6, profile.teamSize);
+  // Offset the roster per studio so different practices show different people.
+  const offset = (profile.name.length + profile.id.length) % TEAM_MEMBERS_POOL.length;
   return Array.from({ length: count }).map((_, i) => {
-    const person = TEAM_MEMBERS_POOL[i % TEAM_MEMBERS_POOL.length];
+    const person = TEAM_MEMBERS_POOL[(i + offset) % TEAM_MEMBERS_POOL.length];
     return {
       id: `${profile.id}-team-${i}`,
       name: person.name,
       slug: person.name.toLowerCase().replace(/\s+/g, "-"),
       role: TEAM_ROLES[(i + profile.name.length) % TEAM_ROLES.length],
-      avatar: `https://randomuser.me/api/portraits/${person.gender}/${person.portraitIdx}.jpg`,
+      avatar: person.avatar,
     };
   });
 }

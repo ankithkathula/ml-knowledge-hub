@@ -671,3 +671,106 @@ export function getInventoryProduct(id: string): InventoryProduct | undefined {
 export function getBrandInventory(): InventoryProduct[] {
   return Object.values(INVENTORY);
 }
+
+// ── Detail resolution for the full catalogue ────────────────────────────────
+// INVENTORY only holds a handful of richly-authored products. Every other
+// product in PRODUCTS previously fell back to one hardcoded tile page. This
+// synthesises a complete, product-specific detail from the real catalogue data
+// so every product opens its own relevant page.
+import { PRODUCTS, type Product } from "../../utils/products";
+import { productImage, productGallery } from "../../utils/productImages";
+import { getBrandLogo } from "../../utils/brandAssets";
+import { BRANDS } from "./mockData";
+
+function aboutBrandFor(brand: string): string {
+  const slug = brand.toLowerCase();
+  const match = BRANDS.find((b) => b.name.toLowerCase() === slug || slug.includes(b.name.toLowerCase().split(" ")[0]));
+  if (match?.about) return match.about;
+  return `${brand} is a trusted manufacturer supplying quality building materials to architects, builders and contractors across India, backed by a strong distribution network and reliable technical support.`;
+}
+
+function synthesizeDetail(p: Product): InventoryProduct {
+  const specs: { label: string; value: string }[] = [];
+  const push = (label: string, value?: string) => { if (value) specs.push({ label, value }); };
+  push("Grade", p.grade);
+  push("Material", p.materialType);
+  push("Compressive Strength", p.compressiveStrength);
+  push("Thickness", p.thickness);
+  push("Density", p.density);
+  push("Coverage", p.coverage);
+  push("Drying Time", p.dryingTime);
+  push("Durability", p.durability);
+  push("Washability", p.washability);
+  push("Packaging", p.packaging);
+
+  const attributeGroups: InventoryProduct["attributeGroups"] = [];
+  if (specs.length) {
+    attributeGroups.push({ title: "SPECIFICATIONS", sections: [{ name: "Technical Details", attributes: specs }] });
+  }
+  if (p.certifications?.length) {
+    attributeGroups.push({
+      title: "CERTIFICATIONS",
+      sections: [{ name: "Standards & Compliance", attributes: p.certifications.map((c) => ({ label: "Certified", value: c })) }],
+    });
+  }
+  if (p.availableCities?.length || p.price) {
+    attributeGroups.push({
+      title: "AVAILABILITY",
+      sections: [{
+        name: "Where to Buy",
+        attributes: [
+          ...(p.price ? [{ label: "Indicative Price", value: p.price }] : []),
+          { label: "Stock", value: p.stock },
+          ...(p.availableCities?.length ? [{ label: "Available In", value: p.availableCities.join(", ") }] : []),
+        ],
+      }],
+    });
+  }
+
+  const desc =
+    `${p.name} from ${p.brand}${p.productFamily ? ` (${p.productFamily})` : ""} — ` +
+    `${p.materialType || p.grade || "a premium building material"} engineered for ${p.application.slice(0, 2).join(" and ").toLowerCase()}. ` +
+    `${p.features.length ? `Key strengths include ${p.features.slice(0, 3).join(", ").toLowerCase()}.` : ""}`;
+
+  return {
+    id: p.id,
+    name: p.name,
+    brand: p.brand,
+    brandLogo: getBrandLogo(p.brand, { size: 200 }),
+    images: productGallery(p),
+    description: desc.trim(),
+    sizes: p.packaging ? [p.packaging] : [],
+    colors: [],
+    finishes: p.finish ? [p.finish] : [],
+    attributeGroups,
+    featureGroups: [
+      ...(p.features.length ? [{ title: "Key Features", features: p.features }] : []),
+      ...(p.badge ? [{ title: "Highlights", features: [p.badge, `Stock: ${p.stock}`] }] : []),
+    ],
+    applications: p.application,
+    faqs: [
+      { question: `What are the main applications of ${p.name}?`, answer: `${p.name} is recommended for ${p.application.join(", ").toLowerCase()}.` },
+      ...(p.certifications?.length ? [{ question: "Is this product certified?", answer: `Yes — it conforms to ${p.certifications.join(", ")}.` }] : []),
+      { question: "What packaging is available?", answer: p.packaging ? `It is supplied as ${p.packaging}.` : `Contact ${p.brand} for packaging options.` },
+    ],
+    aboutBrand: aboutBrandFor(p.brand),
+    category: p.subcategory || p.category,
+    status: "Active",
+    views: 200 + (p.id.length * 37) % 800,
+    enquiries: 8 + (p.id.length * 11) % 60,
+  };
+}
+
+const _detailCache: Record<string, InventoryProduct> = {};
+
+/** Full product detail for any catalogue product (rich inventory or synthesised). */
+export function getProductDetail(id: string): InventoryProduct | undefined {
+  if (!id) return undefined;
+  if (INVENTORY[id]) return INVENTORY[id];
+  if (_detailCache[id]) return _detailCache[id];
+  const p = PRODUCTS.find((pr) => pr.id === id);
+  if (!p) return undefined;
+  const detail = synthesizeDetail(p);
+  _detailCache[id] = detail;
+  return detail;
+}

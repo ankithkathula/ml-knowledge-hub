@@ -4,310 +4,37 @@
  */
 import { motion } from 'motion/react';
 import { useState, useRef } from 'react';
-import { StoreNavigator, type StoreLocation } from '../shared/StoreNavigator';
-import { 
-  ArrowLeft, ArrowRight, MapPin, Globe, Star, Share2, Award, Building2, 
+import { StoreNavigator } from '../shared/StoreNavigator';
+import {
+  ArrowLeft, ArrowRight, MapPin, Globe, Star, Share2, Award, Building2,
   Package, ChevronRight, CheckCircle,
   Download, FileText, Layout, ArrowUpRight, Mail, Phone,
   ChevronDown, Play, X
 } from 'lucide-react';
-import brandLogo from 'figma:asset/cfca8eacc4f23e8cd336915c5e8aaf39b6d1eed3.png';
 import { ImageWithFallback } from '../figma/ImageWithFallback';
 import { MainFooter } from '../MainFooter';
+import { getBrandProfile } from './brandProfileData';
+
+// Icons for the SERVICES section, applied by position (data is now per-brand).
+const SERVICE_ICONS = [
+  <Package size={20} />,
+  <Layout size={20} />,
+  <Award size={20} />,
+  <CheckCircle size={20} />,
+];
 
 interface BrandProfileProps {
   brandName: string;
   onBack: () => void;
+  /** Open the product listing for this brand, optionally narrowed by a category. */
+  onViewProducts?: (category?: string) => void;
 }
 
-const AB_STORES: StoreLocation[] = [
-  { id: "ab1", name: "Aditya Birla Experience Center", type: "flagship", address: "Plot 42, G Block", area: "BKC", city: "Mumbai", pincode: "400051", phone: "+91 22 6652 5000", hours: "Mon–Sat 10am–7pm", lat: 19.0659, lng: 72.8658 },
-  { id: "ab2", name: "UltraTech Cement Hub", type: "dealer", address: "Shop 12, Versova Road", area: "Andheri West", city: "Mumbai", pincode: "400058", phone: "+91 22 2632 8800", hours: "Mon–Sat 9am–6pm", lat: 19.1349, lng: 72.8253 },
-  { id: "ab3", name: "Birla White Showroom", type: "showroom", address: "7 Senapati Bapat Marg", area: "Dadar West", city: "Mumbai", pincode: "400028", phone: "+91 22 2436 7700", hours: "Mon–Sat 10am–6:30pm", lat: 19.0178, lng: 72.8478 },
-  { id: "ab4", name: "UltraTech Supply Depot", type: "depot", address: "MIDC Road, Wagle Estate", area: "Thane West", city: "Thane", pincode: "400604", phone: "+91 22 2580 3300", hours: "Mon–Fri 8am–5pm", lat: 19.2183, lng: 72.9781 },
-  { id: "ab5", name: "Aditya Birla Dealer", type: "dealer", address: "Plot 18, Sector 19", area: "Kharghar", city: "Navi Mumbai", pincode: "410210", phone: "+91 22 2774 6600", hours: "Mon–Sat 9am–6pm", lat: 19.0476, lng: 73.0688 },
-  { id: "ab6", name: "UltraTech Cement Outlet", type: "dealer", address: "Ghodbunder Road, Near Viviana Mall", area: "Manpada", city: "Thane", pincode: "400610", phone: "+91 22 2596 1100", hours: "Mon–Sat 9am–6pm", lat: 19.2468, lng: 72.9659 },
-];
 
-const BRAND_DATA = {
-  name: 'ADITYA BIRLA GROUP',
-  tagline: 'Leading Global Powerhouse in Building Materials',
-  category: 'Building Materials',
-  location: 'Mumbai, MH, India',
-  website: 'www.adityabirla.com',
-  rating: 4.8,
-  reviews: 1420,
-  est: '1857',
-  bannerImage: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1920',
-  logoImage: brandLogo,
-  certifications: ['ISO 9001:2015', 'ISO 14001:2015', 'OHSAS 18001', 'Green Building Council'],
-  certificationsDetailed: [
-    { 
-      name: 'ISO 9001:2015', 
-      issuer: 'Quality Management',
-      image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=400',
-      verified: true
-    },
-    { 
-      name: 'ISO 14001:2015', 
-      issuer: 'Environmental Management',
-      image: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&q=80&w=400',
-      verified: true
-    },
-    { 
-      name: 'GreenPro Certification', 
-      issuer: 'CII-IGBC',
-      image: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=400',
-      verified: true
-    },
-    { 
-      name: 'IGBC Certified', 
-      issuer: 'Green Building Council',
-      image: 'https://images.unsplash.com/photo-1560179707-f14e90ef3623?auto=format&fit=crop&q=80&w=400',
-      verified: true
-    }
-  ],
-  categories: [
-    { name: 'Cement', desc: 'High-performance cement solutions for structural projects.' },
-    { name: 'Steel', desc: 'Structural and reinforcement steel for industrial construction.' },
-    { name: 'Concrete', desc: 'Ready-mix and precast concrete solutions for durability.' },
-    { name: 'Building Materials', desc: 'Comprehensive range of core construction materials.' },
-    { name: 'Waterproofing', desc: 'Advanced waterproofing systems for protection and durability.' },
-    { name: 'Adhesives', desc: 'High-strength bonding solutions for tiles and stone.' }
-  ],
-  about: 'Aditya Birla Group is a global conglomerate with a strong presence in the building materials sector through its flagship brands. We provide end-to-end solutions for the construction industry, ranging from high-performance cement and structural steel to advanced concrete solutions and technical consulting services.',
-  mission: 'To provide world-class building solutions that empower architects and builders to create sustainable, durable, and iconic structures for future generations.',
-  stats: [
-    { label: 'PRODUCTS', value: '140' },
-    { label: 'STORES', value: '24' },
-    { label: 'PORTFOLIO PROJECTS', value: '12' },
-    { label: 'YEARS EXPERIENCE', value: '50+' },
-  ],
-  materials: [
-    { name: 'Material Supply', desc: 'Direct supply of premium grade cement, steel, and aggregates.', icon: <Package size={20} /> },
-    { name: 'Custom Fabrication', desc: 'Specialized structural steel components tailored to architectural designs.', icon: <Layout size={20} /> },
-    { name: 'Technical Consulting', desc: 'Expert feasibility studies and material selection guidance for complex builds.', icon: <Award size={20} /> },
-    { name: 'Installation Support', desc: 'On-site technical support for structural and finishing materials.', icon: <CheckCircle size={20} /> },
-  ],
-  catalogues: [
-    { name: '2025 Architectural Guide', year: '2025', type: 'Main Catalogue', category: 'General', cover: 'https://images.unsplash.com/photo-1544377193-33dcf4d68fb5?auto=format&fit=crop&q=80&w=400' },
-    { name: 'Cement Solutions PDF', year: '2024', type: 'Product Focus', category: 'Flooring', cover: 'https://images.unsplash.com/photo-1518005020251-582c788447dd?auto=format&fit=crop&q=80&w=400' },
-  ],
-  productCategories: [
-    { name: 'UltraTech Cement', count: 42, image: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&q=80&w=400' },
-    { name: 'Structural Steel', count: 28, image: 'https://images.unsplash.com/photo-1587293852726-70cdb56c2866?auto=format&fit=crop&q=80&w=400' },
-    { name: 'Ready Mix Concrete', count: 15, image: 'https://images.unsplash.com/photo-1541008022357-e6195d1af8cc?auto=format&fit=crop&q=80&w=400' },
-    { name: 'Industrial Paints', count: 55, image: 'https://images.unsplash.com/photo-1560185127-6ed189bf02f4?auto=format&fit=crop&q=80&w=400' },
-  ],
-  stores: [] as StoreLocation[],
-  portfolioCategories: [
-    {
-      name: 'Commercial',
-      count: 18,
-      image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=800',
-      projects: [
-        {
-          title: 'Oberoi Business Hub',
-          serviceType: 'Material Supply & Installation',
-          shortDescription: 'Premium commercial complex with state-of-the-art glass facades and structural steel framework.',
-          fullDescription: 'The Oberoi Business Hub represents a landmark commercial development in Mumbai\'s prime business district. This project showcases the integration of UltraTech Cement\'s high-performance solutions with cutting-edge architectural design. The building features a striking glass facade system supported by custom-fabricated structural steel components, creating a modern workspace that prioritizes both aesthetics and functionality.',
-          city: 'Mumbai',
-          country: 'India',
-          duration: '18 months',
-          area: '2,50,000 sq.ft',
-          teamSize: '45 professionals',
-          completionYear: '2024',
-          client: 'Oberoi Realty Ltd.',
-          backgroundImage: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1200',
-          status: 'Active',
-          projectCategory: 'Glass Facades',
-          architect: 'Hafeez Contractor',
-          materialsUsed: ['UltraTech Cement OPC 53', 'Structural Steel Grade A36', 'Low-E Glass Panels'],
-          gallery: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1200', caption: 'Exterior View' },
-            { type: 'image', url: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1200', caption: 'Lobby Interior' },
-            { type: 'image', url: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&q=80&w=1200', caption: 'Office Space' },
-            { type: 'image', url: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1200', caption: 'Structural Detail' },
-          ]
-        },
-        {
-          title: 'Phoenix Mall Extension',
-          serviceType: 'Technical Consulting & Material Supply',
-          shortDescription: 'Large-scale retail expansion featuring advanced waterproofing and ready-mix concrete solutions.',
-          fullDescription: 'The Phoenix Mall Extension project in Bangalore involved the construction of a 300,000 sq.ft retail space with multi-level parking facilities. Our team provided comprehensive waterproofing solutions and ready-mix concrete supply, ensuring durability and structural integrity for this high-traffic commercial space.',
-          city: 'Bangalore',
-          country: 'India',
-          duration: '24 months',
-          area: '3,00,000 sq.ft',
-          teamSize: '60 professionals',
-          completionYear: '2023',
-          client: 'Phoenix Mills Limited',
-          backgroundImage: 'https://images.unsplash.com/photo-1555529771-dd4115eb87de?auto=format&fit=crop&q=80&w=1200',
-          status: 'Active',
-          projectCategory: 'Waterproofing',
-          architect: 'RSP Architects',
-          materialsUsed: ['UltraTech Ready Mix Concrete M40', 'Waterproofing Membrane', 'Tile Adhesives'],
-          gallery: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1555529771-dd4115eb87de?auto=format&fit=crop&q=80&w=1200', caption: 'Main Entrance' },
-            { type: 'image', url: 'https://images.unsplash.com/photo-1567694876529-44ef2c44ad99?auto=format&fit=crop&q=80&w=1200', caption: 'Interior Atrium' },
-            { type: 'image', url: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&q=80&w=1200', caption: 'Retail Corridor' },
-          ]
-        },
-      ]
-    },
-    {
-      name: 'Residential',
-      count: 24,
-      image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&q=80&w=800',
-      projects: [
-        {
-          title: 'Lodha Skyline Towers',
-          serviceType: 'Material Supply',
-          shortDescription: 'Luxury high-rise residential towers with premium cement and waterproofing solutions.',
-          fullDescription: 'Lodha Skyline Towers represents a new benchmark in luxury residential living. This twin-tower development features 45 floors of premium apartments with world-class amenities. Our involvement included supplying UltraTech Cement for structural work and comprehensive waterproofing solutions for bathrooms, terraces, and basements.',
-          city: 'Mumbai',
-          country: 'India',
-          duration: '36 months',
-          area: '8,50,000 sq.ft',
-          teamSize: '80 professionals',
-          completionYear: '2024',
-          client: 'Lodha Group',
-          backgroundImage: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&q=80&w=1200',
-          status: 'Active',
-          projectCategory: 'Cement',
-          architect: 'Pei Cobb Freed & Partners',
-          materialsUsed: ['UltraTech Cement OPC 53', 'Waterproofing Systems', 'Ready Mix Concrete M60'],
-          gallery: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&q=80&w=1200', caption: 'Tower Exterior' },
-            { type: 'image', url: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1200', caption: 'Amenity Deck' },
-            { type: 'image', url: 'https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?auto=format&fit=crop&q=80&w=1200', caption: 'Sample Apartment' },
-            { type: 'image', url: 'https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&q=80&w=1200', caption: 'Rooftop Garden' },
-          ]
-        },
-        {
-          title: 'Green Valley Villas',
-          serviceType: 'Material Supply & Installation Support',
-          shortDescription: 'Eco-friendly villa community with sustainable construction materials.',
-          fullDescription: 'Green Valley Villas is a premium gated community featuring 120 independent villas designed with sustainability at its core. The project utilized eco-friendly cement solutions, advanced tile adhesives, and energy-efficient construction techniques to minimize environmental impact while maximizing comfort.',
-          city: 'Pune',
-          country: 'India',
-          duration: '20 months',
-          area: '4,20,000 sq.ft',
-          teamSize: '35 professionals',
-          completionYear: '2023',
-          client: 'Green Valley Developers',
-          backgroundImage: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1200',
-          status: 'Active',
-          projectCategory: 'Adhesives',
-          architect: 'Design Forum International',
-          materialsUsed: ['UltraTech Cement PPC', 'Tile Adhesives', 'Concrete Blocks'],
-          gallery: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1200', caption: 'Villa Exterior' },
-            { type: 'image', url: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&q=80&w=1200', caption: 'Living Area' },
-            { type: 'image', url: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80&w=1200', caption: 'Bedroom' },
-          ]
-        },
-      ]
-    },
-    {
-      name: 'Infrastructure',
-      count: 12,
-      image: 'https://images.unsplash.com/photo-1681216868987-b7268753b81c?auto=format&fit=crop&q=80&w=800',
-      projects: [
-        {
-          title: 'Mumbai Metro Phase 3',
-          serviceType: 'Material Supply & Technical Consulting',
-          shortDescription: 'Major metro rail infrastructure project with comprehensive material solutions.',
-          fullDescription: 'Mumbai Metro Phase 3 is a critical infrastructure development connecting key business districts. This project required massive quantities of high-grade cement, structural steel, and ready-mix concrete. Our engineering team provided technical support for complex underground construction challenges and material optimization.',
-          city: 'Mumbai',
-          country: 'India',
-          duration: '48 months',
-          area: '32 km alignment',
-          teamSize: '120 professionals',
-          completionYear: '2024',
-          client: 'Mumbai Metro Rail Corporation',
-          backgroundImage: 'https://images.unsplash.com/photo-1681216868987-b7268753b81c?auto=format&fit=crop&q=80&w=1200',
-          status: 'Active',
-          projectCategory: 'Structural Steel',
-          architect: 'RITES Limited',
-          materialsUsed: ['UltraTech Cement OPC 53', 'Structural Steel Grade Fe 500', 'Ready Mix Concrete M50'],
-          gallery: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1681216868987-b7268753b81c?auto=format&fit=crop&q=80&w=1200', caption: 'Metro Station' },
-            { type: 'image', url: 'https://images.unsplash.com/photo-1677419451491-5ddc3a4b7f81?auto=format&fit=crop&q=80&w=1200', caption: 'Platform View' },
-            { type: 'image', url: 'https://images.unsplash.com/photo-1594818379496-da1e345b0ded?auto=format&fit=crop&q=80&w=1200', caption: 'Tunnel Construction' },
-            { type: 'image', url: 'https://images.unsplash.com/photo-1586264829860-3d587784e0cb?auto=format&fit=crop&q=80&w=1200', caption: 'Structural Detail' },
-          ]
-        },
-        {
-          title: 'Delhi-Meerut Expressway',
-          serviceType: 'Material Supply',
-          shortDescription: '96 km expressway with advanced concrete solutions for durability.',
-          fullDescription: 'The Delhi-Meerut Expressway is a landmark highway project designed to reduce travel time between Delhi and Meerut. This project utilized specialized high-performance concrete mixes designed for heavy traffic loads and extreme weather conditions.',
-          city: 'Delhi NCR',
-          country: 'India',
-          duration: '30 months',
-          area: '96 km expressway',
-          teamSize: '90 professionals',
-          completionYear: '2023',
-          client: 'National Highways Authority of India',
-          backgroundImage: 'https://images.unsplash.com/photo-1585859407132-3ea9d5e7f65e?auto=format&fit=crop&q=80&w=1200',
-          status: 'Active',
-          projectCategory: 'Concrete',
-          architect: 'NHAI Engineering Division',
-          materialsUsed: ['UltraTech Ready Mix Concrete M45', 'Cement OPC 53', 'Steel Reinforcement'],
-          gallery: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1585859407132-3ea9d5e7f65e?auto=format&fit=crop&q=80&w=1200', caption: 'Highway Overview' },
-            { type: 'image', url: 'https://images.unsplash.com/photo-1598432856768-c91c69573215?auto=format&fit=crop&q=80&w=1200', caption: 'Bridge Section' },
-            { type: 'image', url: 'https://images.unsplash.com/photo-1605098293544-25f4c32344c8?auto=format&fit=crop&q=80&w=1200', caption: 'Toll Plaza' },
-          ]
-        },
-      ]
-    },
-    {
-      name: 'Industrial',
-      count: 8,
-      image: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&q=80&w=800',
-      projects: [
-        {
-          title: 'Tata Steel Plant Expansion',
-          serviceType: 'Material Supply & Custom Fabrication',
-          shortDescription: 'Large-scale industrial facility expansion with custom steel fabrication.',
-          fullDescription: 'The Tata Steel Plant Expansion in Jamshedpur represents one of India\'s largest industrial construction projects. Our team provided custom-fabricated structural steel components, high-grade cement for foundation work, and specialized concrete mixes for heavy machinery installations.',
-          city: 'Jamshedpur',
-          country: 'India',
-          duration: '42 months',
-          area: '15,00,000 sq.ft',
-          teamSize: '150 professionals',
-          completionYear: '2024',
-          client: 'Tata Steel Limited',
-          backgroundImage: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&q=80&w=1200',
-          status: 'Active',
-          projectCategory: 'Structural Steel',
-          architect: 'Larsen & Toubro',
-          materialsUsed: ['Structural Steel Grade Fe 550', 'UltraTech Cement OPC 53', 'High-Strength Concrete M60'],
-          gallery: [
-            { type: 'image', url: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&q=80&w=1200', caption: 'Plant Exterior' },
-            { type: 'image', url: 'https://images.unsplash.com/photo-1587293852726-70cdb56c2866?auto=format&fit=crop&q=80&w=1200', caption: 'Manufacturing Unit' },
-            { type: 'image', url: 'https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&q=80&w=1200', caption: 'Warehouse' },
-            { type: 'image', url: 'https://images.unsplash.com/photo-1565610222535-2d66b2eaa9a6?auto=format&fit=crop&q=80&w=1200', caption: 'Storage Facility' },
-          ]
-        },
-      ]
-    },
-  ],
-  portfolio: [
-    { name: 'Mumbai Metro Phase 3', category: 'Infrastructure', year: '2024', image: 'https://images.unsplash.com/photo-1681216868987-b7268753b81c?auto=format&fit=crop&q=80&w=800' },
-  ],
-  contact: {
-    email: 'sales@adityabirla.com',
-    phone: '+91 22 6691 7800',
-    hq: 'Mumbai, India',
-    website: 'www.adityabirla.com'
-  }
-};
-
-export function BrandProfile({ brandName, onBack }: BrandProfileProps) {
-  const currentBrandName = brandName || BRAND_DATA.name;
+export function BrandProfile({ brandName, onBack, onViewProducts }: BrandProfileProps) {
+  // Resolve real, brand-specific content for whatever id/name the route passes.
+  const BRAND_DATA = getBrandProfile(brandName);
+  const currentBrandName = BRAND_DATA.name;
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [selectedPortfolioCategory, setSelectedPortfolioCategory] = useState<string | null>(null);
   const [selectedProject, setSelectedProject] = useState<any>(null);
@@ -459,15 +186,19 @@ export function BrandProfile({ brandName, onBack }: BrandProfileProps) {
         <section>
           <div className="flex items-center justify-between mb-[24px]">
             <h2 className="text-[11px] font-medium uppercase tracking-[0.3em] text-gray-400">PRODUCT CATEGORIES</h2>
-            <button className="text-[11px] font-bold text-[#FF6A3D] uppercase tracking-widest flex items-center gap-1 hover:gap-2 transition-all">
+            <button
+              onClick={() => onViewProducts?.()}
+              className="text-[11px] font-bold text-[#FF6A3D] uppercase tracking-widest flex items-center gap-1 hover:gap-2 transition-all cursor-pointer"
+            >
               VIEW ALL <ChevronRight size={14} />
             </button>
           </div>
           <div className="flex md:grid md:grid-cols-2 lg:grid-cols-4 gap-6 overflow-x-auto no-scrollbar pb-4 md:pb-0">
             {BRAND_DATA.productCategories.map((cat, idx) => (
-              <motion.div 
+              <motion.div
                 key={idx}
                 whileHover={{ y: -5 }}
+                onClick={() => onViewProducts?.(cat.name)}
                 className="bg-white border border-[#E6EAF0] rounded-xl overflow-hidden h-[220px] cursor-pointer group shadow-sm hover:shadow-md transition-all shrink-0 w-[240px] md:w-full"
               >
                 <div className="h-[140px] w-full overflow-hidden">
@@ -506,7 +237,7 @@ export function BrandProfile({ brandName, onBack }: BrandProfileProps) {
                 >
                   <div className="flex items-start gap-4">
                     <div className="w-10 h-10 bg-[#FF6A3D]/5 text-[#FF6A3D] rounded-lg flex items-center justify-center shrink-0">
-                      {service.icon}
+                      {SERVICE_ICONS[idx % SERVICE_ICONS.length]}
                     </div>
                     <div className="overflow-hidden">
                       <h3 className="text-[13px] font-medium text-[#111111] uppercase tracking-wider truncate">{service.name}</h3>
@@ -904,7 +635,7 @@ export function BrandProfile({ brandName, onBack }: BrandProfileProps) {
 
         {/* SECTION 7: STORES & LOCATIONS */}
         <section>
-          <StoreNavigator stores={AB_STORES} brandName="Aditya Birla" accentColor="#FF6A3D" />
+          <StoreNavigator stores={BRAND_DATA.stores} brandName={currentBrandName} accentColor={BRAND_DATA.accentColor} />
         </section>
 
         {/* SECTION 8: CONTACT BRAND (UPGRADED) */}

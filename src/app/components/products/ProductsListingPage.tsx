@@ -20,7 +20,17 @@ interface ProductsListingPageProps {
   onProductClick: (productId: string) => void;
   onBackToHome?: () => void;
   initialPath?: string[];
+  initialBrand?: string;
+  initialSearch?: string;
 }
+
+// Tolerant brand comparison so deep-links (?brand=UltraTech Cement / ULTRATECH
+// CEMENT / ultratech-cement) match the catalogue's exact brand strings.
+const brandSlug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "");
+const brandMatches = (productBrand: string, selected: string) => {
+  const a = brandSlug(productBrand), b = brandSlug(selected);
+  return a === b || a.includes(b) || b.includes(a);
+};
 
 // Extended product interface with family data
 interface ExtendedProduct extends Product {
@@ -84,15 +94,15 @@ const countProductsInNode = (node: CategoryNode, allProducts: Product[]): number
   ).length;
 };
 
-export function ProductsListingPage({ onProductClick, onBackToHome, initialPath = [] }: ProductsListingPageProps) {
+export function ProductsListingPage({ onProductClick, onBackToHome, initialPath = [], initialBrand, initialSearch }: ProductsListingPageProps) {
   const [currentPath, setCurrentPath] = useState<string[]>(initialPath);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(initialSearch ?? '');
   const [catSearch, setCatSearch] = useState('');
   const [brandSearch, setBrandSearch] = useState('');
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
   const [expandedCats, setExpandedCats] = useState<Set<string>>(new Set(initialPath));
   const [selectedAttributes, setSelectedAttributes] = useState<Set<string>>(new Set());
-  const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
+  const [selectedBrand, setSelectedBrand] = useState<string | null>(initialBrand ?? null);
   const [viewMode, setViewMode] = useState<'byFamily' | 'allProducts'>('byFamily');
   const [expandedFamilies, setExpandedFamilies] = useState<Set<string>>(new Set());
   const [expandedBrands, setExpandedBrands] = useState<Set<string>>(new Set());
@@ -288,17 +298,21 @@ export function ProductsListingPage({ onProductClick, onBackToHome, initialPath 
         if (currentPath.length > 3 && p.productType    !== currentPath[3]) return false;
       }
 
-      // Search filter
+      // Search filter — token-based so multi-word queries (e.g. a brand's
+      // "OPC Cement" category) match when every word appears in the product's
+      // searchable text, not only as one exact substring.
       if (searchQuery) {
-        const query = searchQuery.toLowerCase();
-        const matches = p.name.toLowerCase().includes(query) || 
-                        p.brand.toLowerCase().includes(query) || 
-                        p.category.toLowerCase().includes(query);
+        const haystack = [
+          p.name, p.brand, p.category, p.subcategory, p.subSubcategory,
+          p.productFamily, p.grade, p.materialType, ...(p.features || []), ...(p.application || []),
+        ].filter(Boolean).join(" ").toLowerCase();
+        const tokens = searchQuery.toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
+        const matches = tokens.every(t => haystack.includes(t));
         if (!matches) return false;
       }
 
-      // Brand filter (single-select)
-      if (selectedBrand && p.brand !== selectedBrand) {
+      // Brand filter (single-select, tolerant so deep-links match)
+      if (selectedBrand && !brandMatches(p.brand, selectedBrand)) {
         return false;
       }
 

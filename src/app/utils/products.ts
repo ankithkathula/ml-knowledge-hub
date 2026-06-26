@@ -1,3 +1,5 @@
+import { productImage } from "./productImages";
+
 export interface Product {
   id: string;
   name: string;
@@ -30,7 +32,7 @@ export interface Product {
   dryingTime?: string; // e.g., "30 min - 2 hrs"
 }
 
-export const PRODUCTS: Product[] = [
+const RAW_PRODUCTS: Product[] = [
   // ========== CEMENT > PORTLAND CEMENT > OPC 53 ==========
   {
     id: 'p1',
@@ -935,3 +937,7 @@ export const PRODUCTS: Product[] = [
     price: '₹350/bag'
   }
 ];
+
+// Override each product's image with a local, category-relevant asset so the
+// catalogue never relies on a live image host and photos always match the product.
+export const PRODUCTS: Product[] = RAW_PRODUCTS.map((p) => ({ ...p, image: productImage(p) }));

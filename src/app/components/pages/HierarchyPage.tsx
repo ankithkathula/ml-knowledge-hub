@@ -13,6 +13,7 @@ import {
   getSiblings,
   type HierarchyNode, type BrandInfo,
 } from "../data/hierarchyData";
+import { getProductImage } from "../../utils/brandAssets";
 
 /* ============ SECTION DIVIDER ============ */
 function SectionHeader({ icon, title, count }: { icon: React.ReactNode; title: string; count?: number }) {
@@ -97,19 +98,14 @@ function HorizontalBar({ items, activeId, onSelect }: { items: HierarchyNode[]; 
 
 /* ============ CATEGORY CARD ============ */
 function CategoryCard({ node, linkTo }: { node: HierarchyNode; linkTo: string }) {
+  // Every category gets a relevant cover — explicit image, else one mapped from
+  // the category's slug/name keywords (live-fetched, category-appropriate).
+  const cover = node.image ?? getProductImage(node.id || node.name);
   return (
     <Link to={linkTo} className="group gl-card cursor-pointer overflow-hidden" style={{ padding: 0 }}>
       <div className="relative h-36 overflow-hidden" style={{ background: "var(--bg-hero)" }}>
-        {node.image ? (
-          <>
-            <img src={node.image} alt={node.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
-            <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.5) 100%)" }} />
-          </>
-        ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <Package className="w-10 h-10" style={{ color: "rgba(255,106,61,0.18)" }} />
-          </div>
-        )}
+        <img src={cover} alt={node.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.5) 100%)" }} />
         {node.childCount !== undefined && node.childCount > 0 && (
           <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full" style={{ background: "var(--glass-strong)", fontSize: "0.7rem", fontWeight: 600, color: "var(--text-primary)" }}>
             {node.childCount} subcategories

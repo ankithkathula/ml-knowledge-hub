@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { getInventoryProduct } from '../data/inventoryData';
+import { getProductDetail } from '../data/inventoryData';
 import { ChevronDown, ExternalLink, Plus, Heart, ChevronRight, Minus, ChevronLeft, ArrowRight, Share2, Link2, Check, X, CheckCircle, Mail, MessageCircle, Layers, MapPin, Download, RotateCcw, Smartphone, ScanLine, ZoomIn, ZoomOut, ChevronUp, Sun, Moon, Info } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Link, useNavigate } from 'react-router';
@@ -2103,7 +2103,7 @@ interface ProductDetailPageProps {
 }
 
 export function ProductDetailPage({ productId, onBack, onViewBrandProfile }: ProductDetailPageProps) {
-  const data = getInventoryProduct(productId ?? '') ?? productData;
+  const data = getProductDetail(productId ?? '') ?? productData;
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedSize, setSelectedSize] = useState(0);
   const [selectedColor, setSelectedColor] = useState(0);
