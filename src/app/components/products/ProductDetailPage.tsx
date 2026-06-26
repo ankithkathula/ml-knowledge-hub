@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { getProductDetail } from '../data/inventoryData';
+import { getBrandProfile } from '../brand/brandProfileData';
 import { ChevronDown, ExternalLink, Plus, Heart, ChevronRight, Minus, ChevronLeft, ArrowRight, Share2, Link2, Check, X, CheckCircle, Mail, MessageCircle, Layers, MapPin, Download, RotateCcw, Smartphone, ScanLine, ZoomIn, ZoomOut, ChevronUp, Sun, Moon, Info } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Link, useNavigate } from 'react-router';
@@ -230,8 +231,8 @@ function SharePanel({ onClose, productName, productBrand }: { onClose: () => voi
 const TIMELINES = ['As soon as possible', 'Within 1–3 months', 'Within 3–6 months', '6 months or more'];
 
 function QuoteModal({
-  size, color, finish, onClose,
-}: { size: string; color: string; finish: string; onClose: () => void }) {
+  size, color, finish, onClose, brand, productName, productImage,
+}: { size: string; color: string; finish: string; onClose: () => void; brand: string; productName: string; productImage: string }) {
   const [step, setStep] = useState<'form' | 'success'>('form');
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [form, setForm] = useState({ name: '', company: '', email: '', phone: '', quantity: '', timeline: '', notes: '' });
@@ -281,7 +282,7 @@ function QuoteModal({
         <div className="flex items-center justify-between px-6 py-5 border-b border-[#F0F0F0] sticky top-0 bg-white z-10">
           <div>
             <h2 className="text-[15px] font-semibold text-[#0F172A]">Request a Quote</h2>
-            <p className="text-[12px] text-gray-400 mt-0.5">{data.brand} will respond within 24 hours</p>
+            <p className="text-[12px] text-gray-400 mt-0.5">{brand} will respond within 24 hours</p>
           </div>
           <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors text-gray-400">
             <X size={16} />
@@ -292,10 +293,10 @@ function QuoteModal({
           <form onSubmit={submit} className="p-6 space-y-4" noValidate>
             {/* Product summary chip */}
             <div className="bg-[#FFF5F0] border border-[#FFD9C7] rounded-xl px-4 py-3 flex items-start gap-3">
-              <img src={data.images[0]} className="w-12 h-12 rounded-lg object-cover flex-shrink-0" alt="" />
+              <img src={productImage} className="w-12 h-12 rounded-lg object-cover flex-shrink-0" alt="" />
               <div>
-                <p className="text-[13px] font-semibold text-[#0F172A]">{data.name}</p>
-                <p className="text-[11px] text-gray-500 mt-0.5">{size} · {color} · {finish} finish</p>
+                <p className="text-[13px] font-semibold text-[#0F172A]">{productName}</p>
+                <p className="text-[11px] text-gray-500 mt-0.5">{[size, color, finish && `${finish} finish`].filter(Boolean).join(' · ') || brand}</p>
               </div>
             </div>
 
@@ -345,7 +346,7 @@ function QuoteModal({
             </div>
             <h3 className="text-[18px] font-semibold text-[#0F172A] mb-2">Quote request sent!</h3>
             <p className="text-[13px] text-gray-500 max-w-xs">
-              {data.brand} has received your enquiry for <strong>{data.name}</strong>. Expect a response within 24 business hours.
+              {brand} has received your enquiry for <strong>{productName}</strong>. Expect a response within 24 business hours.
             </p>
             <button
               onClick={onClose}
@@ -2104,6 +2105,8 @@ interface ProductDetailPageProps {
 
 export function ProductDetailPage({ productId, onBack, onViewBrandProfile }: ProductDetailPageProps) {
   const data = getProductDetail(productId ?? '') ?? productData;
+  // Stores relevant to this product's own brand (not a hardcoded brand).
+  const brandStores = useMemo(() => getBrandProfile(data.brand).stores, [data.brand]);
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedSize, setSelectedSize] = useState(0);
   const [selectedColor, setSelectedColor] = useState(0);
@@ -2540,7 +2543,7 @@ export function ProductDetailPage({ productId, onBack, onViewBrandProfile }: Pro
       {/* SECTION 8: STORE NAVIGATOR */}
       <section className="py-16 md:py-20 border-t border-[#E5E7EB]">
         <div className="max-w-[1200px] mx-auto px-4 md:px-8">
-          <StoreNavigator stores={KAJARIA_STORES} brandName="Kajaria Ceramics" accentColor="#FF6A3D" />
+          <StoreNavigator stores={brandStores} brandName={data.brand} accentColor="#FF6A3D" />
         </div>
       </section>
 
@@ -2574,6 +2577,9 @@ export function ProductDetailPage({ productId, onBack, onViewBrandProfile }: Pro
             size={data.sizes[selectedSize]}
             color={data.colors[selectedColor]}
             finish={data.finishes[selectedFinish]}
+            brand={data.brand}
+            productName={data.name}
+            productImage={data.images[0]}
             onClose={() => setQuoteOpen(false)}
           />
         )}

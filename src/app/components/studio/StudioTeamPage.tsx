@@ -317,6 +317,205 @@ function PermToggle({ checked, onChange }: { checked: boolean; onChange: () => v
   );
 }
 
+/* ── Project Assignments ───────────────────────────────────────────── */
+
+type ProjectRole = "Lead" | "Contributor" | "Reviewer" | "Viewer";
+const PROJECT_ROLES: ProjectRole[] = ["Lead", "Contributor", "Reviewer", "Viewer"];
+
+interface ProjPerms { view: boolean; edit: boolean; upload: boolean; comment: boolean; manage: boolean }
+interface ProjAssignment { memberId: string; role: ProjectRole; perms: ProjPerms }
+
+const PERM_COLS: { key: keyof ProjPerms; label: string }[] = [
+  { key: "view", label: "View" },
+  { key: "edit", label: "Edit" },
+  { key: "upload", label: "Upload Files" },
+  { key: "comment", label: "Comment" },
+  { key: "manage", label: "Manage" },
+];
+
+// Default per-project rights implied by a project role (editable afterwards).
+function permsForRole(role: ProjectRole): ProjPerms {
+  switch (role) {
+    case "Lead":        return { view: true, edit: true, upload: true, comment: true, manage: true };
+    case "Contributor": return { view: true, edit: true, upload: true, comment: true, manage: false };
+    case "Reviewer":    return { view: true, edit: false, upload: false, comment: true, manage: false };
+    case "Viewer":      return { view: true, edit: false, upload: false, comment: false, manage: false };
+  }
+}
+
+const STUDIO_PROJECTS = [
+  { id: "p-greenfield", name: "Villa Greenfield", client: "Ravi Sharma", phase: "Design Development" },
+  { id: "p-lakewood",   name: "Lakewood Residences", client: "Lodha Group", phase: "Construction Docs" },
+  { id: "p-oberoi",     name: "Oberoi Commercial Tower", client: "Oberoi Realty", phase: "Concept" },
+  { id: "p-riverside",  name: "Riverside Resort", client: "Leela Hospitality", phase: "Handover" },
+];
+
+const INITIAL_ASSIGNMENTS: Record<string, ProjAssignment[]> = {
+  "p-greenfield": [
+    { memberId: "m1", role: "Lead",        perms: permsForRole("Lead") },
+    { memberId: "m3", role: "Contributor", perms: permsForRole("Contributor") },
+    { memberId: "m5", role: "Viewer",      perms: permsForRole("Viewer") },
+  ],
+  "p-lakewood": [
+    { memberId: "m2", role: "Lead",        perms: permsForRole("Lead") },
+    { memberId: "m4", role: "Contributor", perms: permsForRole("Contributor") },
+  ],
+  "p-oberoi": [
+    { memberId: "m2", role: "Lead",        perms: permsForRole("Lead") },
+    { memberId: "m3", role: "Reviewer",    perms: permsForRole("Reviewer") },
+  ],
+  "p-riverside": [
+    { memberId: "m1", role: "Reviewer",    perms: permsForRole("Reviewer") },
+  ],
+};
+
+function ProjectAssignments({ members }: { members: TeamMember[] }) {
+  const [activeProject, setActiveProject] = useState(STUDIO_PROJECTS[0].id);
+  const [assignments, setAssignments] = useState<Record<string, ProjAssignment[]>>(INITIAL_ASSIGNMENTS);
+  const [addOpen, setAddOpen] = useState(false);
+
+  const memberById = useMemo(() => Object.fromEntries(members.map((m) => [m.id, m])), [members]);
+  const rows = assignments[activeProject] ?? [];
+  const assignedIds = new Set(rows.map((r) => r.memberId));
+  const available = members.filter((m) => !assignedIds.has(m.id));
+
+  const setRows = (next: ProjAssignment[]) =>
+    setAssignments((prev) => ({ ...prev, [activeProject]: next }));
+
+  const changeRole = (memberId: string, role: ProjectRole) =>
+    setRows(rows.map((r) => (r.memberId === memberId ? { ...r, role, perms: permsForRole(role) } : r)));
+  const togglePerm = (memberId: string, key: keyof ProjPerms) =>
+    setRows(rows.map((r) => (r.memberId === memberId ? { ...r, perms: { ...r.perms, [key]: !r.perms[key] } } : r)));
+  const remove = (memberId: string) => setRows(rows.filter((r) => r.memberId !== memberId));
+  const add = (memberId: string) => {
+    setRows([...rows, { memberId, role: "Contributor", perms: permsForRole("Contributor") }]);
+    setAddOpen(false);
+  };
+
+  const activeProj = STUDIO_PROJECTS.find((p) => p.id === activeProject)!;
+
+  return (
+    <div className="rounded-2xl p-5" style={{ background: "white", border: "1px solid rgba(0,0,0,0.07)", boxShadow: "0 1px 6px rgba(0,0,0,0.04)" }}>
+      <div className="flex items-center justify-between mb-1">
+        <h3 className="text-sm font-bold" style={{ color: "var(--text-primary)" }}>Project Assignments</h3>
+        <span className="text-[11px]" style={{ color: "var(--text-muted)" }}>{rows.length} on this project</span>
+      </div>
+      <p className="text-xs mb-4" style={{ color: "var(--text-muted)" }}>
+        Assign members to projects, set each member's role on that project, and control exactly what they can do there.
+      </p>
+
+      {/* Project tabs */}
+      <div className="flex gap-2 overflow-x-auto pb-1 mb-4">
+        {STUDIO_PROJECTS.map((p) => {
+          const active = p.id === activeProject;
+          return (
+            <button
+              key={p.id}
+              onClick={() => setActiveProject(p.id)}
+              className="flex-shrink-0 px-3.5 py-2 rounded-xl text-left transition-all"
+              style={{
+                background: active ? "var(--accent)" : "rgba(0,0,0,0.03)",
+                color: active ? "#fff" : "var(--text-secondary)",
+                border: active ? "1px solid var(--accent)" : "1px solid rgba(0,0,0,0.06)",
+              }}
+            >
+              <div style={{ fontSize: "0.8rem", fontWeight: 700 }}>{p.name}</div>
+              <div style={{ fontSize: "0.62rem", opacity: 0.8 }}>{(assignments[p.id] ?? []).length} members · {p.phase}</div>
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="flex items-center justify-between mb-3">
+        <div style={{ fontSize: "0.72rem", color: "var(--text-muted)" }}>
+          Client: <strong style={{ color: "var(--text-secondary)" }}>{activeProj.client}</strong> · Phase: {activeProj.phase}
+        </div>
+        <div className="relative">
+          <button
+            onClick={() => setAddOpen((o) => !o)}
+            disabled={available.length === 0}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold"
+            style={{ background: "var(--accent-light)", color: "var(--accent)", opacity: available.length === 0 ? 0.5 : 1 }}
+          >
+            <UserPlus className="w-3.5 h-3.5" /> Assign member
+          </button>
+          {addOpen && available.length > 0 && (
+            <div className="absolute right-0 mt-1 w-56 rounded-xl py-1 z-20" style={{ background: "white", border: "1px solid rgba(0,0,0,0.1)", boxShadow: "0 8px 24px rgba(0,0,0,0.12)" }}>
+              {available.map((m) => (
+                <button key={m.id} onClick={() => add(m.id)} className="w-full flex items-center gap-2.5 px-3 py-2 hover:bg-gray-50 text-left">
+                  <img src={m.avatarUrl} alt="" className="w-7 h-7 rounded-full object-cover" />
+                  <div>
+                    <div style={{ fontSize: "0.78rem", fontWeight: 600, color: "var(--text-primary)" }}>{m.name}</div>
+                    <div style={{ fontSize: "0.66rem", color: "var(--text-muted)" }}>{m.role}</div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Assignment table */}
+      <div className="overflow-x-auto">
+        <table className="w-full min-w-[640px]">
+          <thead>
+            <tr style={{ borderBottom: "1px solid rgba(0,0,0,0.08)" }}>
+              <th className="text-left pb-2" style={{ fontSize: "0.66rem", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase" }}>Member</th>
+              <th className="text-left pb-2" style={{ fontSize: "0.66rem", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase" }}>Project Role</th>
+              {PERM_COLS.map((c) => (
+                <th key={c.key} className="pb-2" style={{ fontSize: "0.62rem", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", textAlign: "center" }}>{c.label}</th>
+              ))}
+              <th />
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((r) => {
+              const m = memberById[r.memberId];
+              if (!m) return null;
+              return (
+                <tr key={r.memberId} style={{ borderBottom: "1px solid rgba(0,0,0,0.05)" }}>
+                  <td className="py-3">
+                    <div className="flex items-center gap-2.5">
+                      <img src={m.avatarUrl} alt="" className="w-8 h-8 rounded-full object-cover" />
+                      <div>
+                        <div style={{ fontSize: "0.8rem", fontWeight: 600, color: "var(--text-primary)" }}>{m.name}</div>
+                        <div style={{ fontSize: "0.64rem", color: "var(--text-muted)" }}>{m.role} · studio</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="py-3">
+                    <select
+                      value={r.role}
+                      onChange={(e) => changeRole(r.memberId, e.target.value as ProjectRole)}
+                      className="px-2.5 py-1.5 rounded-lg text-[12px] font-semibold"
+                      style={{ border: "1px solid rgba(0,0,0,0.12)", background: "white", color: "var(--text-primary)" }}
+                    >
+                      {PROJECT_ROLES.map((role) => <option key={role} value={role}>{role}</option>)}
+                    </select>
+                  </td>
+                  {PERM_COLS.map((c) => (
+                    <td key={c.key} className="py-3 text-center">
+                      <PermToggle checked={r.perms[c.key]} onChange={() => togglePerm(r.memberId, c.key)} />
+                    </td>
+                  ))}
+                  <td className="py-3 text-right">
+                    <button onClick={() => remove(r.memberId)} className="w-7 h-7 rounded-lg inline-flex items-center justify-center" style={{ color: "#ef4444", background: "rgba(239,68,68,0.08)" }} title="Remove from project">
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+            {rows.length === 0 && (
+              <tr><td colSpan={8} className="py-6 text-center" style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>No members assigned to this project yet.</td></tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
 /* ── Component ─────────────────────────────────────────────────────── */
 
 export function StudioTeamPage() {
@@ -489,6 +688,9 @@ export function StudioTeamPage() {
 
       {/* ── Attendance ──────────────────────────────────────────────── */}
       <AttendanceSection />
+
+      {/* ── Project Assignments (per-project role + rights) ─────────── */}
+      <ProjectAssignments members={members} />
 
       {/* ── Pending Invitations ─────────────────────────────────────── */}
       {invitations.length > 0 && (

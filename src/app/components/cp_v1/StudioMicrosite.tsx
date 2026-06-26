@@ -62,7 +62,7 @@ interface Review {
 
 const MOCK_STUDIO = {
   id: '1',
-  name: 'Morphogenesis',
+  name: 'Studio Materium',
   type: 'Architecture Studio',
   logo: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=400',
   coverImage: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&q=80&w=1600',
@@ -259,7 +259,7 @@ const TESTIMONIALS_FOR_SECTION = [
     name: 'Amit Patel',
     avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=400',
     rating: 5,
-    text: 'Morphogenesis delivered beyond expectations. Their sustainable design approach helped us achieve LEED certification.',
+    text: 'Studio Materium delivered beyond expectations. Their sustainable design approach helped us achieve LEED certification.',
     project: 'Corporate Headquarters'
   },
   {
