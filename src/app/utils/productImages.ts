@@ -47,7 +47,11 @@ export function productImageKey(p: ProductLike): ProductImageKey {
   if (/waterproof|adhesive|grout|sealant|admixture|chemical|membrane|bitumen|epoxy/.test(hay)) return "chemicals";
   if (/ready[- ]?mix|\brmc\b|concrete/.test(hay)) return "concrete";
   if (/cement|\bopc\b|\bppc\b|\bpsc\b|putty/.test(hay)) return "cement";
-  if (/paint|emulsion|enamel|primer|coating/.test(hay)) return "paint";
+  if (/paint|emulsion|enamel|primer|coating|putty wall/.test(hay)) return "paint";
+  if (/ply|plywood|veneer|laminate|block ?board|flush door|\bmdf\b|timber|wood/.test(hay)) return "masonry";
+  if (/glass|glazing|gypsum|\bboard\b|insulation/.test(hay)) return "tiles";
+  if (/handle|hinge|lock|fastener|hardware|fitting/.test(hay)) return "steel";
+  if (/switch|socket|wire|cable|\bmcb\b|\brccb\b|electric|conduit/.test(hay)) return "lightingCommercial";
   if (/commercial-lighting|panel|downlight|batten/.test(hay)) return "lightingCommercial";
   if (/light|bulb|\bled\b|lamp|filament|decorative/.test(hay)) return "lighting";
   return "cement"; // construction-site fallback

@@ -23,7 +23,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       # Install exactly from the committed lockfile. react/react-dom are declared as
       # optional peerDependencies (Figma export quirk), so a plain `npm install` /
