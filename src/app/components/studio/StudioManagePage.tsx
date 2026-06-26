@@ -65,12 +65,14 @@ interface BusinessHours {
 
 // --- Mock Data ---
 
+// Same studio roster as the Team page (/studio/team) — names, avatars and
+// emails kept in sync; here we show each person's job title.
 const mockTeam: TeamMember[] = [
-  { id: "1", name: "Ar. Vikram Deshmukh", role: "Principal Architect", email: "vikram@studiomaterium.in", avatar: "VD", avatarUrl: "https://i.pravatar.cc/80?img=37", status: "Active", joinedDate: "2024-01-15" },
-  { id: "2", name: "Neha Kulkarni", role: "Senior Interior Designer", email: "neha@studiomaterium.in", avatar: "NK", avatarUrl: "https://i.pravatar.cc/80?img=39", status: "Active", joinedDate: "2024-06-20" },
-  { id: "3", name: "Rohan Joshi", role: "Project Manager", email: "rohan@studiomaterium.in", avatar: "RJ", avatarUrl: "https://i.pravatar.cc/80?img=24", status: "Active", joinedDate: "2025-02-10" },
-  { id: "4", name: "Sneha Patil", role: "Junior Architect", email: "sneha@studiomaterium.in", avatar: "SP", avatarUrl: "https://i.pravatar.cc/80?img=50", status: "Active", joinedDate: "2025-08-01" },
-  { id: "5", name: "Amit Rao", role: "MEP Consultant", email: "amit.rao@gmail.com", avatar: "AR", avatarUrl: "https://i.pravatar.cc/80?img=6", status: "Invited", joinedDate: "" },
+  { id: "1", name: "Ar. Arjun Mehta", role: "Principal Architect & Founder", email: "arjun@studiomaterium.in", avatar: "AM", avatarUrl: "https://i.pravatar.cc/80?img=12", status: "Active", joinedDate: "2024-01-15" },
+  { id: "2", name: "Priya Sharma", role: "Design Director", email: "priya.sharma@studiomaterium.in", avatar: "PS", avatarUrl: "https://i.pravatar.cc/80?img=47", status: "Active", joinedDate: "2024-03-08" },
+  { id: "3", name: "Rahul Krishnan", role: "Senior Architect", email: "rahul.k@studiomaterium.in", avatar: "RK", avatarUrl: "https://i.pravatar.cc/80?img=57", status: "Active", joinedDate: "2024-06-22" },
+  { id: "4", name: "Sneha Patel", role: "Interior Designer", email: "sneha.p@studiomaterium.in", avatar: "SP", avatarUrl: "https://i.pravatar.cc/80?img=44", status: "Active", joinedDate: "2024-09-05" },
+  { id: "5", name: "Vikram Desai", role: "Junior Architect", email: "vikram.d@studiomaterium.in", avatar: "VD", avatarUrl: "https://i.pravatar.cc/80?img=15", status: "Active", joinedDate: "2025-12-10" },
 ];
 
 const mockServices: ServiceItem[] = [
