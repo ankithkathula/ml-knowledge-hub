@@ -518,7 +518,7 @@ export function ConsultantProfilePage() {
     </div>
   );
 
-  const tabContent: Record<string, () => JSX.Element> = {
+  const tabContent: Record<string, () => React.ReactElement> = {
     overview: renderOverview,
     projects: renderProjects,
     team: renderTeam,

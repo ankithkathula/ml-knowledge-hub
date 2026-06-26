@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { getProductDetail } from '../data/inventoryData';
+import { getProductDetail, type InventoryProduct } from '../data/inventoryData';
 import { getBrandProfile } from '../brand/brandProfileData';
 import { ChevronDown, ExternalLink, Plus, Heart, ChevronRight, Minus, ChevronLeft, ArrowRight, Share2, Link2, Check, X, CheckCircle, Mail, MessageCircle, Layers, MapPin, Download, RotateCcw, Smartphone, ScanLine, ZoomIn, ZoomOut, ChevronUp, Sun, Moon, Info } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -109,6 +109,7 @@ const productData = {
     { question: 'Is this product slip-resistant when wet?', answer: 'The tile has an R10 slip resistance rating, which provides moderate friction. It is suitable for most interior residential areas, though extra care is recommended in wet-room environments.' },
   ],
   aboutBrand: 'Kajaria Ceramics is the largest manufacturer of ceramic/vitrified tiles in India. It has an annual aggregate capacity of 86.47 mn. sq. meters, distributed across eight plants. All plants are ISO 9001, ISO 14001 and OHSAS 18001 certified.',
+  category: 'tiles',
 };
 
 const brandProducts: BrandProduct[] = [

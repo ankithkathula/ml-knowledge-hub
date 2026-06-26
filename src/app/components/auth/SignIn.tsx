@@ -27,7 +27,7 @@ const DEMO_USERS: { role: DemoRole; label: string; email: string; password: stri
   { role: "student",   label: "Student",           email: "priya@student.ml",       password: "Student@123", color: "#6366f1" },
   { role: "faculty",   label: "Faculty",           email: "ravi@faculty.ml",        password: "Faculty@123", color: "#0ea5e9" },
   { role: "brand",     label: "Brand",             email: "brand@kajaria.in",       password: "Kajaria@123", color: "#7b1fa2" },
-  { role: "studio",    label: "Studio",            email: "studio@bdp.in",          password: "Studio@123",  color: "#FF6A3D" },
+  { role: "studio",    label: "Studio",            email: "studio@studiomaterium.in",          password: "Studio@123",  color: "#FF6A3D" },
   { role: "institute", label: "Institute",         email: "admin@rics.in",          password: "RICS@123",    color: "#2563eb" },
   { role: "retail",    label: "Retail Customer",   email: "sam@retail.ml",          password: "Retail@123",  color: "#16a34a" },
   { role: "dealer",   label: "Dealer",             email: "dealer@buildmart.in",    password: "Dealer@123",  color: "#f59e0b" },

@@ -71,11 +71,11 @@ const MEMBER_AVATARS: Record<string, string> = {
 };
 
 const INITIAL_MEMBERS: TeamMember[] = [
-  { id: "m1", name: "Arjun Mehta", email: "arjun@designstudio.in", avatar: "AM", avatarUrl: MEMBER_AVATARS.m1, role: "Owner", joinedDate: "Jan 15, 2024", lastActive: "2 min ago", status: "Active" },
-  { id: "m2", name: "Priya Sharma", email: "priya.sharma@designstudio.in", avatar: "PS", avatarUrl: MEMBER_AVATARS.m2, role: "Admin", joinedDate: "Mar 8, 2024", lastActive: "1h ago", status: "Active" },
-  { id: "m3", name: "Rahul Krishnan", email: "rahul.k@designstudio.in", avatar: "RK", avatarUrl: MEMBER_AVATARS.m3, role: "Editor", joinedDate: "Jun 22, 2024", lastActive: "3h ago", status: "Active" },
-  { id: "m4", name: "Sneha Patel", email: "sneha.p@designstudio.in", avatar: "SP", avatarUrl: MEMBER_AVATARS.m4, role: "Editor", joinedDate: "Sep 5, 2024", lastActive: "Yesterday", status: "Active" },
-  { id: "m5", name: "Vikram Desai", email: "vikram.d@designstudio.in", avatar: "VD", avatarUrl: MEMBER_AVATARS.m5, role: "Viewer", joinedDate: "Dec 10, 2025", lastActive: "5 days ago", status: "Active" },
+  { id: "m1", name: "Arjun Mehta", email: "arjun@studiomaterium.in", avatar: "AM", avatarUrl: MEMBER_AVATARS.m1, role: "Owner", joinedDate: "Jan 15, 2024", lastActive: "2 min ago", status: "Active" },
+  { id: "m2", name: "Priya Sharma", email: "priya.sharma@studiomaterium.in", avatar: "PS", avatarUrl: MEMBER_AVATARS.m2, role: "Admin", joinedDate: "Mar 8, 2024", lastActive: "1h ago", status: "Active" },
+  { id: "m3", name: "Rahul Krishnan", email: "rahul.k@studiomaterium.in", avatar: "RK", avatarUrl: MEMBER_AVATARS.m3, role: "Editor", joinedDate: "Jun 22, 2024", lastActive: "3h ago", status: "Active" },
+  { id: "m4", name: "Sneha Patel", email: "sneha.p@studiomaterium.in", avatar: "SP", avatarUrl: MEMBER_AVATARS.m4, role: "Editor", joinedDate: "Sep 5, 2024", lastActive: "Yesterday", status: "Active" },
+  { id: "m5", name: "Vikram Desai", email: "vikram.d@studiomaterium.in", avatar: "VD", avatarUrl: MEMBER_AVATARS.m5, role: "Viewer", joinedDate: "Dec 10, 2025", lastActive: "5 days ago", status: "Active" },
 ];
 
 const INITIAL_INVITATIONS: Invitation[] = [

@@ -21,7 +21,7 @@
     const dropdownRef = useRef<HTMLDivElement>(null);
     const viewAllDropdownRef = useRef<HTMLDivElement>(null);
     const navRef = useRef<HTMLDivElement>(null);
-    const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const categoryButtonRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
   
     useEffect(() => {

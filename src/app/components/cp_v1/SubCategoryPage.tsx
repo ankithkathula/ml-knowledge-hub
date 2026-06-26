@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
-import { Search, ChevronRight, ChevronDown, Filter, X } from 'lucide-react';
+import { Search, ChevronRight, ChevronDown, Filter, X, ArrowRight } from 'lucide-react';
 import { CategoryNode, CATEGORY_TAXONOMY } from '../../utils/categoryTaxonomy';
 import { ImageWithFallback } from "../figma/ImageWithFallback";
 import { CarouselBanner } from './CarouselBanner';

@@ -167,8 +167,8 @@ function CategoryCard({ category, index }: CategoryCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isHoverHold, setIsHoverHold] = useState(false);
   const [hoverProgress, setHoverProgress] = useState(0);
-  const hoverTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const progressTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const hoverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const progressTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const Icon = category.icon;
 
   const handleMouseEnter = () => {

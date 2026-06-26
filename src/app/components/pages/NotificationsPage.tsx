@@ -83,7 +83,9 @@ export function NotificationsPage() {
               <p className="text-sm" style={{ color: "var(--text-muted)" }}>You're all caught up.</p>
             </div>
           ) : (
-            visible.map((n) => (
+            visible.map((n) => {
+              const Icon = n.icon as React.ElementType;
+              return (
               <div
                 key={n.id}
                 onClick={() => setItems(items.map((x) => x.id === n.id ? { ...x, read: true } : x))}
@@ -94,7 +96,7 @@ export function NotificationsPage() {
                 }}
               >
                 <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: "var(--accent-light)" }}>
-                  <n.icon className="w-4 h-4" style={{ color: "var(--accent)" }} />
+                  <Icon className="w-4 h-4" style={{ color: "var(--accent)" }} />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-0.5">
@@ -107,7 +109,7 @@ export function NotificationsPage() {
                   <p className="text-[11px] mt-1" style={{ color: "var(--text-muted)" }}>{n.when}</p>
                 </div>
               </div>
-            ))
+            ); })
           )}
         </div>
       </div>

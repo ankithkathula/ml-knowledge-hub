@@ -66,10 +66,10 @@ interface BusinessHours {
 // --- Mock Data ---
 
 const mockTeam: TeamMember[] = [
-  { id: "1", name: "Ar. Vikram Deshmukh", role: "Principal Architect", email: "vikram@designstudio.in", avatar: "VD", avatarUrl: "https://i.pravatar.cc/80?img=37", status: "Active", joinedDate: "2024-01-15" },
-  { id: "2", name: "Neha Kulkarni", role: "Senior Interior Designer", email: "neha@designstudio.in", avatar: "NK", avatarUrl: "https://i.pravatar.cc/80?img=39", status: "Active", joinedDate: "2024-06-20" },
-  { id: "3", name: "Rohan Joshi", role: "Project Manager", email: "rohan@designstudio.in", avatar: "RJ", avatarUrl: "https://i.pravatar.cc/80?img=24", status: "Active", joinedDate: "2025-02-10" },
-  { id: "4", name: "Sneha Patil", role: "Junior Architect", email: "sneha@designstudio.in", avatar: "SP", avatarUrl: "https://i.pravatar.cc/80?img=50", status: "Active", joinedDate: "2025-08-01" },
+  { id: "1", name: "Ar. Vikram Deshmukh", role: "Principal Architect", email: "vikram@studiomaterium.in", avatar: "VD", avatarUrl: "https://i.pravatar.cc/80?img=37", status: "Active", joinedDate: "2024-01-15" },
+  { id: "2", name: "Neha Kulkarni", role: "Senior Interior Designer", email: "neha@studiomaterium.in", avatar: "NK", avatarUrl: "https://i.pravatar.cc/80?img=39", status: "Active", joinedDate: "2024-06-20" },
+  { id: "3", name: "Rohan Joshi", role: "Project Manager", email: "rohan@studiomaterium.in", avatar: "RJ", avatarUrl: "https://i.pravatar.cc/80?img=24", status: "Active", joinedDate: "2025-02-10" },
+  { id: "4", name: "Sneha Patil", role: "Junior Architect", email: "sneha@studiomaterium.in", avatar: "SP", avatarUrl: "https://i.pravatar.cc/80?img=50", status: "Active", joinedDate: "2025-08-01" },
   { id: "5", name: "Amit Rao", role: "MEP Consultant", email: "amit.rao@gmail.com", avatar: "AR", avatarUrl: "https://i.pravatar.cc/80?img=6", status: "Invited", joinedDate: "" },
 ];
 

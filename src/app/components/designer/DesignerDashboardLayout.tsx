@@ -425,7 +425,7 @@ export function DesignerDashboardLayout() {
 
                       <div className="py-1 max-h-72 overflow-y-auto">
                         {NOTIFICATIONS.map((n, idx) => {
-                          const Icon = n.icon;
+                          const Icon = n.icon as React.ElementType;
                           return (
                             <div
                               key={idx}

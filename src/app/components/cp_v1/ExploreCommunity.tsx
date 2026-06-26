@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowUpRight, Sparkles, TrendingUp, Users, Award, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowUpRight, Sparkles, TrendingUp, Users, Award, ArrowRight, ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import { useState, useRef } from 'react';
 
 const communities = [
