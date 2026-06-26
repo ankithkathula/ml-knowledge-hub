@@ -605,31 +605,101 @@ export function FacultyResearchPage() {
   );
 }
 
+const FACULTY_THREADS = [
+  { name: "Priya Mehta",        role: "Student · B.Arch 4th Yr", preview: "Sir, could you review my thesis draft before Friday?", time: "12m", unread: 2 },
+  { name: "Dr. Anjali Rao",     role: "HOD, Architecture",        preview: "Faculty meeting moved to 3 PM tomorrow.",            time: "1h", unread: 0 },
+  { name: "Rahul Verma",        role: "Student · B.Arch 3rd Yr", preview: "Requesting an extension on the detail sheet.",       time: "3h", unread: 1 },
+  { name: "Placement Cell",     role: "RICS SBE",                 preview: "3 studios are hiring 4th-year interns this term.",   time: "1d", unread: 0 },
+];
+
 export function FacultyMessagesPage() {
   return (
     <PageWrapper title="Messages">
       <Card>
-        <p style={{ fontSize: "0.88rem", color: "var(--text-muted)" }}>Messaging — coming soon.</p>
+        <div className="space-y-1">
+          {FACULTY_THREADS.map((t, i) => (
+            <div key={t.name} className="flex items-center gap-3 py-3" style={{ borderBottom: i < FACULTY_THREADS.length - 1 ? "1px solid rgba(0,0,0,0.05)" : "none" }}>
+              <div className="w-9 h-9 rounded-full flex items-center justify-center text-[12px] font-bold text-white flex-shrink-0" style={{ background: ACCENT }}>
+                {t.name.split(" ").map((w) => w[0]).join("").slice(0, 2)}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between gap-2">
+                  <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--text-primary)" }}>{t.name}</span>
+                  <span style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>{t.time}</span>
+                </div>
+                <div style={{ fontSize: "0.72rem", color: "var(--text-muted)" }}>{t.role}</div>
+                <div className="truncate" style={{ fontSize: "0.78rem", color: "var(--text-secondary)", marginTop: 2 }}>{t.preview}</div>
+              </div>
+              {t.unread > 0 && (
+                <span className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white" style={{ background: "#ef4444" }}>{t.unread}</span>
+              )}
+            </div>
+          ))}
+        </div>
       </Card>
     </PageWrapper>
   );
 }
 
 export function FacultyProfileEditPage() {
+  const fields = [
+    { label: "Full Name", value: "Dr. Ravi Kumar" },
+    { label: "Designation", value: "Associate Professor" },
+    { label: "Department", value: "Architecture & Built Environment" },
+    { label: "Institute", value: "RICS School of Built Environment" },
+    { label: "Email", value: "ravi@faculty.ml" },
+    { label: "Phone", value: "+91 98200 14567" },
+    { label: "Specialisation", value: "Sustainable Design, Building Construction" },
+    { label: "Experience", value: "14 years" },
+  ];
   return (
     <PageWrapper title="Edit Profile">
       <Card>
-        <p style={{ fontSize: "0.88rem", color: "var(--text-muted)" }}>Profile editor — coming soon.</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {fields.map((f) => (
+            <div key={f.label}>
+              <label style={{ fontSize: "0.72rem", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.04em" }}>{f.label}</label>
+              <input defaultValue={f.value} className="w-full mt-1 px-3 py-2 rounded-xl text-[0.85rem]" style={{ border: "1px solid rgba(0,0,0,0.12)", background: "white" }} />
+            </div>
+          ))}
+        </div>
+        <div className="mt-5">
+          <label style={{ fontSize: "0.72rem", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.04em" }}>Bio</label>
+          <textarea rows={3} defaultValue="Architect and educator focused on climate-responsive design and material literacy. Leads the Environmental Design Studio and mentors thesis projects on sustainable construction." className="w-full mt-1 px-3 py-2 rounded-xl text-[0.85rem]" style={{ border: "1px solid rgba(0,0,0,0.12)", background: "white" }} />
+        </div>
+        <button className="mt-5 px-4 py-2 rounded-xl text-[0.82rem] font-bold text-white" style={{ background: ACCENT }}>Save Changes</button>
       </Card>
     </PageWrapper>
   );
 }
 
 export function FacultySettingsPage() {
+  const toggles = [
+    { label: "Email notifications for new submissions", on: true },
+    { label: "SMS alerts for schedule changes", on: false },
+    { label: "Weekly student-progress digest", on: true },
+    { label: "Show my profile in the public faculty directory", on: true },
+    { label: "Allow students to book office-hour slots", on: false },
+  ];
   return (
     <PageWrapper title="Settings">
       <Card>
-        <p style={{ fontSize: "0.88rem", color: "var(--text-muted)" }}>Settings — coming soon.</p>
+        <h3 style={{ fontSize: "0.9rem", fontWeight: 700, color: "var(--text-primary)", marginBottom: 12 }}>Notifications & Privacy</h3>
+        <div className="space-y-1">
+          {toggles.map((t, i) => (
+            <div key={t.label} className="flex items-center justify-between py-3" style={{ borderBottom: i < toggles.length - 1 ? "1px solid rgba(0,0,0,0.05)" : "none" }}>
+              <span style={{ fontSize: "0.82rem", color: "var(--text-secondary)" }}>{t.label}</span>
+              <span className="w-10 h-6 rounded-full flex items-center px-0.5 flex-shrink-0" style={{ background: t.on ? ACCENT : "rgba(0,0,0,0.15)", justifyContent: t.on ? "flex-end" : "flex-start" }}>
+                <span className="w-5 h-5 rounded-full bg-white" />
+              </span>
+            </div>
+          ))}
+        </div>
+        <h3 style={{ fontSize: "0.9rem", fontWeight: 700, color: "var(--text-primary)", margin: "18px 0 10px" }}>Account</h3>
+        <div className="flex flex-wrap gap-3">
+          <button className="px-4 py-2 rounded-xl text-[0.82rem] font-semibold" style={{ border: "1px solid rgba(0,0,0,0.12)", color: "var(--text-primary)" }}>Change Password</button>
+          <button className="px-4 py-2 rounded-xl text-[0.82rem] font-semibold" style={{ border: "1px solid rgba(239,68,68,0.4)", color: "#ef4444" }}>Sign Out</button>
+        </div>
       </Card>
     </PageWrapper>
   );

@@ -33,11 +33,11 @@ export const INSTITUTE_USER: AuthUser = {
 };
 
 export const BRAND_USER: AuthUser = {
-  id: "ultratech-brand",
-  name: "UltraTech Cement",
-  initials: "UC",
+  id: "kajaria-brand",
+  name: "Kajaria Ceramics",
+  initials: "KC",
   type: "Brand",
-  profilePath: "/brand/ultratech",
+  profilePath: "/brand/Kajaria%20Ceramics",
   dashboardPath: "/b",
   landingPath: "/b",
 };

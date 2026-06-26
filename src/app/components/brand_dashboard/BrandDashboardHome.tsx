@@ -9,36 +9,39 @@ import { ML_STORE_LEADS_KEY, type StoreLeadEntry } from "../shared/StoreNavigato
 const ACCENT = "#0284c7";
 
 const STATS = [
-  { label: "Product Listings",   value: "24",    icon: Package,    color: "#0284c7", bg: "rgba(2,132,199,0.1)" },
-  { label: "Designer Enquiries", value: "138",   icon: TrendingUp, color: "#10b981", bg: "rgba(16,185,129,0.1)" },
-  { label: "Profile Views",      value: "2,840", icon: Eye,        color: "#8b5cf6", bg: "rgba(139,92,246,0.1)" },
-  { label: "Sample Requests",    value: "47",    icon: Star,       color: "#f59e0b", bg: "rgba(245,158,11,0.1)" },
+  { label: "Product Listings",   value: "86",    icon: Package,    color: "#0284c7", bg: "rgba(2,132,199,0.1)" },
+  { label: "Designer Enquiries", value: "214",   icon: TrendingUp, color: "#10b981", bg: "rgba(16,185,129,0.1)" },
+  { label: "Profile Views",      value: "9,640", icon: Eye,        color: "#8b5cf6", bg: "rgba(139,92,246,0.1)" },
+  { label: "Sample Requests",    value: "112",   icon: Star,       color: "#f59e0b", bg: "rgba(245,158,11,0.1)" },
 ];
 
 const HOT_LEADS = [
-  { name: "Morphogenesis Architects", project: "OPC 53 bulk order for township",       value: "₹4.2L potential" },
-  { name: "Morphogenesis",             project: "RMC supply for commercial project",     value: "₹6.8L potential" },
+  { name: "Morphogenesis Architects", project: "Vitrified flooring for 320-unit township", value: "₹18.5L potential" },
+  { name: "Livspace Mumbai",          project: "Bulk tile + sanitaryware for 200 flats",    value: "₹12.2L potential" },
 ];
 
 const WARM_LEADS = [
-  { name: "Livspace Mumbai",  project: "Wall putty + tile adhesive for 200 units", value: "₹1.4L potential" },
-  { name: "Studio Sangam",    project: "Birla White + POP for luxury villa",        value: "₹85K potential" },
+  { name: "Studio Lotus",      project: "Large-format slabs for hotel lobby",       value: "₹6.4L potential" },
+  { name: "DesignCraft Studio", project: "Bathonix suite for luxury villa project",  value: "₹3.1L potential" },
 ];
 
 const COLD_LEADS = [
-  { name: "Design Atelier",       project: "Product catalogue request",    value: "Exploring" },
-  { name: "DesignCraft Studio",   project: "Sample request — OPC 43",      value: "Sampling" },
+  { name: "Design Atelier",     project: "Eternity collection catalogue request",  value: "Exploring" },
+  { name: "Urban Spaces Co.",   project: "Sample request — Marbonite series",      value: "Sampling" },
 ];
 
 const TOP_PRODUCTS = [
-  { name: "UltraTech OPC 53 Grade Cement",      views: "1,240", enquiries: "48" },
-  { name: "UltraTech Ready Mix Concrete M25",   views: "890",   enquiries: "31" },
-  { name: "UltraTech Wall Putty",               views: "640",   enquiries: "22" },
+  { name: "Eternity Glazed Vitrified Tile (800×800)", views: "3,120", enquiries: "96" },
+  { name: "Marbonite Double Charge Tile",             views: "2,540", enquiries: "74" },
+  { name: "Vintage Wood-Plank Vitrified Tile",        views: "1,880", enquiries: "58" },
+  { name: "Bathonix Sanitaryware Suite",              views: "1,460", enquiries: "41" },
+  { name: "Kerastar Anti-Skid Outdoor Tile",          views: "1,090", enquiries: "33" },
 ];
 
 const KC_VISITS = [
-  { studio: "Morphogenesis Architects", location: "KC Bandra West, Mumbai",     date: "May 22, 2026",  purpose: "Product demo & samples" },
-  { studio: "Studio Lotus",             location: "KC Connaught Place, Delhi",   date: "May 28, 2026",  purpose: "Technical consultation" },
+  { studio: "Morphogenesis Architects", location: "KC Bandra West, Mumbai",   date: "May 22, 2026", purpose: "Tile finish library walkthrough" },
+  { studio: "Studio Lotus",             location: "KC Connaught Place, Delhi", date: "May 28, 2026", purpose: "Large-format slab samples" },
+  { studio: "Livspace Mumbai",          location: "KC Powai, Mumbai",          date: "Jun 03, 2026", purpose: "Sanitaryware & adhesive demo" },
 ];
 
 const QUICK_ACTIONS = [
@@ -79,7 +82,7 @@ export function BrandDashboardHome() {
           Brand Overview
         </h1>
         <p style={{ fontSize: "0.85rem", color: "var(--text-muted)", marginTop: 2 }}>
-          Here's how UltraTech Cement is performing on Material Library.
+          Here's how Kajaria Ceramics is performing on Material Library.
         </p>
       </div>
 

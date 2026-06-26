@@ -16,18 +16,18 @@ const PRODUCT_CATEGORIES = [
 ];
 
 const HOT_LEADS = [
-  { name: "Morphogenesis Architects", project: "OPC 53 bulk order for township",   value: "₹4.2L", lastContact: "May 10, 2026", type: "Hot" },
-  { name: "Morphogenesis",             project: "RMC supply for commercial project", value: "₹6.8L", lastContact: "May 12, 2026", type: "Hot" },
+  { name: "Morphogenesis Architects", project: "Vitrified flooring for 320-unit township", value: "₹18.5L", lastContact: "May 10, 2026", type: "Hot" },
+  { name: "Livspace Mumbai",          project: "Bulk tile + sanitaryware for 200 flats",    value: "₹12.2L", lastContact: "May 12, 2026", type: "Hot" },
 ];
 
 const WARM_LEADS = [
-  { name: "Livspace Mumbai", project: "Wall putty + tile adhesive for 200 units", value: "₹1.4L", lastContact: "May 8, 2026",  type: "Warm" },
-  { name: "Studio Sangam",   project: "Birla White + POP for luxury villa",        value: "₹85K",  lastContact: "May 6, 2026",  type: "Warm" },
+  { name: "Studio Lotus",       project: "Large-format slabs for hotel lobby",      value: "₹6.4L", lastContact: "May 8, 2026",  type: "Warm" },
+  { name: "Studio Sangam",      project: "Marbonite + wood-plank tiles for villa",  value: "₹3.0L", lastContact: "May 6, 2026",  type: "Warm" },
 ];
 
 const COLD_LEADS = [
-  { name: "Design Atelier",     project: "Product catalogue request",   value: "Exploring", lastContact: "May 2, 2026",  type: "Cold" },
-  { name: "DesignCraft Studio", project: "Sample request — OPC 43",     value: "Sampling",  lastContact: "Apr 28, 2026", type: "Cold" },
+  { name: "Design Atelier",     project: "Eternity collection catalogue request",   value: "Exploring", lastContact: "May 2, 2026",  type: "Cold" },
+  { name: "DesignCraft Studio", project: "Sample request — Marbonite series",       value: "Sampling",  lastContact: "Apr 28, 2026", type: "Cold" },
 ];
 
 const CATALOGUES = [
@@ -291,7 +291,7 @@ export function BrandProductsPage() {
                 <input
                   value={form.name}
                   onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-                  placeholder="e.g. UltraTech PPC Cement"
+                  placeholder="e.g. Eternity Glazed Vitrified Tile"
                   className="w-full px-4 py-2.5 rounded-xl text-[13px]"
                   style={{ border: "1px solid rgba(0,0,0,0.12)", outline: "none", color: "var(--text-primary)" }}
                 />
@@ -382,11 +382,11 @@ export function BrandAnalyticsPage() {
   ];
 
   const topProducts = [
-    { name: "UltraTech OPC 53",       views: 1240, pct: 100 },
-    { name: "Ready Mix Concrete M25", views: 890,  pct: 72  },
-    { name: "Wall Putty",             views: 640,  pct: 52  },
-    { name: "AAC Block",              views: 410,  pct: 33  },
-    { name: "PPC Cement",             views: 320,  pct: 26  },
+    { name: "Eternity Glazed Vitrified Tile", views: 3120, pct: 100 },
+    { name: "Marbonite Double Charge Tile",   views: 2540, pct: 81  },
+    { name: "Vintage Wood-Plank Tile",        views: 1880, pct: 60  },
+    { name: "Bathonix Sanitaryware Suite",    views: 1460, pct: 47  },
+    { name: "Kerastar Anti-Skid Outdoor Tile",views: 1090, pct: 35  },
   ];
 
   const sources = [
@@ -593,7 +593,7 @@ const BRAND_MEMBERS = [
 ];
 
 const BRAND_ACTIVITY = [
-  { icon: FileText, color: "#0284c7", bg: "rgba(2,132,199,0.1)",   text: "Rahul Krishnan updated product listing 'UltraTech OPC 53'",     time: "1h ago"    },
+  { icon: FileText, color: "#0284c7", bg: "rgba(2,132,199,0.1)",   text: "Rahul Krishnan updated product listing 'Eternity Glazed Vitrified Tile'", time: "1h ago"    },
   { icon: Users,    color: "#10b981", bg: "rgba(16,185,129,0.1)",  text: "Arjun Mehta invited deepa.nair@gmail.com as Editor",             time: "3h ago"    },
   { icon: Pencil,   color: "#8b5cf6", bg: "rgba(139,92,246,0.1)", text: "Priya Sharma published blog 'AAC vs Red Brick: A Comparison'",    time: "5h ago"    },
   { icon: Package,  color: "#f59e0b", bg: "rgba(245,158,11,0.1)",  text: "Sneha Patel updated BOM for project 'Lakewood Residences'",      time: "Yesterday" },
@@ -684,11 +684,12 @@ export function BrandProfileEditPage() {
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <h2 style={{ fontSize: "1.25rem", fontWeight: 800, color: "var(--text-primary)" }}>UltraTech Cement Ltd.</h2>
-                <p style={{ fontSize: "0.88rem", color: ACCENT, fontWeight: 600, marginTop: 2 }}>Building Tomorrow, Today</p>
+                <h2 style={{ fontSize: "1.25rem", fontWeight: 800, color: "var(--text-primary)" }}>Kajaria Ceramics Ltd.</h2>
+                <p style={{ fontSize: "0.88rem", color: ACCENT, fontWeight: 600, marginTop: 2 }}>India's No. 1 Tile Company</p>
                 <p style={{ fontSize: "0.82rem", color: "var(--text-secondary)", marginTop: 6, lineHeight: 1.5, maxWidth: 560 }}>
-                  India's No. 1 cement brand with a comprehensive portfolio of building materials including ready-mix concrete,
-                  wall putty, and AAC blocks. Trusted by architects and designers across 100+ cities.
+                  India's largest manufacturer of ceramic and vitrified tiles, with a portfolio spanning glazed vitrified,
+                  double-charge, wood-plank and large-format slabs, plus the Bathonix sanitaryware range. Trusted by architects
+                  and designers across 100+ cities.
                 </p>
               </div>
               <button
@@ -701,9 +702,9 @@ export function BrandProfileEditPage() {
 
             <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mt-4">
               {[
-                { icon: Package,  text: "Building Materials" },
-                { icon: MapPin,   text: "Mumbai, Maharashtra" },
-                { icon: Phone,    text: "+91 22 6691 7800" },
+                { icon: Package,  text: "Tiles, Slabs & Sanitaryware" },
+                { icon: MapPin,   text: "New Delhi, India" },
+                { icon: Phone,    text: "+91 11 2614 9000" },
                 { icon: Mail,     text: "connect@materiallibrary.in" },
               ].map(({ icon: Icon, text }) => (
                 <span key={text} className="flex items-center gap-1.5" style={{ fontSize: "0.78rem", color: "var(--text-muted)" }}>
@@ -713,8 +714,8 @@ export function BrandProfileEditPage() {
             </div>
             <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mt-2">
               {[
-                { icon: Globe,  text: "www.ultratechcement.com" },
-                { icon: Clock,  text: "Since 2004" },
+                { icon: Globe,  text: "www.kajariaceramics.com" },
+                { icon: Clock,  text: "Since 1988" },
               ].map(({ icon: Icon, text }) => (
                 <span key={text} className="flex items-center gap-1.5" style={{ fontSize: "0.78rem", color: "var(--text-muted)" }}>
                   <Icon style={{ width: 13, height: 13 }} /> {text}

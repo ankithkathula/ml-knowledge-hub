@@ -19,12 +19,12 @@ const TYPE_META: Record<StoreLocation["type"], { label: string; color: string; b
 };
 
 const SEED_STORES: StoreLocation[] = [
-  { id: "ab1", name: "Aditya Birla Experience Center", type: "flagship", address: "Plot 42, G Block",                      area: "BKC",            city: "Mumbai",     pincode: "400051", phone: "+91 22 6652 5000", hours: "Mon–Sat 10am–7pm",  lat: 19.0659, lng: 72.8658 },
-  { id: "ab2", name: "UltraTech Cement Hub",           type: "dealer",   address: "Shop 12, Versova Road",                 area: "Andheri West",   city: "Mumbai",     pincode: "400058", phone: "+91 22 2632 8800", hours: "Mon–Sat 9am–6pm",   lat: 19.1349, lng: 72.8253 },
-  { id: "ab3", name: "Birla White Showroom",           type: "showroom", address: "7 Senapati Bapat Marg",                 area: "Dadar West",     city: "Mumbai",     pincode: "400028", phone: "+91 22 2436 7700", hours: "Mon–Sat 10am–6:30pm",lat: 19.0178, lng: 72.8478 },
-  { id: "ab4", name: "UltraTech Supply Depot",         type: "depot",    address: "MIDC Road, Wagle Estate",               area: "Thane West",     city: "Thane",      pincode: "400604", phone: "+91 22 2580 3300", hours: "Mon–Fri 8am–5pm",   lat: 19.2183, lng: 72.9781 },
-  { id: "ab5", name: "Aditya Birla Dealer",            type: "dealer",   address: "Plot 18, Sector 19",                    area: "Kharghar",       city: "Navi Mumbai",pincode: "410210", phone: "+91 22 2774 6600", hours: "Mon–Sat 9am–6pm",   lat: 19.0476, lng: 73.0688 },
-  { id: "ab6", name: "UltraTech Cement Outlet",        type: "dealer",   address: "Ghodbunder Road, Near Viviana Mall",    area: "Manpada",        city: "Thane",      pincode: "400610", phone: "+91 22 2596 1100", hours: "Mon–Sat 9am–6pm",   lat: 19.2468, lng: 72.9659 },
+  { id: "kj1", name: "Kajaria Experience Centre",     type: "flagship", address: "Plot 42, G Block",                   area: "BKC",          city: "Mumbai",      pincode: "400051", phone: "+91 22 6652 5000", hours: "Mon–Sat 10am–7pm",   lat: 19.0659, lng: 72.8658 },
+  { id: "kj2", name: "Kajaria World Showroom",        type: "showroom", address: "Shop 12, Linking Road",              area: "Bandra West",  city: "Mumbai",      pincode: "400050", phone: "+91 22 2632 8800", hours: "Mon–Sat 10am–7:30pm",lat: 19.0606, lng: 72.8365 },
+  { id: "kj3", name: "Kajaria Eternity Studio",       type: "showroom", address: "7 Senapati Bapat Marg",              area: "Dadar West",   city: "Mumbai",      pincode: "400028", phone: "+91 22 2436 7700", hours: "Mon–Sat 10am–6:30pm",lat: 19.0178, lng: 72.8478 },
+  { id: "kj4", name: "Kajaria Tiles Distribution Depot", type: "depot", address: "MIDC Road, Wagle Estate",            area: "Thane West",   city: "Thane",       pincode: "400604", phone: "+91 22 2580 3300", hours: "Mon–Fri 9am–6pm",    lat: 19.2183, lng: 72.9781 },
+  { id: "kj5", name: "Kajaria Authorised Dealer — Kharghar", type: "dealer", address: "Plot 18, Sector 19",            area: "Kharghar",     city: "Navi Mumbai", pincode: "410210", phone: "+91 22 2774 6600", hours: "Mon–Sat 9am–6pm",    lat: 19.0476, lng: 73.0688 },
+  { id: "kj6", name: "Kajaria Tile Boutique — Ghodbunder", type: "dealer",  address: "Ghodbunder Road, Near Viviana Mall", area: "Manpada",  city: "Thane",       pincode: "400610", phone: "+91 22 2596 1100", hours: "Mon–Sat 9am–6pm",    lat: 19.2468, lng: 72.9659 },
 ];
 
 const EMPTY_FORM = {
@@ -129,7 +129,7 @@ export function BrandStoresPage() {
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
           <Link
-            to="/brand/UltraTech%20Cement"
+            to="/brand/Kajaria%20Ceramics"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-[12px] font-semibold"
@@ -330,7 +330,7 @@ export function BrandStoresPage() {
                 <input
                   value={form.name}
                   onChange={f("name")}
-                  placeholder="e.g. UltraTech Cement Hub, Andheri"
+                  placeholder="e.g. Kajaria World Showroom, Bandra"
                   className="w-full px-4 py-2.5 rounded-xl text-[13px]"
                   style={{ border: "1px solid rgba(0,0,0,0.12)", outline: "none", color: "var(--text-primary)" }}
                 />

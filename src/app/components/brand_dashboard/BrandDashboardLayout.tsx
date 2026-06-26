@@ -33,10 +33,10 @@ const BOTTOM_NAV = [
 ];
 
 const NOTIFICATIONS = [
-  { icon: TrendingUp,    color: "#0284c7", text: "138 designer enquiries this month — up 22% from last month", time: "1h ago",  unread: true  },
-  { icon: Package,       color: "#10b981", text: "Your product 'UltraTech OPC 53' has 240 new views",          time: "3h ago",  unread: true  },
-  { icon: MapPin,        color: "#f59e0b", text: "Studio Morphogenesis scheduled a KC visit for May 22",        time: "1d ago",  unread: false },
-  { icon: MessageSquare, color: "#8b5cf6", text: "New enquiry from Morphogenesis for bulk cement pricing",      time: "2d ago",  unread: false },
+  { icon: TrendingUp,    color: "#0284c7", text: "214 designer enquiries this month — up 28% from last month",         time: "1h ago",  unread: true  },
+  { icon: Package,       color: "#10b981", text: "Your product 'Eternity Glazed Vitrified Tile' has 320 new views",   time: "3h ago",  unread: true  },
+  { icon: MapPin,        color: "#f59e0b", text: "Studio Morphogenesis scheduled a KC visit for May 22",              time: "1d ago",  unread: false },
+  { icon: MessageSquare, color: "#8b5cf6", text: "New enquiry from Livspace for bulk vitrified tile pricing",          time: "2d ago",  unread: false },
 ];
 
 const ACCENT = "#0284c7";
@@ -126,8 +126,8 @@ export function BrandDashboardLayout() {
     return location.pathname.startsWith(href);
   };
 
-  const initials  = authUser?.initials  ?? "UC";
-  const firstName = authUser?.name?.split(" ")[0] ?? "UltraTech";
+  const initials  = authUser?.initials  ?? "KC";
+  const firstName = authUser?.name?.split(" ")[0] ?? "Kajaria";
 
   const sidebarContent = (
     <div className="flex flex-col h-full">
@@ -227,7 +227,7 @@ export function BrandDashboardLayout() {
           );
         })}
         <Link
-          to="/brand/ultratech"
+          to="/brand/Kajaria%20Ceramics"
           className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all"
           style={{ color: ACCENT, fontWeight: 500 }}
           title={collapsed ? "View Public Profile" : undefined}
@@ -257,7 +257,7 @@ export function BrandDashboardLayout() {
                 style={{ fontSize: "0.78rem", fontWeight: 700, color: "var(--text-primary)" }}
                 className="truncate"
               >
-                {authUser?.name ?? "UltraTech Cement"}
+                {authUser?.name ?? "Kajaria Ceramics"}
               </div>
               <div style={{ fontSize: "0.68rem", color: "var(--text-muted)" }}>
                 {authUser?.type ?? "Brand"}
